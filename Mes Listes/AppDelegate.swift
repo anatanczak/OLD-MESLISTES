@@ -7,16 +7,38 @@
 //
 
 import UIKit
+import RealmSwift
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        do {
+            _ = try Realm()
+        }catch{
+            print("Error initializing new realm,\(error)")
+        }
+        
+        //print(Realm.Configuration.defaultConfiguration.fileURL)
+        
+        // asking for user authorisation
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            print("granted: (\(granted)")
+        }
+        
+        UNUserNotificationCenter.current().delegate = self
+        
         return true
+    }
+    
+//to make notification visible when it is in the foreground
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound])
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
