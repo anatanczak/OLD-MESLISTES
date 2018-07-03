@@ -29,6 +29,9 @@
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
+                                    <connections>
+                                        <action selector="textFieldPrimaryActionTriggered:" destination="jyI-yk-usi" eventType="primaryActionTriggered" id="cvD-pk-i1G"/>
+                                    </connections>
                                 </textField>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZZa-1h-jJJ">
                                     <rect key="frame" x="306" y="14" width="69" height="30"/>
@@ -89,6 +92,9 @@
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
+                                    <connections>
+                                        <action selector="textFieldPrimaryActionTriggered:" destination="Unx-TD-956" eventType="primaryActionTriggered" id="86N-Xp-Ixm"/>
+                                    </connections>
                                 </textField>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tVJ-Wa-ayb">
                                     <rect key="frame" x="303" y="7" width="64" height="30"/>

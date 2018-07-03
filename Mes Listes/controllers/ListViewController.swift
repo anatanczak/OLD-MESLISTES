@@ -12,12 +12,17 @@ import UserNotifications
 import EventKit
 import SwipeCellKit
 
-class ListViewController: SwipeTableViewController {
+class ListViewController: SwipeTableViewController, UITextFieldDelegate {
     
     let realm = try! Realm()
     var lists : Results <Liste>?
     var chosenRow = 0
     var chosenNameforCalendar = ""
+    
+    @IBAction func textFieldPrimaryActionTriggered(_ sender: Any) {
+        userInputHandeled()
+    }
+    
     
     @IBAction func saveButtonTapped(_ sender: UIButton) {
         userInputHandeled()
@@ -29,6 +34,8 @@ class ListViewController: SwipeTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
   
+        self.listTextField.delegate = self
+        
         listTextField.text = "Add a new list."
         listTextField.clearsOnBeginEditing = true
         loadLists()
@@ -36,6 +43,9 @@ class ListViewController: SwipeTableViewController {
     
     // MARK: - Table view delegate methods
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "goToItem", sender: self)
+    }
 
     // MARK: - Table view data source
 
@@ -65,13 +75,10 @@ class ListViewController: SwipeTableViewController {
             cell.textLabel?.text = "You haven't created a list yet"
         }
 
-        cell.backgroundColor = colorize(hex: 0xD1C5CA)
+       // cell.backgroundColor = colorize(hex: 0xD1C5CA)
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "goToItem", sender: self)
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToItem" {

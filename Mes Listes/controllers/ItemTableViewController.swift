@@ -11,7 +11,7 @@ import RealmSwift
 import UserNotifications
 import EventKit
 
-class ItemTableViewController:SwipeTableViewController {
+class ItemTableViewController:SwipeTableViewController, UITextFieldDelegate {
     
     let realm = try! Realm()
     var items : Results <Item>?
@@ -24,7 +24,10 @@ class ItemTableViewController:SwipeTableViewController {
             loadItems()
         }
     }
-
+    @IBAction func textFieldPrimaryActionTriggered(_ sender: Any) {
+        userInputHandeled()
+    }
+    
     @IBOutlet weak var navigationTitle: UINavigationItem!
    
     @IBOutlet weak var itemTextField: UITextField!
@@ -75,7 +78,7 @@ class ItemTableViewController:SwipeTableViewController {
             cell.textLabel?.text = "You haven't created an item yet"
         }
         
-        cell.backgroundColor = colorize(hex: 0xD1C5CA)
+       // cell.backgroundColor = colorize(hex: 0xD1C5CA)
         
         return cell
     }
