@@ -7,13 +7,12 @@
 //
 
 import UIKit
-import RealmSwift
-import UserNotifications
 
 class DatePickerPopupViewController: UIViewController {
     
-        let realm = try! Realm()
-        var chosenItem: List?
+    var dateForCalendar = false
+    var setReminder: ((_ components: DateComponents) -> ())?
+    var saveEventToCalendar: ((_ date: Date) ->())?
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var datePicker: UIDatePicker!
@@ -23,48 +22,22 @@ class DatePickerPopupViewController: UIViewController {
 
     
     @IBAction func saveButtonTapped(_ sender: UIButton) {
-        print("SaveButtonTapped")
-        
-        updateModelWithDate()
-        sendNotificationToRemind()
-        
+        if dateForCalendar == true {
+            saveEventToCalendar!(datePicker.date)
+        }else{
+            let components = datePicker.calendar.dateComponents([.day, .month, .year, .hour, .minute], from: datePicker.date)
+            setReminder!(components)
+        }
         dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(chosenItem ?? "the chosen item has not been set yet")
-    }
-    
-    // updatingModel with a date
-    
-    func updateModelWithDate (){
-        do {
-            try realm.write {
-                chosenItem?.reminderDate = datePicker.date
-                print(chosenItem?.reminderDate ?? "the date has not been set yet")
-            }
-        } catch {
-            print("Error saving massage\(error)")
+
+        if dateForCalendar == true{
+            saveButtonLabel.setTitle("Save to calendar", for: .normal)
+            print("save button tapped")
         }
-    }
-    
-    func sendNotificationToRemind () {
-
-        let content = UNMutableNotificationContent()
-        content.title = "Don't forget!!!"
-        content.body = chosenItem!.name
-        content.sound = UNNotificationSound.default()
-
-        let components = datePicker.calendar.dateComponents([.day, .month, .year, .hour, .minute], from: datePicker.date)
         
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let request = UNNotificationRequest(identifier: "TestIdentifier", content: content, trigger: trigger)
-
-        UNUserNotificationCenter.current().add(request) { (error) in
-            if let error = error {
-                print(" We had an error: \(error)")
-            }
-        }
     }
 }

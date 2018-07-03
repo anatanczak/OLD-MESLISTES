@@ -9,10 +9,9 @@
 import Foundation
 import RealmSwift
 
-class List: Object {
+class Liste: Object {
     @objc dynamic var name: String = ""
-    @objc dynamic var reminderDate: Date?
     
-    //forvad relationship to item class
-    
+    //forward relationship to item class
+ let items = List<Item>()
 }
