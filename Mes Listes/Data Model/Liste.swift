@@ -11,7 +11,9 @@ import RealmSwift
 
 class Liste: Object {
     @objc dynamic var name: String = ""
+    @objc dynamic var done: Bool = false
+    @objc dynamic var important : Bool = false
     
     //forward relationship to item class
- let items = List<Item>()
+    let items = List<Item>()
 }

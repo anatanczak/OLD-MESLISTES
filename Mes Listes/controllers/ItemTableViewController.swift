@@ -17,6 +17,7 @@ class ItemTableViewController:SwipeTableViewController {
     var items : Results <Item>?
     var selectedItem = 0
     var nameOfTheSelectedListe = ""
+    var selectedItemForTheCalendar = ""
     
     var selectedListe : Liste? {
         didSet {
@@ -57,8 +58,25 @@ class ItemTableViewController:SwipeTableViewController {
         
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        cell.textLabel?.text = items?[indexPath.row].title ?? "You haven't created an item yet"
+        if let item = items?[indexPath.row] {
+            
+            if item.done == true {
+                let attributedString = NSMutableAttributedString.init(string: item.title)
+                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: item.title.count))
+                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
+                cell.textLabel?.attributedText = attributedString
+                
+            }else{
+                let attributedString = NSMutableAttributedString.init(string: item.title)
+                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
+                cell.textLabel?.attributedText = attributedString
+            }
+        }else{
+            cell.textLabel?.text = "You haven't created an item yet"
+        }
+        
         cell.backgroundColor = colorize(hex: 0xD1C5CA)
+        
         return cell
     }
     
@@ -97,10 +115,6 @@ class ItemTableViewController:SwipeTableViewController {
   
         //MARK: - Methods for Swipe Actions
     
-//    override func updateModelByAddingAReminder(at indexpath: IndexPath) {
-//        selectedItem = indexpath.row
-//        performSegue(withIdentifier: "goToDatePopupFromItems", sender: self)
-//    }
     
     override func updateModel(at indexpath: IndexPath) {
         if let itemForDeletion = self.items?[indexpath.row] {
@@ -123,6 +137,7 @@ class ItemTableViewController:SwipeTableViewController {
         
         popup.setReminder = setReminder
         self.present(popup, animated: true)
+        tableView.reloadData()
     }
     
     // sends the notification to user to remind the list
@@ -142,12 +157,59 @@ class ItemTableViewController:SwipeTableViewController {
         }
     }
     
-    
     override func addEventToCalendar(at indexpath: IndexPath) {
+        
         selectedItem = indexpath.row
-
+        selectedItemForTheCalendar = items![indexpath.row].title
+        
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
+        
+        popup.dateForCalendar = true
+        popup.saveEventToCalendar = saveEventToCalendar
+        
+        self.present(popup, animated: true)
+        tableView.reloadData()
     }
     
+    func saveEventToCalendar(_ date: Date) ->(){
+        
+        let eventStore = EKEventStore()
+        
+        eventStore.requestAccess(to: .event) { (granted, error) in
+            if granted {
+                let event = EKEvent(eventStore: eventStore)
+                
+                event.title = self.selectedItemForTheCalendar
+                event.startDate = date
+                event.endDate = date.addingTimeInterval(3600)
+                event.calendar = eventStore.defaultCalendarForNewEvents
+                do  {
+                    try eventStore.save(event, span: .thisEvent)
+                }catch{
+                    print("error saving the event\(error)")
+                }
+                
+            }else{
+                print("error getting access to calendar\(error!)")
+            }
+        }
+    }
+    
+    override func strikeOut(at indexPath: IndexPath) {
+        if let currentItem = self.items?[indexPath.row] {
+            do {
+                try realm.write {
+                    currentItem.done = !currentItem.done
+                }
+            }catch{
+                print("error updating realm\(error)")
+            }
+            
+            tableView.reloadData()
+        }
+    }
+ 
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //       
 //    }

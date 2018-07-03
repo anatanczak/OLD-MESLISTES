@@ -42,7 +42,12 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         if orientation == .left {
             guard isSwipeRightEnabled else { return nil }
             
-            let setReminder = SwipeAction(style: .default, title: "Set a reminder") { action, indexPath in
+            let strikeOut = SwipeAction(style: .default, title: "Strike Out") { (action, indexPath) in
+                
+                self.strikeOut(at: indexPath)
+            }
+            
+            let setReminder = SwipeAction(style: .default, title: "Reminder") { action, indexPath in
                 
                 self.updateModelByAddingAReminder(at: indexPath)
                 
@@ -50,11 +55,11 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
             setReminder.image = UIImage(named: "reminder-icon")
            
             
-            let addEventToCalendar = SwipeAction(style: .default, title: "Add Event To Calendar") { (action, indexPath) in
+            let addEventToCalendar = SwipeAction(style: .default, title: "Calendar") { (action, indexPath) in
                 
                 self.addEventToCalendar(at: indexPath)
             }
-             return[setReminder, addEventToCalendar]
+             return[strikeOut, setReminder, addEventToCalendar]
             
         }else{
             
@@ -92,6 +97,10 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     
     func addEventToCalendar (at indexpath: IndexPath) {
         // add events to calendar
+    }
+    
+    func strikeOut (at indexPath: IndexPath) {
+        // stike out the text in the cell
     }
     
     func colorize (hex: Int, alpha: Double = 1.0) -> UIColor {

@@ -48,8 +48,23 @@ class ListViewController: SwipeTableViewController {
         
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        cell.textLabel?.text = lists?[indexPath.row].name ?? "You haven't created a list yet"
-        
+        if let liste = lists?[indexPath.row] {
+
+            if liste.done == true {
+                let attributedString = NSMutableAttributedString.init(string: liste.name)
+                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
+                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
+                cell.textLabel?.attributedText = attributedString
+                
+            }else{
+                let attributedString = NSMutableAttributedString.init(string: liste.name)
+                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
+                cell.textLabel?.attributedText = attributedString
+            }
+        }else{
+            cell.textLabel?.text = "You haven't created a list yet"
+        }
+
         cell.backgroundColor = colorize(hex: 0xD1C5CA)
         return cell
     }
@@ -64,7 +79,6 @@ class ListViewController: SwipeTableViewController {
             
             if let indexPath = tableView.indexPathForSelectedRow {
                 destinationVC.selectedListe = lists?[indexPath.row]
-                print(lists?[indexPath.row])
             }
 
         }
@@ -118,6 +132,7 @@ class ListViewController: SwipeTableViewController {
         
         popup.setReminder = setReminder
          self.present(popup, animated: true)
+        tableView.reloadData()
     }
     
     // sends the notification to user to remind the list
@@ -162,6 +177,7 @@ class ListViewController: SwipeTableViewController {
         popup.saveEventToCalendar = saveEventToCalendar
         
         self.present(popup, animated: true)
+        tableView.reloadData()
     }
     
     func saveEventToCalendar(_ date: Date) ->(){
@@ -185,6 +201,24 @@ class ListViewController: SwipeTableViewController {
             }else{
                 print("error getting access to calendar\(error!)")
             }
+        }
+    }
+    
+    //strikes out the text
+    
+    override func strikeOut(at indexPath: IndexPath) {
+        
+        if let itemForUpdate = self.lists?[indexPath.row] {
+            
+            //changing the done property
+            do {
+                try realm.write {
+                    itemForUpdate.done = !itemForUpdate.done
+                }
+            }catch{
+                print("error updating relm\(error)")
+            }
+          tableView.reloadData()
         }
     }
 }
