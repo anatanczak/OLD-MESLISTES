@@ -63,6 +63,10 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
             
         }else{
             
+            let createNote = SwipeAction(style: .default, title: "Note") { (action, indexPath) in
+                self.createNote(at: indexPath)
+            }
+            
             let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
                 
                 self.updateModel(at: indexPath)
@@ -70,7 +74,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
             }
             // customize the action appearance
             deleteAction.image = UIImage(named: "delete-icon")
-            return [deleteAction]
+            return [deleteAction, createNote]
         }
         
     }
@@ -101,6 +105,10 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     
     func strikeOut (at indexPath: IndexPath) {
         // stike out the text in the cell
+    }
+    
+    func createNote (at indexPath: IndexPath) {
+        //creates a note
     }
     
     func colorize (hex: Int, alpha: Double = 1.0) -> UIColor {

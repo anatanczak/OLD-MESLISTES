@@ -42,14 +42,23 @@ class ItemTableViewController:SwipeTableViewController, UITextFieldDelegate {
         itemTextField.text = "Add a new item."
         itemTextField.clearsOnBeginEditing = true
         loadItems()
-        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        // MARK: - Table view delegate methods
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let currentItem = items?[indexPath.row]
+        if currentItem?.hasNote == true {
+            performSegue(withIdentifier: "goToNote", sender: self)
+        }
     }
-
+    
+    
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -212,9 +221,33 @@ class ItemTableViewController:SwipeTableViewController, UITextFieldDelegate {
             tableView.reloadData()
         }
     }
+    
+    override func createNote(at indexPath: IndexPath) {
+        selectedItem = indexPath.row
+        
+        if let currentItem = self.items?[indexPath.row] {
+            if currentItem.hasNote == false {
+                do {
+                    try realm.write {
+                        currentItem.hasNote = true
+                    }
+                }catch{
+                    print("error updating realm\(error)")
+                }
+            }
+            performSegue(withIdentifier: "goToNote", sender: self)
+        }
+        tableView.reloadData()
+    }
  
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//       
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToNote" {
+            
+            let destinationNavigationController = segue.destination as! UINavigationController
+            let targetController = destinationNavigationController.topViewController as! NoteViewController
+            
+                targetController.currentItem = items?[selectedItem]
+        }
+    }
 
 }

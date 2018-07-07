@@ -130,6 +130,45 @@ class ListViewController: SwipeTableViewController, UITextFieldDelegate {
     
     //MARK: - Methods for Swipe Actions
     
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        //guard orientation == .right else { return nil }
+        
+        if orientation == .left {
+            guard isSwipeRightEnabled else { return nil }
+            
+            let strikeOut = SwipeAction(style: .default, title: "Strike Out") { (action, indexPath) in
+                
+                self.strikeOut(at: indexPath)
+            }
+            
+            let setReminder = SwipeAction(style: .default, title: "Reminder") { action, indexPath in
+                
+                self.updateModelByAddingAReminder(at: indexPath)
+                
+            }
+            setReminder.image = UIImage(named: "reminder-icon")
+            
+            
+            let addEventToCalendar = SwipeAction(style: .default, title: "Calendar") { (action, indexPath) in
+                
+                self.addEventToCalendar(at: indexPath)
+            }
+            return[strikeOut, setReminder, addEventToCalendar]
+            
+        }else{
+            
+            let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+                
+                self.updateModel(at: indexPath)
+                
+            }
+            // customize the action appearance
+            deleteAction.image = UIImage(named: "delete-icon")
+            return [deleteAction]
+        }
+        
+    }
+    
     override func updateModelByAddingAReminder(at indexpath: IndexPath) {
     
         chosenRow = indexpath.row

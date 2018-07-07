@@ -130,11 +130,20 @@
                         <outlet property="itemTextField" destination="0AB-pF-yv8" id="qMo-ac-WFw"/>
                         <outlet property="navigationTitle" destination="nRT-VH-vtW" id="3zH-uG-p4Z"/>
                         <segue destination="yim-2V-cis" kind="presentation" identifier="goToDatePopupFromItems" id="GMd-pV-FY4"/>
+                        <segue destination="5FN-20-RcI" kind="show" identifier="goToNote" id="82y-pE-4S1"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y6g-va-oMj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2188" y="151.57421289355324"/>
+        </scene>
+        <!--Note-->
+        <scene sceneID="6Ks-pD-5xc">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Note" id="5FN-20-RcI" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qgd-ZV-aLj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2718" y="151"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="CxW-4c-RCo">
