@@ -14,6 +14,8 @@ import UserNotifications
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
 
+    
+    //MARK: - GLOBAL VARIABLES
     var isSwipeRightEnabled = true
     
     override func viewDidLoad() {
@@ -22,7 +24,8 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         
     }
     
-    //TableView DataSource Methods
+    //MARK: - TABLEVIEW DATASOURCE METHODS
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         //initializes the SwipeTableViewCell as the default cell for all of the TableView that inherit from this class
@@ -35,7 +38,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         return cell
     }
     
-    //the requered delegate method
+    //MARK: - SWIPE CELL METHODS
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         //guard orientation == .right else { return nil }
         
@@ -90,6 +93,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         return options
     }
     
+    //MARK: - DIFFERENT FUNCTIONS
     func updateModel(at indexpath: IndexPath){
         //Update our data model by deleting things from the database
     }
