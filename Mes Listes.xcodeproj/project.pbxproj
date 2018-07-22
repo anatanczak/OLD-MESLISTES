@@ -20,6 +20,7 @@
 		4C239AA820D51B73004A0089 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C239AA520D51B73004A0089 /* ListViewController.swift */; };
 		4C25E0C720ED3564003AF851 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C25E0C620ED3564003AF851 /* NoteViewController.swift */; };
 		635084BD210469410050DD1D /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635084BC210469400050DD1D /* RealmManager.swift */; };
+		635084BF21046DCA0050DD1D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635084BE21046DCA0050DD1D /* Coordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		4C239AA520D51B73004A0089 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		4C25E0C620ED3564003AF851 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		635084BC210469400050DD1D /* RealmManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		635084BE21046DCA0050DD1D /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		728AAED0934248CEE6DA1D88 /* Pods-Mes Listes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.debug.xcconfig"; sourceTree = "<group>"; };
 		FDEA6D9EE3FABA11FD24A774 /* Pods-Mes Listes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -75,6 +77,7 @@
 		4C239A9020D51B36004A0089 /* Mes Listes */ = {
 			isa = PBXGroup;
 			children = (
+				635084BE21046DCA0050DD1D /* Coordinator.swift */,
 				4C239A9120D51B36004A0089 /* AppDelegate.swift */,
 				4C239AA920D51B8D004A0089 /* Data Model */,
 				4C239AAA20D51B9A004A0089 /* controllers */,
@@ -153,7 +156,6 @@
 				4C239A8B20D51B36004A0089 /* Frameworks */,
 				4C239A8C20D51B36004A0089 /* Resources */,
 				F3875F05BD83153D4BCD61A1 /* [CP] Embed Pods Frameworks */,
-				E33EC20DF19FB6D933B0078E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -229,21 +231,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E33EC20DF19FB6D933B0078E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		F3875F05BD83153D4BCD61A1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -275,6 +262,7 @@
 			files = (
 				4C25E0C720ED3564003AF851 /* NoteViewController.swift in Sources */,
 				4C239A9220D51B36004A0089 /* AppDelegate.swift in Sources */,
+				635084BF21046DCA0050DD1D /* Coordinator.swift in Sources */,
 				4C1EB04920D7A0DC0056F1B5 /* DatePickerPopupViewController.swift in Sources */,
 				4C2158CB20DC0C7700403BCE /* SwipeTableViewController.swift in Sources */,
 				4C1DFC0A20DFF91800F3D459 /* Item.swift in Sources */,
@@ -419,12 +407,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5L8ZCK6563;
+				DEVELOPMENT_TEAM = B8MVUE7F92;
 				INFOPLIST_FILE = "Mes Listes/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anaviktoriv.Mes-Listes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -438,12 +424,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5L8ZCK6563;
+				DEVELOPMENT_TEAM = B8MVUE7F92;
 				INFOPLIST_FILE = "Mes Listes/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anaviktoriv.Mes-Listes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

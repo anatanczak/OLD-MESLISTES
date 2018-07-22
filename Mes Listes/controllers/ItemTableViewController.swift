@@ -50,7 +50,7 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
         itemTextField.placeholder = "Add a new item."
         itemTextField.clearsOnBeginEditing = true
         loadItems()
-        hideKeyboardWhenTappedAround()
+        //hideKeyboardWhenTappedAround()
     }
     
         // MARK: - TABLE VIEW DELEGATE METHODS
@@ -260,13 +260,13 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
     //MARK: - GESTURE RECOGNITION AND TEXTFIELD METHODS
     
     //hides the keyboard when tapped somewhere else
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-        tap.delegate = self
-    
-    }
+//    func hideKeyboardWhenTappedAround() {
+//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListViewController.dismissKeyboard))
+//        tap.cancelsTouchesInView = false
+//        view.addGestureRecognizer(tap)
+//        tap.delegate = self
+//    
+//    }
     
     @objc func dismissKeyboard() {
         view.endEditing(true)

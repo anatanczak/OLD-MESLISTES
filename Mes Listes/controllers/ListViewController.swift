@@ -12,120 +12,183 @@ import UserNotifications
 import EventKit
 import SwipeCellKit
 
-class ListViewController: SwipeTableViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class ListViewController: UIViewController {
     
-    //MARK: - GLOBAL VARIABLES
-    let realm = try! Realm()
+    //MARK: - Property
+    
+    /* Views. */
+    let tableView: UITableView = UITableView()
+    let textField: UITextField = UITextField()
+    
+    
+    /* Models. */
     var lists : Results <Liste>?
-    var chosenRow = 0
-    var chosenNameforCalendar = ""
     
-    //MARK: - IBACTIONS
-    @IBAction func textFieldPrimaryActionTriggered(_ sender: Any) {
-        userInputHandeled()
-    }
+    /// This property used for enebled or disable swipe action
+    var isSwipeRightEnabled = true
 
-    @IBAction func saveButtonTapped(_ sender: UIButton) {
-        userInputHandeled()
-    }
-    
-    //MARK: - IBOUTLETS
-    @IBOutlet weak var listTextField: UITextField!
-    
-    
-    //MARK: - VEIW DID LOAD
+    //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-  
-        self.listTextField.delegate = self
         
-        listTextField.placeholder = "Add a new list."
-        listTextField.clearsOnBeginEditing = true
-        loadLists()
-        hideKeyboardWhenTappedAround()
-    }
-    
-    
-    // MARK: - TABLE VIEW DELEGATE METHODS
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "goToItem", sender: self)
+        prepareNavigationBar()
+        prepareView()
     }
 
-    // MARK: - TABLE VIEW DATA SOURCE
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lists?.count ?? 1
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        /* Poin where screen did load but not appear. */
+        print(":=-> Poin where screen did load but not appear.")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+      
+        /* Poin where screen did load and did apear. */
+        print(":=-> Poin where screen did load but not appear.")
+    }
+    
+    
+    //MARK: Preparing
+    /// This func used for preparing navigation bar
+    func prepareNavigationBar() {
+        let title = "List"
+        self.title = title
+        let rightNavigationBatButton = UIBarButtonItem(title: "Add new",
+                                                       style: .plain,
+                                                       target: self,
+                                                       action: #selector(rightButtonAction))
+        self.navigationItem.setRightBarButton(rightNavigationBatButton, animated: false)
+    }
+    
+    @objc func rightButtonAction() {
+        print(":=-> rightButtonAction")
+        /* Make new item for table. */
+    }
+    
+    func prepareView() {
+        
+        let statusbarHeight: CGFloat = 20.0
+        let navigationBarHeight = (self.navigationController?.navigationBar.frame.height)! //44.0
+
+        let textFieldY = statusbarHeight + navigationBarHeight
+        let textFieldWidht = self.view.bounds.size.width - (20 + 20)
+        let textFieldHeight: CGFloat = 40.0
+        
+        let tableViewHeight = self.view.bounds.size.height - statusbarHeight - navigationBarHeight - textFieldHeight
+        let tableY = textFieldY + textFieldHeight
+        
+        //textField
+        textField.delegate = self
+        textField.placeholder = "Put name for new item"
+        textField.frame = CGRect(x: 20,
+                                 y: textFieldY,
+                                 width: textFieldWidht,
+                                 height: textFieldHeight)
+        
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.gray.cgColor
+        textField.layer.masksToBounds = true
+        
+        //textField.backgroundColor = UIColor.green
+        
+        //tableView
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(SwipeTableViewCell.self, forCellReuseIdentifier: "SwipeTableViewCell")
+        
+        tableView.backgroundColor = UIColor.yellow
+        
+
+        
+        tableView.frame = CGRect(x: 0,
+                                 y: tableY,
+                                 width: self.view.bounds.size.width,
+                                 height: tableViewHeight)
+
+        self.view.addSubview(tableView)
+
+
+        self.view.addSubview(textField)
+    }
+}
+
+extension ListViewController: UITextFieldDelegate {
+   
+    // return NO to not change text
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        return true
+    }
+    
+    // called when clear button pressed. return NO to ignore (no notifications)
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        return true
+        
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return true
+        
+    }
+}
+
+//MAKE: - UITableViewDataSource, UITableViewDelegate
+extension ListViewController: UITableViewDataSource, UITableViewDelegate {
+    /* UITableViewDataSource. */
+   
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return self.lists?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SwipeTableViewCell", for: indexPath) as! SwipeTableViewCell
+        
+        //makes this class delegate and enables the implementation of all the methods for a swipe cell
+        cell.delegate = self
         
         if let liste = lists?[indexPath.row] {
-
+            
             if liste.done == true {
                 let attributedString = NSMutableAttributedString.init(string: liste.name)
                 attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
                 attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
                 cell.textLabel?.attributedText = attributedString
                 
-            }else{
+            } else {
                 let attributedString = NSMutableAttributedString.init(string: liste.name)
                 attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
                 cell.textLabel?.attributedText = attributedString
             }
-        }else{
+        } else {
             cell.textLabel?.text = "You haven't created a list yet"
         }
-
-       // cell.backgroundColor = colorize(hex: 0xD1C5CA)
+        
+        // cell.backgroundColor = colorize(hex: 0xD1C5CA)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44.0
+    }
+}
 
-    
-    //gets userInput from the textField
-    func userInputHandeled(){
-        
-        if listTextField.text != "" {
-            let newList = Liste()
-            newList.name = listTextField.text!
-            self.save(list: newList)
-            
-            DispatchQueue.main.async {
-                self.listTextField.resignFirstResponder()
-            }
-            listTextField.clearsOnBeginEditing = true
-            listTextField.text = ""
-            tableView.reloadData()
-            
-        }
-    }
-    
-    //MARK: - REALM FUNCTIONS
-    
-    //saves data into database
-    func save(list: Liste) {
-        
-        do {
-            try realm.write {
-                realm.add(list)
-            }
-        } catch {
-            print("Error saving massage\(error)")
-        }
-    }
-    
-    //retrieves data from the database
-    func loadLists () {
-        lists = realm.objects(Liste.self)
-        lists = lists?.sorted(byKeyPath: "name", ascending: true)
-        tableView.reloadData()
-    }
-    
-    //MARK: - METHODS FOR SWIPE ACTIONS
-    
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+extension ListViewController: SwipeTableViewCellDelegate {
+        /**
+         Asks the delegate for the actions to display in response to a swipe in the specified row.
+         
+         - parameter tableView: The table view object which owns the cell requesting this information.
+         
+         - parameter indexPath: The index path of the row.
+         
+         - parameter orientation: The side of the cell requesting this information.
+         
+         - returns: An array of `SwipeAction` objects representing the actions for the row. Each action you provide is used to create a button that the user can tap.  Returning `nil` will prevent swiping for the supplied orientation.
+         */
+    //MARK: - SWIPE CELL METHODS
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         //guard orientation == .right else { return nil }
         
         if orientation == .left {
@@ -150,7 +213,7 @@ class ListViewController: SwipeTableViewController, UITextFieldDelegate, UIGestu
             }
             return[strikeOut, setReminder, addEventToCalendar]
             
-        }else{
+        } else {
             
             let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
                 
@@ -164,144 +227,76 @@ class ListViewController: SwipeTableViewController, UITextFieldDelegate, UIGestu
         
     }
     
-    override func updateModelByAddingAReminder(at indexpath: IndexPath) {
-    
-        chosenRow = indexpath.row
-        
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
-        
-        popup.setReminder = setReminder
-         self.present(popup, animated: true)
-        tableView.reloadData()
+    //MARK: - DIFFERENT FUNCTIONS
+    func updateModel(at indexpath: IndexPath){
+        //Update our data model by deleting things from the database
     }
     
-    // sends the notification to user to remind the list
-    func setReminder (_ components: DateComponents) ->(){
-        
-        let content = UNMutableNotificationContent()
-        content.title = "Don't forget!!!"
-        content.body = lists![chosenRow].name
-        content.sound = UNNotificationSound.default()
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let request = UNNotificationRequest(identifier: "TestIdentifier", content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request) { (error) in
-            if let error = error {
-                print(" We had an error: \(error)")
-            }
-        }
+    
+    func updateModelByAddingAReminder(at indexpath: IndexPath){
+        // add time to datamodel
     }
     
-    //deletes the list
-    override func updateModel(at indexpath: IndexPath) {
-        if let listForDeletion = self.lists?[indexpath.row]{
-            do {
-                try self.realm.write {
-                    self.realm.delete(listForDeletion)
-                }
-            } catch{
-                print("Error deleting category\(error)")
-            }
-        }
+    func addEventToCalendar (at indexpath: IndexPath) {
+        // add events to calendar
     }
     
-    override func addEventToCalendar(at indexpath: IndexPath) {
+    func strikeOut (at indexPath: IndexPath) {
+        // stike out the text in the cell
+    }
+    
+    func createNote (at indexPath: IndexPath) {
+        //creates a note
+    }
 
-        chosenRow = indexpath.row
-        chosenNameforCalendar = lists![indexpath.row].name
         
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
+        /**
+         Asks the delegate for the display options to be used while presenting the action buttons.
+         
+         - parameter tableView: The table view object which owns the cell requesting this information.
+         
+         - parameter indexPath: The index path of the row.
+         
+         - parameter orientation: The side of the cell requesting this information.
+         
+         - returns: A `SwipeTableOptions` instance which configures the behavior of the action buttons.
+         
+         - note: If not implemented, a default `SwipeTableOptions` instance is used.
+         */
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         
-        popup.dateForCalendar = true
-        popup.saveEventToCalendar = saveEventToCalendar
+        var options = SwipeTableOptions()
         
-        self.present(popup, animated: true)
-        tableView.reloadData()
-    }
-    
-    func saveEventToCalendar(_ date: Date) ->(){
-
-        let eventStore = EKEventStore()
-    
-        eventStore.requestAccess(to: .event) { (granted, error) in
-            if granted {
-                let event = EKEvent(eventStore: eventStore)
-
-                    event.title = self.chosenNameforCalendar
-                    event.startDate = date
-                    event.endDate = date.addingTimeInterval(3600)
-                    event.calendar = eventStore.defaultCalendarForNewEvents
-                do  {
-                    try eventStore.save(event, span: .thisEvent)
-                }catch{
-                    print("error saving the event\(error)")
-                }
-                
-            }else{
-                print("error getting access to calendar\(error!)")
-            }
-        }
-    }
-    
-    //strikes out the text
-    
-    override func strikeOut(at indexPath: IndexPath) {
         
-        if let itemForUpdate = self.lists?[indexPath.row] {
-            
-            //changing the done property
-            do {
-                try realm.write {
-                    itemForUpdate.done = !itemForUpdate.done
-                }
-            }catch{
-                print("error updating relm\(error)")
-            }
-          tableView.reloadData()
-        }
+        //diferent expansion styles
+        options.expansionStyle = orientation == .left ? .selection : .destructive
+        
+        return options
     }
-    
-    //MARK: - DIFFERENT METHODS
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToItem" {
-            let destinationVC = segue.destination as! ItemTableViewController
-            
-            if let indexPath = tableView.indexPathForSelectedRow {
-                destinationVC.selectedListe = lists?[indexPath.row]
-            }
-            
-        }
-    }
-    
-    //MARK: - GESTURE RECOGNIZER ADN TEXTFIELD METHODS
-    //hides the keyboard when tapped somewhere else
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-        tap.delegate = self
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    //function called by gestureRecognaizer and it returns false if it is a UIButton
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        // Don't handle button taps
-        print("false")
-        return !(touch.view is UIButton)
+        
+        /**
+         Tells the delegate that the table view is about to go into editing mode.
+         
+         - parameter tableView: The table view object providing this information.
+         
+         - parameter indexPath: The index path of the row.
+         
+         - parameter orientation: The side of the cell.
+         */
+    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) {
         
     }
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-
-        listTextField.text = ""
-        return true
-    }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
-        return true
+        
+        /**
+         Tells the delegate that the table view has left editing mode.
+         
+         - parameter tableView: The table view object providing this information.
+         
+         - parameter indexPath: The index path of the row.
+         
+         - parameter orientation: The side of the cell.
+         */
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation) {
+        
     }
 }

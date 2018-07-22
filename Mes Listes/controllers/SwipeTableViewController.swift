@@ -64,7 +64,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
             }
              return[strikeOut, setReminder, addEventToCalendar]
             
-        }else{
+        } else {
             
             let createNote = SwipeAction(style: .default, title: "Note") { (action, indexPath) in
                 self.createNote(at: indexPath)
