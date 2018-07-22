@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }catch{
             print("Error initializing new realm,\(error)")
         }
-        
+        let i = 0
         print(Realm.Configuration.defaultConfiguration.fileURL)
         
         // asking for user authorisation
