@@ -25,6 +25,7 @@ class Coordinator: NSObject {
         var isUserAuth = true
      
         isUserAuth = false
+       
         if isUserAuth {
             setupAuthFlow()
         } else {

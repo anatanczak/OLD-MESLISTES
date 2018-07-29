@@ -22,8 +22,10 @@ class ListViewController: UIViewController {
     
     
     /* Models. */
-    var lists : Results <Liste>?
-    
+    //var lists : Results <Liste>?
+    var lists : [NSObject?] = []
+    var currentArrayForPrint = 0
+
     /// This property is used to enable or disable swipe action
     var isSwipeRightEnabled = true
 
@@ -31,8 +33,34 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let object = NSObject()
+        lists.append(object)
+        
         prepareNavigationBar()
         prepareView()
+        
+
+        printFirstArray()
+        printSecondArray()
+        print("Arrays did printed")
+    }
+    
+    func printFirstArray() {
+        currentArrayForPrint = 1
+        print("first array will start for print")
+        for i in 0...10 {
+            print("first array :=-> \(i)")
+        }
+        print("first array did printed")
+    }
+    
+    func printSecondArray() {
+        currentArrayForPrint = 2
+        print("second array will start for print")
+        for i in 0...100 {
+            print("second array :=-> \(i)")
+        }
+        print("second array did printed")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -69,6 +97,8 @@ class ListViewController: UIViewController {
     
     func prepareView() {
         
+        view.backgroundColor = UIColor.green
+        
         let statusbarHeight: CGFloat = 20.0
         let navigationBarHeight = (self.navigationController?.navigationBar.frame.height)! //44.0
 
@@ -90,6 +120,7 @@ class ListViewController: UIViewController {
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.gray.cgColor
         textField.layer.masksToBounds = true
+        textField.backgroundColor = UIColor.white
         
         //textField.backgroundColor = UIColor.green
         
@@ -138,9 +169,20 @@ extension ListViewController: UITextFieldDelegate {
 extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     /* UITableViewDataSource. */
    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+     
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        print(":=-> didSelectRowAt  indexPath = \(indexPath)")
+
+        /* ItemTableViewController */
+        let itemVC = ItemTableViewController()
+        self.navigationController?.pushViewController(itemVC, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return self.lists?.count ?? 0
+        return self.lists.count 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -148,9 +190,8 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
         
         //makes this class delegate and enables the implementation of all the methods for a swipe cell
         cell.delegate = self
-        
-        if let liste = lists?[indexPath.row] {
-            
+        if let liste = lists[indexPath.row] {
+            /*
             if liste.done == true {
                 let attributedString = NSMutableAttributedString.init(string: liste.name)
                 attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
@@ -161,7 +202,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
                 let attributedString = NSMutableAttributedString.init(string: liste.name)
                 attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
                 cell.textLabel?.attributedText = attributedString
-            }
+            }*/
         } else {
             cell.textLabel?.text = "You haven't created a list yet"
         }

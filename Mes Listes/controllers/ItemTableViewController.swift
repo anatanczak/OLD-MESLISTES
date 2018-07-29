@@ -27,7 +27,7 @@ class ItemTableViewController: UIViewController {
     var selectedItem = 0
     var nameOfTheSelectedListe = ""
     var selectedItemForTheCalendar = ""
-    
+    //let realm = RealmManager.shared.getRealm()
     
     
     //MARK: - Life cycle
@@ -37,7 +37,8 @@ class ItemTableViewController: UIViewController {
         prepareNavigationBar()
         prepareView()
     }
-/*How does this function work? Where's the instance declaration of this class?*/
+
+    /* How does this function work? Where's the instance declaration of this class? */
     func prepareNavigationBar () {
         
         //!!! Need to change the title to the name of the list (e.g. shopping list etc.)
@@ -102,36 +103,36 @@ extension ItemTableViewController: UITextFieldDelegate {
 }
 
 extension ItemTableViewController: UITableViewDataSource, UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! SwipeTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SwipeTableViewCell", for: indexPath) as! SwipeTableViewCell
         
         cell.delegate = self
-                if let item = items?[indexPath.row] {
+        if let item = items?[indexPath.row] {
+            
+            if item.done == true {
+                let attributedString = NSMutableAttributedString.init(string: item.title)
+                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: item.title.count))
+                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
+                cell.textLabel?.attributedText = attributedString
+                
+            } else {
+                let attributedString = NSMutableAttributedString.init(string: item.title)
+                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
+                cell.textLabel?.attributedText = attributedString
+            }
+        } else {
+            cell.textLabel?.text = "You haven't created an item yet"
+        }
         
-                    if item.done == true {
-                        let attributedString = NSMutableAttributedString.init(string: item.title)
-                        attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: item.title.count))
-                        attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
-                        cell.textLabel?.attributedText = attributedString
+        // cell.backgroundColor = colorize(hex: 0xD1C5CA)
         
-                    }else{
-                        let attributedString = NSMutableAttributedString.init(string: item.title)
-                        attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
-                        cell.textLabel?.attributedText = attributedString
-                    }
-                }else{
-                    cell.textLabel?.text = "You haven't created an item yet"
-                }
-        
-               // cell.backgroundColor = colorize(hex: 0xD1C5CA)
-        
-                return cell
-}
+        return cell
+    }
 }
 
 extension ItemTableViewController: SwipeTableViewCellDelegate {
@@ -296,7 +297,7 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
 //                        try realm.write {
 //                            currentItem.hasNote = true
 //                        }
-//                    }catch{
+//                    } catch {
 //                        print("error updating realm\(error)")
 //                    }
 //                }

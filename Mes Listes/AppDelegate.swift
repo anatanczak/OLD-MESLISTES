@@ -35,9 +35,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         UNUserNotificationCenter.current().delegate = self
         
-        //self.window = UIWindow(frame: UIScreen.main.bounds)
-        //let coordinator = Coordinator(window: self.window!)
-        //coordinator.setup()
+        
+        let screenBounds = UIScreen.main.bounds
+        self.window = UIWindow(frame: screenBounds)
+        
+        let coordinator = Coordinator(window: self.window!)
+        coordinator.setup()
+        
         return true
     }
     

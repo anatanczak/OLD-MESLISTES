@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Qu4-cW-rvP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -23,12 +23,28 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PET-7q-IlC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1377" y="449"/>
+            <point key="canvasLocation" x="1319" y="651"/>
+        </scene>
+        <!--Item Table View Controller-->
+        <scene sceneID="lbl-Qc-dPa">
+            <objects>
+                <viewController id="Lj3-uE-Qb5" customClass="ItemTableViewController" customModule="Mes_Listes" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jqs-97-Xdk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="0lL-1U-PML"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="bTF-o7-SKJ"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dw8-X9-4xc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1385" y="-385"/>
         </scene>
         <!--Title-->
         <scene sceneID="r3J-dn-CP6">
             <objects>
-                <tableViewController id="Unx-TD-956" customClass="ItemTableViewController" customModule="Mes_Listes" sceneMemberID="viewController">
+                <tableViewController id="Unx-TD-956" customClass="ItemsTableViewController" customModule="Mes_Listes" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="biC-FG-7KQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -43,9 +59,6 @@
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
-                                    <connections>
-                                        <action selector="textFieldPrimaryActionTriggered:" destination="Unx-TD-956" eventType="primaryActionTriggered" id="86N-Xp-Ixm"/>
-                                    </connections>
                                 </textField>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tVJ-Wa-ayb">
                                     <rect key="frame" x="303" y="7" width="64" height="30"/>
@@ -54,9 +67,6 @@
                                     <state key="normal" title="Save">
                                         <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </state>
-                                    <connections>
-                                        <action selector="saveItemButton:" destination="Unx-TD-956" eventType="touchUpInside" id="zv2-mn-fH5"/>
-                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -78,15 +88,13 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Title" id="nRT-VH-vtW"/>
                     <connections>
-                        <outlet property="itemTextField" destination="0AB-pF-yv8" id="qMo-ac-WFw"/>
-                        <outlet property="navigationTitle" destination="nRT-VH-vtW" id="3zH-uG-p4Z"/>
                         <segue destination="yim-2V-cis" kind="presentation" identifier="goToDatePopupFromItems" id="GMd-pV-FY4"/>
                         <segue destination="4iZ-iy-ktR" kind="presentation" identifier="goToNote" id="OdI-HX-wH9"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y6g-va-oMj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2183" y="116"/>
+            <point key="canvasLocation" x="2038" y="126"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="CxW-4c-RCo">
@@ -103,12 +111,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Unx-TD-956" kind="relationship" relationship="rootViewController" id="fzt-f7-wJw"/>
+                        <segue destination="Lj3-uE-Qb5" kind="relationship" relationship="rootViewController" id="6YK-ao-oEm"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eJc-PW-ajm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="458" y="116"/>
+            <point key="canvasLocation" x="703" y="116"/>
         </scene>
         <!--Date Picker Popup View Controller-->
         <scene sceneID="yl7-x6-DJj">
