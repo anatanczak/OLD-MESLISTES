@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0275788A4B58FFC460D20C8E /* Pods_Mes_Listes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A93D742BF7FE4BCFE3ABA8E /* Pods_Mes_Listes.framework */; };
-		4C1C583120EBD2A4006F54FC /* Note.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C1C583020EBD2A4006F54FC /* Note.storyboard */; };
 		4C1DFC0820DFEBB200F3D459 /* ItemTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1DFC0720DFEBB200F3D459 /* ItemTableViewController.swift */; };
 		4C1DFC0A20DFF91800F3D459 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1DFC0920DFF91800F3D459 /* Item.swift */; };
 		4C1EB04920D7A0DC0056F1B5 /* DatePickerPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EB04820D7A0DC0056F1B5 /* DatePickerPopupViewController.swift */; };
@@ -24,7 +23,6 @@
 
 /* Begin PBXFileReference section */
 		3A93D742BF7FE4BCFE3ABA8E /* Pods_Mes_Listes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mes_Listes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C1C583020EBD2A4006F54FC /* Note.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Note.storyboard; sourceTree = "<group>"; };
 		4C1DFC0720DFEBB200F3D459 /* ItemTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewController.swift; sourceTree = "<group>"; };
 		4C1DFC0920DFF91800F3D459 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		4C1EB04820D7A0DC0056F1B5 /* DatePickerPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerPopupViewController.swift; sourceTree = "<group>"; };
@@ -109,7 +107,6 @@
 			isa = PBXGroup;
 			children = (
 				4C239AA420D51B73004A0089 /* Main.storyboard */,
-				4C1C583020EBD2A4006F54FC /* Note.storyboard */,
 				4C239A9820D51B37004A0089 /* Assets.xcassets */,
 				4C239A9A20D51B37004A0089 /* LaunchScreen.storyboard */,
 			);
@@ -194,7 +191,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C1C583120EBD2A4006F54FC /* Note.storyboard in Resources */,
 				4C239A9C20D51B37004A0089 /* LaunchScreen.storyboard in Resources */,
 				4C239A9920D51B37004A0089 /* Assets.xcassets in Resources */,
 				4C239AA720D51B73004A0089 /* Main.storyboard in Resources */,

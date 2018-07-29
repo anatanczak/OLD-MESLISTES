@@ -10,17 +10,20 @@ import UIKit
 
 class DatePickerPopupViewController: UIViewController {
     
+    //MARK: - GLOBAL VARIABLES
     var dateForCalendar = false
     var setReminder: ((_ components: DateComponents) -> ())?
     var saveEventToCalendar: ((_ date: Date) ->())?
 
+    
+    //MARK: - IBOUTLETS
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var datePicker: UIDatePicker!
     
     @IBOutlet weak var saveButtonLabel: UIButton!
     
 
-    
+    //MARK: - IBACTIONS
     @IBAction func saveButtonTapped(_ sender: UIButton) {
         if dateForCalendar == true {
             saveEventToCalendar!(datePicker.date)
@@ -31,6 +34,7 @@ class DatePickerPopupViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
 

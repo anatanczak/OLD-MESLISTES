@@ -11,8 +11,9 @@ import RealmSwift
 import UserNotifications
 import EventKit
 
-class ItemTableViewController:SwipeTableViewController, UITextFieldDelegate {
+class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
+    //MARK: - GLOBAL VARIABLES
     let realm = try! Realm()
     var items : Results <Item>?
     var selectedItem = 0
@@ -24,32 +25,35 @@ class ItemTableViewController:SwipeTableViewController, UITextFieldDelegate {
             loadItems()
         }
     }
+    
+    //MARK: - IBACTIONS
+    @IBAction func saveItemButton(_ sender: UIButton) {
+                userInputHandeled()
+    }
     @IBAction func textFieldPrimaryActionTriggered(_ sender: Any) {
         userInputHandeled()
     }
     
+    
+    //MARK: - IBOUTLETS
     @IBOutlet weak var navigationTitle: UINavigationItem!
    
     @IBOutlet weak var itemTextField: UITextField!
     
-    @IBAction func saveItemButton(_ sender: UIButton) {
-        userInputHandeled()
-    }
     
+    //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.itemTextField.delegate = self
         navigationTitle.title = selectedListe?.name
-        itemTextField.text = "Add a new item."
+        itemTextField.placeholder = "Add a new item."
         itemTextField.clearsOnBeginEditing = true
         loadItems()
+        hideKeyboardWhenTappedAround()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        tableView.reloadData()
-    }
-
-        // MARK: - Table view delegate methods
+        // MARK: - TABLE VIEW DELEGATE METHODS
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let currentItem = items?[indexPath.row]
@@ -59,7 +63,7 @@ class ItemTableViewController:SwipeTableViewController, UITextFieldDelegate {
     }
     
     
-    // MARK: - Table view data source
+    // MARK: - TABLE VIEW DATA SOURSE
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
@@ -92,10 +96,10 @@ class ItemTableViewController:SwipeTableViewController, UITextFieldDelegate {
         return cell
     }
     
+    //MARK: - REALM FUNCTIONS
     
     func userInputHandeled(){
         
-
         if let currentListe = self.selectedListe {
             if itemTextField.text != "" && itemTextField.text != "Add a new item." {
                 
@@ -117,15 +121,14 @@ class ItemTableViewController:SwipeTableViewController, UITextFieldDelegate {
             }
         }
     }
-
-    
+  
     //retrieves data from the database
     func loadItems () {
         items = selectedListe?.items.sorted(byKeyPath: "title", ascending: true)
         tableView.reloadData()
     }
   
-        //MARK: - Methods for Swipe Actions
+        //MARK: - METHODS FOR SWIPE ACTIONS
     
     
     override func updateModel(at indexpath: IndexPath) {
@@ -240,14 +243,52 @@ class ItemTableViewController:SwipeTableViewController, UITextFieldDelegate {
         tableView.reloadData()
     }
  
+    
+    //MARK: - DIFFERENT METHODS
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToNote" {
             
-            let destinationNavigationController = segue.destination as! UINavigationController
-            let targetController = destinationNavigationController.topViewController as! NoteViewController
+            let destinationVC = segue.destination as! NoteViewController
             
-                targetController.currentItem = items?[selectedItem]
+            destinationVC.currentItem = items?[selectedItem]
+            print(destinationVC.currentItem ?? "fuck")
         }
     }
 
+    
+    //MARK: - GESTURE RECOGNITION AND TEXTFIELD METHODS
+    
+    //hides the keyboard when tapped somewhere else
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        tap.delegate = self
+    
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+
+    }
+    
+    //function called by gestureRecognaizer and it returns false if it is a UIButton
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // Don't handle button taps
+        print("false")
+        return !(touch.view is UIButton)
+        
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        
+        itemTextField.text = ""
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return true
+    }
 }
+

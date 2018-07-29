@@ -12,45 +12,49 @@ import UserNotifications
 import EventKit
 import SwipeCellKit
 
-class ListViewController: SwipeTableViewController, UITextFieldDelegate {
+class ListViewController: SwipeTableViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
+    //MARK: - GLOBAL VARIABLES
     let realm = try! Realm()
     var lists : Results <Liste>?
     var chosenRow = 0
     var chosenNameforCalendar = ""
     
+    //MARK: - IBACTIONS
     @IBAction func textFieldPrimaryActionTriggered(_ sender: Any) {
         userInputHandeled()
     }
-    
-    
+
     @IBAction func saveButtonTapped(_ sender: UIButton) {
         userInputHandeled()
-        
     }
     
+    //MARK: - IBOUTLETS
     @IBOutlet weak var listTextField: UITextField!
     
+    
+    //MARK: - VEIW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
   
         self.listTextField.delegate = self
         
-        listTextField.text = "Add a new list."
+        listTextField.placeholder = "Add a new list."
         listTextField.clearsOnBeginEditing = true
         loadLists()
+        hideKeyboardWhenTappedAround()
     }
     
-    // MARK: - Table view delegate methods
+    
+    // MARK: - TABLE VIEW DELEGATE METHODS
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItem", sender: self)
     }
 
-    // MARK: - Table view data source
+    // MARK: - TABLE VIEW DATA SOURCE
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return lists?.count ?? 1
     }
 
@@ -80,22 +84,10 @@ class ListViewController: SwipeTableViewController, UITextFieldDelegate {
     }
 
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToItem" {
-            let destinationVC = segue.destination as! ItemTableViewController
-            
-            if let indexPath = tableView.indexPathForSelectedRow {
-                destinationVC.selectedListe = lists?[indexPath.row]
-            }
-
-        }
-    }
-
-    
     //gets userInput from the textField
     func userInputHandeled(){
         
-        if listTextField.text != "" && listTextField.text != "Add a new list." {
+        if listTextField.text != "" {
             let newList = Liste()
             newList.name = listTextField.text!
             self.save(list: newList)
@@ -103,11 +95,14 @@ class ListViewController: SwipeTableViewController, UITextFieldDelegate {
             DispatchQueue.main.async {
                 self.listTextField.resignFirstResponder()
             }
-            listTextField.text = "Add a new list."
             listTextField.clearsOnBeginEditing = true
+            listTextField.text = ""
             tableView.reloadData()
+            
         }
     }
+    
+    //MARK: - REALM FUNCTIONS
     
     //saves data into database
     func save(list: Liste) {
@@ -128,7 +123,7 @@ class ListViewController: SwipeTableViewController, UITextFieldDelegate {
         tableView.reloadData()
     }
     
-    //MARK: - Methods for Swipe Actions
+    //MARK: - METHODS FOR SWIPE ACTIONS
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         //guard orientation == .right else { return nil }
@@ -266,5 +261,47 @@ class ListViewController: SwipeTableViewController, UITextFieldDelegate {
             }
           tableView.reloadData()
         }
+    }
+    
+    //MARK: - DIFFERENT METHODS
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToItem" {
+            let destinationVC = segue.destination as! ItemTableViewController
+            
+            if let indexPath = tableView.indexPathForSelectedRow {
+                destinationVC.selectedListe = lists?[indexPath.row]
+            }
+            
+        }
+    }
+    
+    //MARK: - GESTURE RECOGNIZER ADN TEXTFIELD METHODS
+    //hides the keyboard when tapped somewhere else
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        tap.delegate = self
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    //function called by gestureRecognaizer and it returns false if it is a UIButton
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // Don't handle button taps
+        print("false")
+        return !(touch.view is UIButton)
+        
+    }
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+
+        listTextField.text = ""
+        return true
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+
+        return true
     }
 }

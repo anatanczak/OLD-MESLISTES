@@ -15,7 +15,7 @@ class Item: Object {
     @objc dynamic var important: Bool = false
     @objc dynamic var hasNote: Bool = false
     @objc dynamic var noteInput = ""
-    @objc dynamic var images = [UIImage]()
+    var imagenames = List<String>()
     
 var parentListe = LinkingObjects(fromType: Liste.self, property: "items")
 }
