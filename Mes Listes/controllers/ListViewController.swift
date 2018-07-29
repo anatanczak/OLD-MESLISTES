@@ -24,7 +24,7 @@ class ListViewController: UIViewController {
     /* Models. */
     var lists : Results <Liste>?
     
-    /// This property used for enebled or disable swipe action
+    /// This property is used to enable or disable swipe action
     var isSwipeRightEnabled = true
 
     //MARK: - Life cycle
@@ -55,11 +55,11 @@ class ListViewController: UIViewController {
     func prepareNavigationBar() {
         let title = "List"
         self.title = title
-        let rightNavigationBatButton = UIBarButtonItem(title: "Add new",
+        let rightNavigationButton = UIBarButtonItem(title: "Add",
                                                        style: .plain,
                                                        target: self,
                                                        action: #selector(rightButtonAction))
-        self.navigationItem.setRightBarButton(rightNavigationBatButton, animated: false)
+        self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
     }
     
     @objc func rightButtonAction() {
@@ -81,7 +81,7 @@ class ListViewController: UIViewController {
         
         //textField
         textField.delegate = self
-        textField.placeholder = "Put name for new item"
+        textField.placeholder = "Add a new list"
         textField.frame = CGRect(x: 20,
                                  y: textFieldY,
                                  width: textFieldWidht,
@@ -134,7 +134,7 @@ extension ListViewController: UITextFieldDelegate {
     }
 }
 
-//MAKE: - UITableViewDataSource, UITableViewDelegate
+//MARK: - UITableViewDataSource, UITableViewDelegate
 extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     /* UITableViewDataSource. */
    
