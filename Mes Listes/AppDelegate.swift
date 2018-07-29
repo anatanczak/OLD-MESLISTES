@@ -15,13 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     var window: UIWindow?
 
+    var coordinator: Coordinator?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         /* In feature wiil init coordinator file for working with application, and rounting berween screens. */
         do {
             _ = try Realm()
-        }catch{
+        } catch {
             print("Error initializing new realm,\(error)")
         }
         let i = 0
@@ -34,6 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         UNUserNotificationCenter.current().delegate = self
         
+        //self.window = UIWindow(frame: UIScreen.main.bounds)
+        //let coordinator = Coordinator(window: self.window!)
+        //coordinator.setup()
         return true
     }
     

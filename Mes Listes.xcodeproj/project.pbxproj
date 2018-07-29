@@ -77,8 +77,8 @@
 		4C239A9020D51B36004A0089 /* Mes Listes */ = {
 			isa = PBXGroup;
 			children = (
-				635084BE21046DCA0050DD1D /* Coordinator.swift */,
 				4C239A9120D51B36004A0089 /* AppDelegate.swift */,
+				635084BE21046DCA0050DD1D /* Coordinator.swift */,
 				4C239AA920D51B8D004A0089 /* Data Model */,
 				4C239AAA20D51B9A004A0089 /* controllers */,
 				635084B7210468730050DD1D /* Managers */,
@@ -410,7 +410,10 @@
 				DEVELOPMENT_TEAM = B8MVUE7F92;
 				INFOPLIST_FILE = "Mes Listes/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anaviktoriv.Mes-Listes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -427,7 +430,10 @@
 				DEVELOPMENT_TEAM = B8MVUE7F92;
 				INFOPLIST_FILE = "Mes Listes/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anaviktoriv.Mes-Listes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
