@@ -49,8 +49,8 @@ class ItemTableViewController: UIViewController {
     }
     
     @objc func rightButtonAction() {
-        print(":=-> rightButtonAction")
-        /* Make new item for table. */
+        let dateController = DatePickerPopupViewController()
+        self.navigationController?.show(dateController, sender: self)
     }
     
     func prepareView () {
@@ -133,6 +133,13 @@ extension ItemTableViewController: UITableViewDataSource, UITableViewDelegate {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let noteVC = NoteViewController()
+        self.navigationController?.pushViewController(noteVC, animated: true)
+    }
 }
 
 extension ItemTableViewController: SwipeTableViewCellDelegate {
@@ -207,15 +214,15 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
         }
     
         func updateModelByAddingAReminder(at indexpath: IndexPath) {
-    
-            selectedItem = indexpath.row
-    
-            let sb = UIStoryboard(name: "Main", bundle: nil)
-            let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
-    
-            popup.setReminder = setReminder
-            self.present(popup, animated: true)
-            tableView.reloadData()
+//
+//            selectedItem = indexpath.row
+//
+//            let sb = UIStoryboard(name: "Main", bundle: nil)
+//            let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
+//
+//            popup.setReminder = setReminder
+//            self.present(popup, animated: true)
+//            tableView.reloadData()
         }
     
         // sends the notification to user to remind the list
@@ -237,17 +244,17 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
     
         func addEventToCalendar(at indexpath: IndexPath) {
     
-            selectedItem = indexpath.row
-            selectedItemForTheCalendar = items![indexpath.row].title
-    
-            let sb = UIStoryboard(name: "Main", bundle: nil)
-            let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
-    
-            popup.dateForCalendar = true
-            popup.saveEventToCalendar = saveEventToCalendar
-    
-            self.present(popup, animated: true)
-            tableView.reloadData()
+//            selectedItem = indexpath.row
+//            selectedItemForTheCalendar = items![indexpath.row].title
+//    
+//            let sb = UIStoryboard(name: "Main", bundle: nil)
+//            let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
+//    
+//            popup.dateForCalendar = true
+//            popup.saveEventToCalendar = saveEventToCalendar
+//    
+//            self.present(popup, animated: true)
+//            tableView.reloadData()
         }
     
         func saveEventToCalendar(_ date: Date) ->(){
