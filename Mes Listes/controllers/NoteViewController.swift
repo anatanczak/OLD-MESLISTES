@@ -30,7 +30,8 @@ class NoteViewController: UIViewController {
         
         prepareNavigationBar()
         prepareView()
-    
+        
+  getCursor()
     }
     
     func prepareNavigationBar () {
@@ -94,7 +95,17 @@ class NoteViewController: UIViewController {
 }
 
 extension NoteViewController: UITextViewDelegate {
-    
+    func getCursor () {
+        let startPosition: UITextPosition = textView.beginningOfDocument
+        let endPositin: UITextPosition = textView.endOfDocument
+        let selectedRange: UITextRange? = textView.selectedTextRange
+        
+        if let selectedRange = textView.selectedTextRange {
+            let cursorPosition = textView.offset(from: startPosition, to: selectedRange.start)
+            
+            print(cursorPosition)
+        }
+    }
 }
 
 
