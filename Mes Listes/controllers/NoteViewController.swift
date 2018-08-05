@@ -243,6 +243,7 @@ extension NoteViewController: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         // what happens when the user finishes editing the textView
         doneButtonPressed.setTitle("Save", for: .normal)
+        getCursor()
     }
     
     // makes the text in a textview not to hide behind the keyboard
@@ -261,6 +262,18 @@ extension NoteViewController: UITextViewDelegate {
         }
         
         textView.scrollRangeToVisible(textView.selectedRange)
+    }
+    
+    func getCursor () {
+        let startPosition: UITextPosition = textView.beginningOfDocument
+        let endPosition: UITextPosition = textView.endOfDocument
+        let selectedRange: UITextRange? = textView.selectedTextRange
+        
+        if let selectedRange = textView.selectedTextRange {
+            let cursorPosition = textView.offset(from: startPosition, to: selectedRange.start)
+            
+            print("-->CursorPosition is\(cursorPosition)")
+        }
     }
     
 }
