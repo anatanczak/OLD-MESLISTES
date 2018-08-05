@@ -22,6 +22,7 @@
 		632BE01A210DAE4200A11B25 /* ItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632BE019210DAE4200A11B25 /* ItemsTableViewController.swift */; };
 		635084BD210469410050DD1D /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635084BC210469400050DD1D /* RealmManager.swift */; };
 		635084BF21046DCA0050DD1D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635084BE21046DCA0050DD1D /* Coordinator.swift */; };
+		63CE28602116ECCF00C1645A /* ListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CE285F2116ECCF00C1645A /* ListTVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		632BE019210DAE4200A11B25 /* ItemsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsTableViewController.swift; sourceTree = "<group>"; };
 		635084BC210469400050DD1D /* RealmManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		635084BE21046DCA0050DD1D /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		63CE285F2116ECCF00C1645A /* ListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTVC.swift; sourceTree = "<group>"; };
 		728AAED0934248CEE6DA1D88 /* Pods-Mes Listes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.debug.xcconfig"; sourceTree = "<group>"; };
 		FDEA6D9EE3FABA11FD24A774 /* Pods-Mes Listes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,8 +83,9 @@
 			children = (
 				4C239A9120D51B36004A0089 /* AppDelegate.swift */,
 				635084BE21046DCA0050DD1D /* Coordinator.swift */,
+				63CE285A2116E99400C1645A /* Views */,
 				4C239AA920D51B8D004A0089 /* Data Model */,
-				4C239AAA20D51B9A004A0089 /* controllers */,
+				4C239AAA20D51B9A004A0089 /* Controllers */,
 				635084B7210468730050DD1D /* Managers */,
 				4C239AAB20D51BA7004A0089 /* supporting files */,
 				4C239A9D20D51B37004A0089 /* Info.plist */,
@@ -99,7 +102,7 @@
 			path = "Data Model";
 			sourceTree = "<group>";
 		};
-		4C239AAA20D51B9A004A0089 /* controllers */ = {
+		4C239AAA20D51B9A004A0089 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				4C25E0C620ED3564003AF851 /* NoteViewController.swift */,
@@ -109,7 +112,7 @@
 				4C239AA520D51B73004A0089 /* ListViewController.swift */,
 				632BE019210DAE4200A11B25 /* ItemsTableViewController.swift */,
 			);
-			path = controllers;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		4C239AAB20D51BA7004A0089 /* supporting files */ = {
@@ -128,6 +131,14 @@
 				635084BC210469400050DD1D /* RealmManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		63CE285A2116E99400C1645A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				63CE285F2116ECCF00C1645A /* ListTVC.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		DA08D1F700BCAF402E0E9967 /* Pods */ = {
@@ -272,6 +283,7 @@
 				4C1DFC0A20DFF91800F3D459 /* Item.swift in Sources */,
 				635084BD210469410050DD1D /* RealmManager.swift in Sources */,
 				4C239AA820D51B73004A0089 /* ListViewController.swift in Sources */,
+				63CE28602116ECCF00C1645A /* ListTVC.swift in Sources */,
 				4C239AA620D51B73004A0089 /* Liste.swift in Sources */,
 				4C1DFC0820DFEBB200F3D459 /* ItemTableViewController.swift in Sources */,
 			);

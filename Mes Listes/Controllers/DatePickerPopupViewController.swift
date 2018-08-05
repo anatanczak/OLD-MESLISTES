@@ -21,11 +21,12 @@ class DatePickerPopupViewController: UIViewController {
     }
     
     func prepareview () {
+            
         let labelHeight: CGFloat = 40.0
         let labelWidth = self.view.bounds.size.width
         let labelY = self.view.bounds.size.height / 3
-        
-
+            
+        view.isOpaque = false
         
         let saveButtonHeight: CGFloat = 40.0
         let saveButtonWidth = self.view.bounds.size.width
@@ -43,6 +44,7 @@ class DatePickerPopupViewController: UIViewController {
         saveButton.backgroundColor = UIColor.red
         saveButton.setTitle("Save", for: .normal)
         saveButton.frame = CGRect(x: 0, y: saveButtonY, width: saveButtonWidth, height: saveButtonHeight)
+        saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
         
         datePicker.backgroundColor = UIColor.red
         datePicker.frame = CGRect(x: 0, y: datePickerY, width: datePickerWidth, height: datePickerHeight)
@@ -52,6 +54,13 @@ class DatePickerPopupViewController: UIViewController {
         self.view.addSubview(datePicker)
     }
     
+    //MARK: - Actions:
+    @objc func saveButtonAction() {
+        /* logic for saving date...*/
+        
+        /* close picker... */
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 //class DatePickerPopupViewController: UIViewController {

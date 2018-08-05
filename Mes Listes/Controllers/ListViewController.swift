@@ -127,7 +127,7 @@ class ListViewController: UIViewController {
         //tableView
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(SwipeTableViewCell.self, forCellReuseIdentifier: "SwipeTableViewCell")
+        tableView.register(ListTVC.self, forCellReuseIdentifier: "ListTVC")
         
         tableView.backgroundColor = UIColor.yellow
         
@@ -186,33 +186,20 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SwipeTableViewCell", for: indexPath) as! SwipeTableViewCell
-        
-        //makes this class delegate and enables the implementation of all the methods for a swipe cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ListTVC", for: indexPath) as! ListTVC
         cell.delegate = self
-        if let liste = lists[indexPath.row] {
-            /*
-            if liste.done == true {
-                let attributedString = NSMutableAttributedString.init(string: liste.name)
-                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
-                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
-                cell.textLabel?.attributedText = attributedString
-                
-            } else {
-                let attributedString = NSMutableAttributedString.init(string: liste.name)
-                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
-                cell.textLabel?.attributedText = attributedString
-            }*/
-        } else {
-            cell.textLabel?.text = "You haven't created a list yet"
-        }
-        
-        // cell.backgroundColor = colorize(hex: 0xD1C5CA)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44.0
+        return 60.0
+    }
+}
+
+extension ListViewController: ListTVCDelegate {
+  
+    func cellDidTapOnOk() {
+        print(":=-> view controller get ok action from cell...")
     }
 }
 

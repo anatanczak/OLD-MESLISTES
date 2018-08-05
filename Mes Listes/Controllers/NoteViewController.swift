@@ -12,12 +12,12 @@ import RealmSwift
 class NoteViewController: UIViewController {
    
     //MARK: - Properites
-    let textView = UITextView()
-    let deleteButton = UIButton()
-    let shareButton = UIButton()
-    let fontButton = UIButton()
-    let takePhotoButton = UIButton()
-    let photoLibraryButton = UIButton()
+    let textView            = UITextView()
+    let deleteButton        = UIButton()
+    let shareButton         = UIButton()
+    let fontButton          = UIButton()
+    let takePhotoButton     = UIButton()
+    let photoLibraryButton  = UIButton()
     
     //images for buttons
     let imageTakePhoto = UIImage(named: "camera-icon")
@@ -31,7 +31,7 @@ class NoteViewController: UIViewController {
         prepareNavigationBar()
         prepareView()
         
-  getCursor()
+        getCursor()
     }
     
     func prepareNavigationBar () {
@@ -40,10 +40,7 @@ class NoteViewController: UIViewController {
         let rightNavigationItem = UIBarButtonItem(title: "Save", style:.plain , target: self, action: #selector(rightButtonAction))
         self.navigationItem.setRightBarButton(rightNavigationItem, animated: false)
     }
-    
-    @objc func rightButtonAction () {
-        
-    }
+
     
     func prepareView () {
         let statusBarHeight: CGFloat = 20.0
@@ -90,6 +87,11 @@ class NoteViewController: UIViewController {
         self.view.addSubview(fontButton)
         self.view.addSubview(takePhotoButton)
         self.view.addSubview(photoLibraryButton)
+    }
+    
+    //MARK: - Actions
+    @objc func rightButtonAction () {
+        
     }
     
 }

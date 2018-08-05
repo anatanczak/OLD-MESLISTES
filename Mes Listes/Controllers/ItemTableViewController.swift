@@ -50,6 +50,9 @@ class ItemTableViewController: UIViewController {
     
     @objc func rightButtonAction() {
         let dateController = DatePickerPopupViewController()
+        dateController.modalPresentationStyle = .overCurrentContext
+        
+        self.present(dateController, animated: true, completion: nil)
         self.navigationController?.show(dateController, sender: self)
     }
     
