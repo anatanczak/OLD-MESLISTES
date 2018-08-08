@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0275788A4B58FFC460D20C8E /* Pods_Mes_Listes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A93D742BF7FE4BCFE3ABA8E /* Pods_Mes_Listes.framework */; };
+		4C02F0172119DFFF00CBD16A /* ItemTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C02F0162119DFFF00CBD16A /* ItemTVC.swift */; };
 		4C1DFC0820DFEBB200F3D459 /* ItemTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1DFC0720DFEBB200F3D459 /* ItemTableViewController.swift */; };
 		4C1DFC0A20DFF91800F3D459 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1DFC0920DFF91800F3D459 /* Item.swift */; };
 		4C1EB04920D7A0DC0056F1B5 /* DatePickerPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EB04820D7A0DC0056F1B5 /* DatePickerPopupViewController.swift */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		3A93D742BF7FE4BCFE3ABA8E /* Pods_Mes_Listes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mes_Listes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C02F0162119DFFF00CBD16A /* ItemTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTVC.swift; sourceTree = "<group>"; };
 		4C1DFC0720DFEBB200F3D459 /* ItemTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewController.swift; sourceTree = "<group>"; };
 		4C1DFC0920DFF91800F3D459 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		4C1EB04820D7A0DC0056F1B5 /* DatePickerPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerPopupViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 		63CE285A2116E99400C1645A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4C02F0162119DFFF00CBD16A /* ItemTVC.swift */,
 				63CE285F2116ECCF00C1645A /* ListTVC.swift */,
 			);
 			path = Views;
@@ -284,6 +287,7 @@
 				635084BD210469410050DD1D /* RealmManager.swift in Sources */,
 				4C239AA820D51B73004A0089 /* ListViewController.swift in Sources */,
 				63CE28602116ECCF00C1645A /* ListTVC.swift in Sources */,
+				4C02F0172119DFFF00CBD16A /* ItemTVC.swift in Sources */,
 				4C239AA620D51B73004A0089 /* Liste.swift in Sources */,
 				4C1DFC0820DFEBB200F3D459 /* ItemTableViewController.swift in Sources */,
 			);

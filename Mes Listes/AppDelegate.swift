@@ -25,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } catch {
             print("Error initializing new realm,\(error)")
         }
-        let i = 0
-        print(Realm.Configuration.defaultConfiguration.fileURL)
+//        let i = 0
+//        print(Realm.Configuration.defaultConfiguration.fileURL)
         
         // asking for user authorisation
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
