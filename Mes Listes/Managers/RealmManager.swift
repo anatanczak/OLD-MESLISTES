@@ -106,7 +106,7 @@ class RealmManager: NSObject {
 //MARK: - Liste Objects
 extension RealmManager {
     
-    func createListe(name: String) {
+    func createListe(name: String, completion: (()->())?) {
         operationQueue.async { [weak self] in
             guard let `self` = self else { return }
             
@@ -128,8 +128,9 @@ extension RealmManager {
                 realm.add(liste, update: true)
                 try! realm.commitWrite()
             }
+            completion?()
         }
-        }
+    }
     
     func getListes() -> [Liste] {
         let realm = self.getRealm()
@@ -137,8 +138,7 @@ extension RealmManager {
         let array = Array(realm.objects(Liste.self))
         return array
     }
-  
-    }
+}
     
     //MARK: -  Item Objects
     extension RealmManager {

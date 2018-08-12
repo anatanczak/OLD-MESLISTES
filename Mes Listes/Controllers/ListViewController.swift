@@ -34,7 +34,8 @@ class ListViewController: UIViewController {
         prepareNavigationBar()
         prepareView()
         
-//        addHardcodedItems()
+        registerForKeyboardDidShowNotification(scrollView: self.tableView)
+        registerForKeyboardWillHideNotification(scrollView: self.tableView)
     }
 
     
@@ -52,11 +53,16 @@ class ListViewController: UIViewController {
     
     @objc func rightButtonAction() {
         if let text = textField.text, text != "" {
-            RealmManager.shared.createListe(name: text)
-            let listobjects = RealmManager.shared.getListes()
-            print(listobjects)
-            listesArray = listobjects
-            tableView.reloadData()
+            RealmManager.shared.createListe(name: text, completion: { [weak self] in
+                guard let `self` = self else { return }
+              
+                DispatchQueue.main.async { [weak self] in
+                    let listobjects = RealmManager.shared.getListes()
+                    print(listobjects)
+                    self?.listesArray = listobjects
+                    self?.tableView.reloadData()
+                }
+            })
         }
     }
     
@@ -146,7 +152,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
                 attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
                 cell.textLabel?.attributedText = attributedString
                 
-            }else{
+            } else {
                 let attributedString = NSMutableAttributedString.init(string: liste.name)
                 attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
                 cell.textLabel?.attributedText = attributedString

@@ -22,6 +22,7 @@
 		4CA5BE0F2120840A00EB6457 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CA5BE0E2120840A00EB6457 /* Main.storyboard */; };
 		635084BD210469410050DD1D /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635084BC210469400050DD1D /* RealmManager.swift */; };
 		635084BF21046DCA0050DD1D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635084BE21046DCA0050DD1D /* Coordinator.swift */; };
+		639D130D2120974A007B42AA /* ViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639D130C2120974A007B42AA /* ViewController+Extension.swift */; };
 		63CE28602116ECCF00C1645A /* ListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CE285F2116ECCF00C1645A /* ListTVC.swift */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		4CA5BE0E2120840A00EB6457 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		635084BC210469400050DD1D /* RealmManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		635084BE21046DCA0050DD1D /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		639D130C2120974A007B42AA /* ViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Extension.swift"; sourceTree = "<group>"; };
 		63CE285F2116ECCF00C1645A /* ListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTVC.swift; sourceTree = "<group>"; };
 		728AAED0934248CEE6DA1D88 /* Pods-Mes Listes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.debug.xcconfig"; sourceTree = "<group>"; };
 		FDEA6D9EE3FABA11FD24A774 /* Pods-Mes Listes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.release.xcconfig"; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 		4C239AAB20D51BA7004A0089 /* supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				639D130B2120971A007B42AA /* Extensions */,
 				4CA5BE0E2120840A00EB6457 /* Main.storyboard */,
 				4C239A9820D51B37004A0089 /* Assets.xcassets */,
 				4C239A9A20D51B37004A0089 /* LaunchScreen.storyboard */,
@@ -130,6 +133,14 @@
 				635084BC210469400050DD1D /* RealmManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		639D130B2120971A007B42AA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				639D130C2120974A007B42AA /* ViewController+Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		63CE285A2116E99400C1645A /* Views */ = {
@@ -279,6 +290,7 @@
 				635084BF21046DCA0050DD1D /* Coordinator.swift in Sources */,
 				4C1EB04920D7A0DC0056F1B5 /* DatePickerPopupViewController.swift in Sources */,
 				4C2158CB20DC0C7700403BCE /* SwipeTableViewController.swift in Sources */,
+				639D130D2120974A007B42AA /* ViewController+Extension.swift in Sources */,
 				4C1DFC0A20DFF91800F3D459 /* Item.swift in Sources */,
 				635084BD210469410050DD1D /* RealmManager.swift in Sources */,
 				4C239AA820D51B73004A0089 /* ListViewController.swift in Sources */,
