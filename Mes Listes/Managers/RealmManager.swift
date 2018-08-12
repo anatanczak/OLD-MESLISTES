@@ -15,11 +15,10 @@ enum RealmAccessThread {
     case background
 }
 
-
 class RealmManager: NSObject {
     
     static let shared = RealmManager()
-    static let accessThreadLabel = "com.costless.background.realm"
+    static let accessThreadLabel = "com.mes.list.background.realm"
     
     let operationQueue = DispatchQueue(label: accessThreadLabel)
     
@@ -102,4 +101,54 @@ class RealmManager: NSObject {
             }
         }
     }
+}
+
+
+/* Extension for working with item ... */
+extension RealmManager {
+    
+    func createItem(title: String) {
+        operationQueue.async { [weak self] in
+            guard let `self` = self else { return }
+
+            let item = Item()
+            item.title = title
+            
+            let date = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            
+            let key = dateFormatter.string(from: date)
+            
+            item.id = key
+            
+            let realm = self.getRealm()
+            
+            if realm.object(ofType: Item.self, forPrimaryKey: key) == nil {
+                realm.beginWrite()
+                realm.add(item, update: true)
+                try! realm.commitWrite()
+            }
+        }
+    }
+    
+    func getAllItems() -> [Item] {
+        let realm = self.getRealm()
+        
+        let array = Array(realm.objects(Item.self))
+        return array
+    }
+    
+    func getAllItems(forListName list: String) -> [Item] {
+
+        let realm = self.getRealm()
+        
+        let result = Array(realm.objects(Item.self).filter("parentListName = '\(list)'"))
+        return result
+    }
+    
+    //update
+    
+    //delete 
+    
 }

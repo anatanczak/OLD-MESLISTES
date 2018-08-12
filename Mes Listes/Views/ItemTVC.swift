@@ -14,10 +14,10 @@ protocol ItemTVCDelegate: NSObjectProtocol {
     func cellDidTapOnNoteButton()
 }
 
-class ItemTVC: UITableViewCell {
+class ItemTVC: SwipeTableViewCell {
     
-    weak var delegate: ItemTVCDelegate?
-
+    weak var itemDelegate: ItemTVCDelegate?
+    
     //MARK: - Properties
     var label = UILabel()
     var noteButton = UIButton()
@@ -57,7 +57,7 @@ class ItemTVC: UITableViewCell {
     //MARK: - Action
     @objc func noteButtonAction () {
         print(":-->noteButtonPressed")
-        delegate?.cellDidTapOnNoteButton()
+        itemDelegate?.cellDidTapOnNoteButton()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
