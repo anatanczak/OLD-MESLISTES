@@ -22,68 +22,28 @@ class ListViewController: UIViewController {
     
     
     /* Models. */
-    //var lists : Results <Liste>?
-    var lists : [NSObject?] = []
-    var currentArrayForPrint = 0
-
+    var listesArray = [Liste]()
+    
     /// This property is used to enable or disable swipe action
     var isSwipeRightEnabled = true
 
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let object = NSObject()
-        lists.append(object)
-        
+
         prepareNavigationBar()
         prepareView()
         
-
-        printFirstArray()
-        printSecondArray()
-        print("Arrays did printed")
-    }
-    
-    func printFirstArray() {
-        currentArrayForPrint = 1
-        print("first array will start for print")
-        for i in 0...10 {
-            print("first array :=-> \(i)")
-        }
-        print("first array did printed")
-    }
-    
-    func printSecondArray() {
-        currentArrayForPrint = 2
-        print("second array will start for print")
-        for i in 0...100 {
-            print("second array :=-> \(i)")
-        }
-        print("second array did printed")
+//        addHardcodedItems()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        /* Poin where screen did load but not appear. */
-        print(":=-> Poin where screen did load but not appear.")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-      
-        /* Poin where screen did load and did apear. */
-        print(":=-> Poin where screen did load but not appear.")
-    }
-    
     
     //MARK: Preparing
     /// This func used for preparing navigation bar
     func prepareNavigationBar() {
-        let title = "List"
+        let title = "MesListes"
         self.title = title
-        let rightNavigationButton = UIBarButtonItem(title: "Add",
+        let rightNavigationButton = UIBarButtonItem(title: "+",
                                                        style: .plain,
                                                        target: self,
                                                        action: #selector(rightButtonAction))
@@ -91,8 +51,13 @@ class ListViewController: UIViewController {
     }
     
     @objc func rightButtonAction() {
-        print(":=-> rightButtonAction")
-        /* Make new item for table. */
+        if let text = textField.text, text != "" {
+            RealmManager.shared.createListe(name: text)
+            let listobjects = RealmManager.shared.getListes()
+            print(listobjects)
+            listesArray = listobjects
+            tableView.reloadData()
+        }
     }
     
     func prepareView() {
@@ -146,23 +111,7 @@ class ListViewController: UIViewController {
 }
 
 extension ListViewController: UITextFieldDelegate {
-   
-    // return NO to not change text
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        return true
-    }
-    
-    // called when clear button pressed. return NO to ignore (no notifications)
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        return true
-        
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return true
-        
-    }
+
 }
 
 //MARK: - UITableViewDataSource, UITableViewDelegate
@@ -177,17 +126,32 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
 
         /* ItemTableViewController */
         let itemVC = ItemTableViewController()
+        itemVC.currentListeId = listesArray[indexPath.row].id
         self.navigationController?.pushViewController(itemVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return self.lists.count 
+        return listesArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListTVC", for: indexPath) as! ListTVC
         cell.delegate = self
+        
+        let liste = listesArray[indexPath.row]
+            
+            if liste.done == true {
+                let attributedString = NSMutableAttributedString.init(string: liste.name)
+                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
+                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
+                cell.textLabel?.attributedText = attributedString
+                
+            }else{
+                let attributedString = NSMutableAttributedString.init(string: liste.name)
+                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
+                cell.textLabel?.attributedText = attributedString
+            }
+        
         return cell
     }
     
@@ -204,17 +168,7 @@ extension ListViewController: ListTVCDelegate {
 }
 
 extension ListViewController: SwipeTableViewCellDelegate {
-        /**
-         Asks the delegate for the actions to display in response to a swipe in the specified row.
-         
-         - parameter tableView: The table view object which owns the cell requesting this information.
-         
-         - parameter indexPath: The index path of the row.
-         
-         - parameter orientation: The side of the cell requesting this information.
-         
-         - returns: An array of `SwipeAction` objects representing the actions for the row. Each action you provide is used to create a button that the user can tap.  Returning `nil` will prevent swiping for the supplied orientation.
-         */
+
     //MARK: - SWIPE CELL METHODS
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         //guard orientation == .right else { return nil }
@@ -254,8 +208,8 @@ extension ListViewController: SwipeTableViewCellDelegate {
         }
         
     }
-    
-    //MARK: - DIFFERENT FUNCTIONS
+
+    //MARK: - DIFFERENT SWIPE FUNCTIONS
     func updateModel(at indexpath: IndexPath){
         //Update our data model by deleting things from the database
     }
@@ -272,25 +226,8 @@ extension ListViewController: SwipeTableViewCellDelegate {
     func strikeOut (at indexPath: IndexPath) {
         // stike out the text in the cell
     }
-    
-    func createNote (at indexPath: IndexPath) {
-        //creates a note
-    }
 
-        
-        /**
-         Asks the delegate for the display options to be used while presenting the action buttons.
-         
-         - parameter tableView: The table view object which owns the cell requesting this information.
-         
-         - parameter indexPath: The index path of the row.
-         
-         - parameter orientation: The side of the cell requesting this information.
-         
-         - returns: A `SwipeTableOptions` instance which configures the behavior of the action buttons.
-         
-         - note: If not implemented, a default `SwipeTableOptions` instance is used.
-         */
+
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         
         var options = SwipeTableOptions()
@@ -301,30 +238,14 @@ extension ListViewController: SwipeTableViewCellDelegate {
         
         return options
     }
-        
-        /**
-         Tells the delegate that the table view is about to go into editing mode.
-         
-         - parameter tableView: The table view object providing this information.
-         
-         - parameter indexPath: The index path of the row.
-         
-         - parameter orientation: The side of the cell.
-         */
-    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) {
-        
-    }
-        
-        /**
-         Tells the delegate that the table view has left editing mode.
-         
-         - parameter tableView: The table view object providing this information.
-         
-         - parameter indexPath: The index path of the row.
-         
-         - parameter orientation: The side of the cell.
-         */
-    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation) {
-        
-    }
+
+}
+
+//MARK: - HARDCODED Listes
+extension ListViewController {
+//    func addHardcodedItems () {
+//        RealmManager.shared.createListe(name: "Shopping List")
+//        listesArray = RealmManager.shared.getListes()
+//       // tableView.reloadData() //????
+//    }
 }

@@ -17,10 +17,9 @@
 		4C239A9920D51B37004A0089 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C239A9820D51B37004A0089 /* Assets.xcassets */; };
 		4C239A9C20D51B37004A0089 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C239A9A20D51B37004A0089 /* LaunchScreen.storyboard */; };
 		4C239AA620D51B73004A0089 /* Liste.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C239AA320D51B73004A0089 /* Liste.swift */; };
-		4C239AA720D51B73004A0089 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C239AA420D51B73004A0089 /* Main.storyboard */; };
 		4C239AA820D51B73004A0089 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C239AA520D51B73004A0089 /* ListViewController.swift */; };
 		4C25E0C720ED3564003AF851 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C25E0C620ED3564003AF851 /* NoteViewController.swift */; };
-		632BE01A210DAE4200A11B25 /* ItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632BE019210DAE4200A11B25 /* ItemsTableViewController.swift */; };
+		4CA5BE0F2120840A00EB6457 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CA5BE0E2120840A00EB6457 /* Main.storyboard */; };
 		635084BD210469410050DD1D /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635084BC210469400050DD1D /* RealmManager.swift */; };
 		635084BF21046DCA0050DD1D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635084BE21046DCA0050DD1D /* Coordinator.swift */; };
 		63CE28602116ECCF00C1645A /* ListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CE285F2116ECCF00C1645A /* ListTVC.swift */; };
@@ -39,10 +38,9 @@
 		4C239A9B20D51B37004A0089 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4C239A9D20D51B37004A0089 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C239AA320D51B73004A0089 /* Liste.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Liste.swift; sourceTree = "<group>"; };
-		4C239AA420D51B73004A0089 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		4C239AA520D51B73004A0089 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		4C25E0C620ED3564003AF851 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
-		632BE019210DAE4200A11B25 /* ItemsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsTableViewController.swift; sourceTree = "<group>"; };
+		4CA5BE0E2120840A00EB6457 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		635084BC210469400050DD1D /* RealmManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		635084BE21046DCA0050DD1D /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		63CE285F2116ECCF00C1645A /* ListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTVC.swift; sourceTree = "<group>"; };
@@ -112,7 +110,6 @@
 				4C2158CA20DC0C7700403BCE /* SwipeTableViewController.swift */,
 				4C1EB04820D7A0DC0056F1B5 /* DatePickerPopupViewController.swift */,
 				4C239AA520D51B73004A0089 /* ListViewController.swift */,
-				632BE019210DAE4200A11B25 /* ItemsTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -120,7 +117,7 @@
 		4C239AAB20D51BA7004A0089 /* supporting files */ = {
 			isa = PBXGroup;
 			children = (
-				4C239AA420D51B73004A0089 /* Main.storyboard */,
+				4CA5BE0E2120840A00EB6457 /* Main.storyboard */,
 				4C239A9820D51B37004A0089 /* Assets.xcassets */,
 				4C239A9A20D51B37004A0089 /* LaunchScreen.storyboard */,
 			);
@@ -221,9 +218,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CA5BE0F2120840A00EB6457 /* Main.storyboard in Resources */,
 				4C239A9C20D51B37004A0089 /* LaunchScreen.storyboard in Resources */,
 				4C239A9920D51B37004A0089 /* Assets.xcassets in Resources */,
-				4C239AA720D51B73004A0089 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +277,6 @@
 				4C25E0C720ED3564003AF851 /* NoteViewController.swift in Sources */,
 				4C239A9220D51B36004A0089 /* AppDelegate.swift in Sources */,
 				635084BF21046DCA0050DD1D /* Coordinator.swift in Sources */,
-				632BE01A210DAE4200A11B25 /* ItemsTableViewController.swift in Sources */,
 				4C1EB04920D7A0DC0056F1B5 /* DatePickerPopupViewController.swift in Sources */,
 				4C2158CB20DC0C7700403BCE /* SwipeTableViewController.swift in Sources */,
 				4C1DFC0A20DFF91800F3D459 /* Item.swift in Sources */,

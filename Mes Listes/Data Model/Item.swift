@@ -18,9 +18,9 @@ class Item: Object {
     @objc dynamic var noteInput = ""
     var imagenames = List<String>()
    
-    @objc dynamic var parentID = ""
+    @objc dynamic var parentListName = ""
     
-    var parentListe = LinkingObjects(fromType: Liste.self, property: "items")
+    //var parentListe = LinkingObjects(fromType: Liste.self, property: "items")
     
     override static func primaryKey() -> String? {
         return "id"

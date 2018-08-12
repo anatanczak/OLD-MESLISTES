@@ -18,7 +18,7 @@ enum RealmAccessThread {
 class RealmManager: NSObject {
     
     static let shared = RealmManager()
-    static let accessThreadLabel = "com.mes.list.background.realm"
+    static let accessThreadLabel = "com.mes.listes.background.realm"
     
     let operationQueue = DispatchQueue(label: accessThreadLabel)
     
@@ -49,7 +49,7 @@ class RealmManager: NSObject {
         
         // 1. Find managed object to get his realm
         // 2. Find original thread and switch to this thread
-
+        
         var managed = [ThreadSafeReference<Object>]()
         var unmanaged = [Object]()
         
@@ -103,16 +103,15 @@ class RealmManager: NSObject {
     }
 }
 
-
-/* Extension for working with item ... */
+//MARK: - Liste Objects
 extension RealmManager {
     
-    func createItem(title: String) {
+    func createListe(name: String) {
         operationQueue.async { [weak self] in
             guard let `self` = self else { return }
-
-            let item = Item()
-            item.title = title
+            
+            let liste = Liste()
+            liste.name = name
             
             let date = Date()
             let dateFormatter = DateFormatter()
@@ -120,35 +119,74 @@ extension RealmManager {
             
             let key = dateFormatter.string(from: date)
             
-            item.id = key
+            liste.id = key
             
             let realm = self.getRealm()
             
-            if realm.object(ofType: Item.self, forPrimaryKey: key) == nil {
+            if realm.object(ofType: Liste.self, forPrimaryKey: key) == nil {
                 realm.beginWrite()
-                realm.add(item, update: true)
+                realm.add(liste, update: true)
                 try! realm.commitWrite()
             }
         }
-    }
+        }
     
-    func getAllItems() -> [Item] {
+    func getListes() -> [Liste] {
         let realm = self.getRealm()
         
-        let array = Array(realm.objects(Item.self))
+        let array = Array(realm.objects(Liste.self))
         return array
     }
-    
-    func getAllItems(forListName list: String) -> [Item] {
-
-        let realm = self.getRealm()
-        
-        let result = Array(realm.objects(Item.self).filter("parentListName = '\(list)'"))
-        return result
+  
     }
     
-    //update
-    
-    //delete 
-    
+    //MARK: -  Item Objects
+    extension RealmManager {
+        
+        func createItem(title: String) {
+            operationQueue.async { [weak self] in
+                guard let `self` = self else { return }
+                
+                let item = Item()
+                item.title = title
+                
+                let date = Date()
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                
+                let key = dateFormatter.string(from: date)
+                
+                item.id = key
+                
+                let realm = self.getRealm()
+                
+                if realm.object(ofType: Item.self, forPrimaryKey: key) == nil {
+                    realm.beginWrite()
+                    realm.add(item, update: true)
+                    try! realm.commitWrite()
+                }
+            }
+        }
+        
+        func getAllItems() -> [Item] {
+            let realm = self.getRealm()
+            
+            let array = Array(realm.objects(Item.self))
+            return array
+        }
+        
+        func getAllItems(forListName list: String) -> [Item] {
+            
+            let realm = self.getRealm()
+            
+            let result = Array(realm.objects(Item.self).filter("parentListName = '\(list)'"))
+            return result
+        }
+        
+        //update
+        
+        //delete
+        
 }
+
+
