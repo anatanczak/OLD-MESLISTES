@@ -14,7 +14,7 @@ import SwipeCellKit
 
 class ListViewController: UIViewController {
     
-    //MARK: - Property
+    //MARK: - Properties
     
     /* Views. */
     let tableView: UITableView = UITableView()
@@ -26,18 +26,20 @@ class ListViewController: UIViewController {
     
     /// This property is used to enable or disable swipe action
     var isSwipeRightEnabled = true
-
+    
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         prepareNavigationBar()
         prepareView()
+        
+        listesArray = RealmManager.shared.getListes()
         
         registerForKeyboardDidShowNotification(scrollView: self.tableView)
         registerForKeyboardWillHideNotification(scrollView: self.tableView)
     }
-
+    
     
     //MARK: Preparing
     /// This func used for preparing navigation bar
@@ -45,25 +47,16 @@ class ListViewController: UIViewController {
         let title = "MesListes"
         self.title = title
         let rightNavigationButton = UIBarButtonItem(title: "+",
-                                                       style: .plain,
-                                                       target: self,
-                                                       action: #selector(rightButtonAction))
+                                                    style: .plain,
+                                                    target: self,
+                                                    action: #selector(rightButtonAction))
         self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
     }
     
     @objc func rightButtonAction() {
-        if let text = textField.text, text != "" {
-            RealmManager.shared.createListe(name: text, completion: { [weak self] in
-                guard let `self` = self else { return }
-              
-                DispatchQueue.main.async { [weak self] in
-                    let listobjects = RealmManager.shared.getListes()
-                    print(listobjects)
-                    self?.listesArray = listobjects
-                    self?.tableView.reloadData()
-                }
-            })
-        }
+        
+        saveListe()
+        
     }
     
     func prepareView() {
@@ -72,7 +65,7 @@ class ListViewController: UIViewController {
         
         let statusbarHeight: CGFloat = 20.0
         let navigationBarHeight = (self.navigationController?.navigationBar.frame.height)! //44.0
-
+        
         let textFieldY = statusbarHeight + navigationBarHeight
         let textFieldWidht = self.view.bounds.size.width - (20 + 20)
         let textFieldHeight: CGFloat = 40.0
@@ -102,20 +95,21 @@ class ListViewController: UIViewController {
         
         tableView.backgroundColor = UIColor.yellow
         
-
+        
         
         tableView.frame = CGRect(x: 0,
                                  y: tableY,
                                  width: self.view.bounds.size.width,
                                  height: tableViewHeight)
-
+        
         self.view.addSubview(tableView)
-
-
+        
+        
         self.view.addSubview(textField)
     }
 }
 
+//MARK: - TextField Delegate
 extension ListViewController: UITextFieldDelegate {
 
 }
@@ -123,13 +117,13 @@ extension ListViewController: UITextFieldDelegate {
 //MARK: - UITableViewDataSource, UITableViewDelegate
 extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     /* UITableViewDataSource. */
-   
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-     
+        
         tableView.deselectRow(at: indexPath, animated: true)
         
         print(":=-> didSelectRowAt  indexPath = \(indexPath)")
-
+        
         /* ItemTableViewController */
         let itemVC = ItemTableViewController()
         itemVC.currentListeId = listesArray[indexPath.row].id
@@ -145,18 +139,18 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
         cell.delegate = self
         
         let liste = listesArray[indexPath.row]
+        
+        if liste.done == true {
+            let attributedString = NSMutableAttributedString.init(string: liste.name)
+            attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
+            attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
+            cell.textLabel?.attributedText = attributedString
             
-            if liste.done == true {
-                let attributedString = NSMutableAttributedString.init(string: liste.name)
-                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
-                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
-                cell.textLabel?.attributedText = attributedString
-                
-            } else {
-                let attributedString = NSMutableAttributedString.init(string: liste.name)
-                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
-                cell.textLabel?.attributedText = attributedString
-            }
+        } else {
+            let attributedString = NSMutableAttributedString.init(string: liste.name)
+            attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
+            cell.textLabel?.attributedText = attributedString
+        }
         
         return cell
     }
@@ -165,16 +159,16 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
         return 60.0
     }
 }
-
+//MARK: - ListTVCDelegate
 extension ListViewController: ListTVCDelegate {
-  
+    
     func cellDidTapOnOk() {
         print(":=-> view controller get ok action from cell...")
     }
 }
 
 extension ListViewController: SwipeTableViewCellDelegate {
-
+    
     //MARK: - SWIPE CELL METHODS
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         //guard orientation == .right else { return nil }
@@ -214,7 +208,7 @@ extension ListViewController: SwipeTableViewCellDelegate {
         }
         
     }
-
+    
     //MARK: - DIFFERENT SWIPE FUNCTIONS
     func updateModel(at indexpath: IndexPath){
         //Update our data model by deleting things from the database
@@ -232,8 +226,8 @@ extension ListViewController: SwipeTableViewCellDelegate {
     func strikeOut (at indexPath: IndexPath) {
         // stike out the text in the cell
     }
-
-
+    
+    
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         
         var options = SwipeTableOptions()
@@ -244,14 +238,32 @@ extension ListViewController: SwipeTableViewCellDelegate {
         
         return options
     }
-
+    
 }
 
-//MARK: - HARDCODED Listes
 extension ListViewController {
-//    func addHardcodedItems () {
-//        RealmManager.shared.createListe(name: "Shopping List")
-//        listesArray = RealmManager.shared.getListes()
-//       // tableView.reloadData() //????
-//    }
+    //MARK: - HARDCODED Listes
+    
+    //    func addHardcodedItems () {
+    //        RealmManager.shared.createListe(name: "Shopping List")
+    //        listesArray = RealmManager.shared.getListes()
+    //       // tableView.reloadData() //????
+    //    }
+    
+    //MARK: - DIFFERENT METHODS
+    func saveListe () {
+        if let text = textField.text, text != "" {
+            RealmManager.shared.createListe(name: text, completion: { [weak self] in
+                guard let `self` = self else { return }
+                
+                DispatchQueue.main.async { [weak self] in
+                    let listobjects = RealmManager.shared.getListes()
+                    self?.listesArray = listobjects
+                    self?.textField.text = ""
+                    self?.tableView.reloadData()
+                }
+            })
+        }
+    }
+    
 }

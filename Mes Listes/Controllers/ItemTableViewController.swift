@@ -61,12 +61,7 @@ class ItemTableViewController: UIViewController {
     
     @objc func rightButtonAction() {
       
-        /* LOGIC FOR SAVE ITEM OBJECT */
-        if let text = self.textField.text, text != "" {
-            RealmManager.shared.createItem(title: text)
-            self.itemsArray = RealmManager.shared.getAllItems()
-            self.tableView.reloadData()
-        }    
+        saveItem()
     }
     
     
@@ -351,4 +346,23 @@ func addEventToCalendar(at indexpath: IndexPath) {
 //        tableView.reloadData()
     }
 
+}
+
+extension ItemTableViewController {
+    //MARK: - DIFFERENT METHODS
+    func saveItem () {
+        if let text = textField.text, text != "" {
+            RealmManager.shared.createListe(name: text, completion: { [weak self] in
+                guard let `self` = self else { return }
+                
+                DispatchQueue.main.async { [weak self] in
+
+                    let itemojects = RealmManager.shared.getAllItems(forListName: (self?.currentListeId)!)
+                    self?.itemsArray = itemojects
+                    self?.tableView.reloadData()
+                }
+
+            })
+        }
+    }
 }
