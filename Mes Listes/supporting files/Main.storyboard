@@ -235,11 +235,6 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TBh-vP-VsM">
-                                        <rect key="frame" x="82" y="324" width="240" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="1" green="0.87101049829999999" blue="0.8412338761" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                    </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" distribution="fillEqually" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="bq5-F9-2Et">
                                         <rect key="frame" x="8" y="5" width="156" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -330,7 +325,6 @@
                     </view>
                     <connections>
                         <outlet property="doneButtonPressed" destination="tdD-ra-mjF" id="QoD-Tg-oBf"/>
-                        <outlet property="imageView" destination="TBh-vP-VsM" id="5Oz-Qk-8rp"/>
                         <outlet property="nameLabel" destination="Cyl-4u-EEW" id="osN-SA-46t"/>
                         <outlet property="textView" destination="x25-e9-f7U" id="eKf-CR-fzb"/>
                     </connections>

@@ -18,12 +18,11 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var addedImage: UIImage?
     var imageName = ""
     var arrayOfIamgesFromRealm = [UIImage]()
-
+    
     //MARK: - OUTLETS
     @IBOutlet weak var doneButtonPressed: UIButton!
     
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var imageView: UIImageView!
     
     @IBOutlet weak var textView: UITextView!
     
@@ -50,6 +49,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     @IBAction func fontButtonPressed(_ sender: UIButton) {
+
     }
     
     
@@ -59,6 +59,15 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     
     @IBAction func photoButtonPressed(_ sender: UIButton) {
+        /*
+         1. create a string from the date to ID the image
+         2. get the cursor position
+         3. add this ID string to the text (and the new line sign)
+         ( - > if the use button in ImagePicker was tapped the sting stays
+          - > esle delete it from the text)
+         3. change image ID from the old version to the new version (date)
+         4. insert image instead of the ID string
+         */
         openCamera()
     }
     
@@ -172,9 +181,10 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(imageName)
         //get the image we took with camera
         let image = addedImage
+        let orientedImage = image!.upOrientationImage()
         
         //get the PNG data for this image
-        let data = UIImagePNGRepresentation(image!)
+        let data = UIImagePNGRepresentation(orientedImage!)
         
         //store it in the document directory
         fileManager.createFile(atPath: imagePath as String, contents: data, attributes: nil)
@@ -204,7 +214,13 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         let fullString = NSMutableAttributedString(string: textView.text!)
         let image1Attachment = NSTextAttachment()
         image1Attachment.image = arrayOfIamgesFromRealm[0]
-        image1Attachment.setImageHeight(height: 230)
+       // image1Attachment.setImageHeight(height: 230)
+        let newWidth = self.view.bounds.size.width - 10
+       let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
+        print((image1Attachment.image?.size.height)!)
+        print((image1Attachment.image?.size.width)!)
+        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
+        
         let image1String = NSAttributedString(attachment: image1Attachment)
         fullString.append(image1String)
         textView.attributedText = fullString
@@ -278,15 +294,30 @@ extension NoteViewController: UITextViewDelegate {
     
 }
 
-extension NSTextAttachment {
-    func setImageHeight(height: CGFloat) {
-        guard let image = image else { return }
-        let ratio = image.size.width / image.size.height
-        //let width =
-        
-//        bounds = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: ratio * height, height: height)
-              //  bounds = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: , height: height)
-        //(bounds.origin.x, bounds.origin.y, ratio * height, height)
+//extension NSTextAttachment {
+//    func setImageHeight(height: CGFloat) {
+//        guard let image = image else { return }
+//        let ratio = image.size.width / image.size.height
+//
+//
+////        bounds = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: ratio * height, height: height)
+////bounds = CGRect(x: 0, y: bounds.origin.y, width: wi, height: <#T##CGFloat#>)
+//        //(bounds.origin.x, bounds.origin.y, ratio * height, height)
+//    }
+//}
+
+extension UIImage {
+    func upOrientationImage() -> UIImage? {
+        switch imageOrientation {
+        case .up:
+            return self
+        default:
+            UIGraphicsBeginImageContextWithOptions(size, false, scale)
+            draw(in: CGRect(origin: .zero, size: size))
+            let result = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return result
+        }
     }
 }
 
