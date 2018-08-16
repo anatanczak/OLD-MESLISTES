@@ -27,7 +27,7 @@ class ItemTableViewController: UIViewController {
     var currentListeId: String? {
         didSet {
             //load items with this liste id
-            let sortedItems = RealmManager.shared.getAllItems(forListName: currentListeId!)
+            let sortedItems = RealmManager.sharedInstance.getAllItems(forListName: currentListeId!)
             itemsArray = sortedItems
         }
     }
@@ -327,24 +327,24 @@ func addEventToCalendar(at indexpath: IndexPath) {
 //            tableView.reloadData()
 //        }
     }
-    
+    /*
     func createNote(at indexPath: IndexPath) {
-//        selectedItem = indexPath.row
-//
-//        if let currentItem = self.items?[indexPath.row] {
-//            if currentItem.hasNote == false {
-//                do {
-//                    try realm.write {
-//                        currentItem.hasNote = true
-//                    }
-//                }catch{
-//                    print("error updating realm\(error)")
-//                }
-//            }
-//            performSegue(withIdentifier: "goToNote", sender: self)
-//        }
-//        tableView.reloadData()
-    }
+        selectedItem = indexPath.row
+
+        if let currentItem = self.items?[indexPath.row] {
+            if currentItem.hasNote == false {
+                do {
+                    try realm.write {
+                        currentItem.hasNote = true
+                    }
+                } catch {
+                    print("error updating realm\(error)")
+                }
+            }
+            performSegue(withIdentifier: "goToNote", sender: self)
+        }
+        tableView.reloadData()
+    }*/
 
 }
 
@@ -352,17 +352,18 @@ extension ItemTableViewController {
     //MARK: - DIFFERENT METHODS
     func saveItem () {
         if let text = textField.text, text != "" {
-            RealmManager.shared.createListe(name: text, completion: { [weak self] in
+            /*
+            RealmManager.sharedInstance.createListe(name: text, completion: { [weak self] in
                 guard let `self` = self else { return }
                 
                 DispatchQueue.main.async { [weak self] in
 
-                    let itemojects = RealmManager.shared.getAllItems(forListName: (self?.currentListeId)!)
+                    let itemojects = RealmManager.sharedInstance.getAllItems(forListName: (self?.currentListeId)!)
                     self?.itemsArray = itemojects
                     self?.tableView.reloadData()
                 }
 
-            })
+            })*/
         }
     }
 }

@@ -34,7 +34,7 @@ class ListViewController: UIViewController {
         prepareNavigationBar()
         prepareView()
         
-        listesArray = RealmManager.shared.getListes()
+        listesArray = RealmManager.sharedInstance.getListes()
         
         registerForKeyboardDidShowNotification(scrollView: self.tableView)
         registerForKeyboardWillHideNotification(scrollView: self.tableView)
@@ -56,7 +56,6 @@ class ListViewController: UIViewController {
     @objc func rightButtonAction() {
         
         saveListe()
-        
     }
     
     func prepareView() {
@@ -103,8 +102,6 @@ class ListViewController: UIViewController {
                                  height: tableViewHeight)
         
         self.view.addSubview(tableView)
-        
-        
         self.view.addSubview(textField)
     }
 }
@@ -253,16 +250,24 @@ extension ListViewController {
     //MARK: - DIFFERENT METHODS
     func saveListe () {
         if let text = textField.text, text != "" {
-            RealmManager.shared.createListe(name: text, completion: { [weak self] in
-                guard let `self` = self else { return }
-                
-                DispatchQueue.main.async { [weak self] in
-                    let listobjects = RealmManager.shared.getListes()
-                    self?.listesArray = listobjects
-                    self?.textField.text = ""
-                    self?.tableView.reloadData()
-                }
-            })
+           
+            let liste = Liste()
+            liste.name = text
+            
+            /* Saving object to realm. */
+            RealmManager.sharedInstance.createListe(listObject: liste, completion: { })
+
+            self.listesArray.append(liste)
+            
+            let index = self.listesArray.index(of: liste)!
+            
+            let indexPath = IndexPath(row: index, section: 0)
+            
+            /* Adding new cell for table view. */
+            tableView.beginUpdates()
+            tableView.insertRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+            
         }
     }
     

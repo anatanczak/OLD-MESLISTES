@@ -17,7 +17,7 @@ enum RealmAccessThread {
 
 class RealmManager: NSObject {
     
-    static let shared = RealmManager()
+    static let sharedInstance = RealmManager()
     static let accessThreadLabel = "com.mes.listes.background.realm"
     
     let operationQueue = DispatchQueue(label: accessThreadLabel)
@@ -106,30 +106,30 @@ class RealmManager: NSObject {
 //MARK: - Liste Objects
 extension RealmManager {
     
-    func createListe(name: String, completion: (()->())?) {
-        operationQueue.async { [weak self] in
-            guard let `self` = self else { return }
-            
-            let liste = Liste()
-            liste.name = name
-            
-            let date = Date()
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-            
-            let key = dateFormatter.string(from: date)
-            
-            liste.id = key
-            
-            let realm = self.getRealm()
-            
-            if realm.object(ofType: Liste.self, forPrimaryKey: key) == nil {
-                realm.beginWrite()
-                realm.add(liste, update: true)
-                try! realm.commitWrite()
-            }
-            completion?()
+    func createListe(listObject: Liste, completion: (()->())?) {
+        
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        
+        let key = dateFormatter.string(from: date)
+        
+        listObject.id = key
+        
+        let realm = self.getRealm()
+        
+        if realm.object(ofType: Liste.self, forPrimaryKey: key) == nil {
+            realm.beginWrite()
+            realm.add(listObject, update: true)
+            try! realm.commitWrite()
         }
+        completion?()
+        
+//        operationQueue.async { [weak self] in
+//            guard let `self` = self else { return }
+//
+//
+//        }
     }
     
     func getListes() -> [Liste] {
