@@ -17,7 +17,8 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     let imagePicker = UIImagePickerController()
     var addedImage: UIImage?
     var imageName = ""
-    var dictionaryOfIamgesFromRealm: [String: UIImage] = [:]
+    var arrayOfImagesFromRealm = [UIImage]()
+    var arrayOfImageNamesFromRealm = [String]()
     
     //MARK: - OUTLETS
     @IBOutlet weak var doneButtonPressed: UIButton!
@@ -42,10 +43,11 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
+
     }
     
     @IBAction func shareButtonPressed(_ sender: UIButton) {
-        attachImagesToText()
+
     }
     
     @IBAction func fontButtonPressed(_ sender: UIButton) {
@@ -75,11 +77,10 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 //          - > esle delete it from the text)
         
 //         4. insert image instead of the ID string
-        
 
         openCamera()
         
-        getImagesAndPutThemInDictionary()
+getImagesAndPutThemInArray()
         
         
     }
@@ -92,7 +93,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         textView.text = currentItem?.noteInput ?? ""
         
-        getImagesAndPutThemInDictionary()
+        getImagesAndPutThemInArray()
         
         NotificationCenter.default.addObserver(self, selector: #selector(NoteViewController.updateTextView(notification:)), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
         
@@ -122,6 +123,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             do {
                 try realm.write {
                     selectedItem.imagenames.append(nameofImage)
+                    print("saving nameOfImageToRealm-->\(selectedItem.imagenames)")
                 }
             }catch{
                 print("error updating realm\(error)")
@@ -161,15 +163,6 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             addedImage = originalImage
             textView.text!.append(contentsOf: imageName)
             
-//            imageName = randomAlphaNumericString(length: 10)
-//
-//            if let selectedItem = currentItem {
-//                if selectedItem.imagenames.isEmpty == false {
-//                    if selectedItem.imagenames.contains(imageName){
-//                        imageName.append("12")
-//                    }
-//                }
-//            }
             
             saveImage(the: addedImage!, called: imageName)
             
@@ -183,7 +176,8 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("Cancelled")
+        print("Picker Cancelled")
+        imagePicker.dismiss(animated: true, completion: nil)
         
     }
     
@@ -207,14 +201,17 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
     }
     
-    func getImagesAndPutThemInDictionary () {
+    func getImagesAndPutThemInArray () {
         let fileManager = FileManager.default
         if let selectedItem = currentItem {
             for nameOfImage in selectedItem.imagenames {
                 let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(nameOfImage)
                 if fileManager.fileExists(atPath: imagePath){
                     let newImage = UIImage(contentsOfFile: imagePath)
-                    dictionaryOfIamgesFromRealm[nameOfImage] = newImage
+                    arrayOfImagesFromRealm.append(newImage!)
+                    arrayOfImageNamesFromRealm.append(nameOfImage)
+                    
+                    print("-->gettingImagesFromRealm\(arrayOfImageNamesFromRealm)\(arrayOfImagesFromRealm)")
                 }else{
                     print("Panic! No Image!")
                     
@@ -228,21 +225,22 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func attachImagesToText () {
         
-        let fullStringFromTextView = textView.text!
+//        let fullStringFromTextView = textView.text!
+//
+//        let fullString = NSMutableAttributedString(string: textView.text!)
+//
+//        let image1Attachment = NSTextAttachment()
+//        image1Attachment.image = arrayOfImagesFromRealm[0]
+//        print()
 
-        let fullString = NSMutableAttributedString(string: textView.text!)
-        
-        let image1Attachment = NSTextAttachment()
-        image1Attachment.image = dictionaryOfIamgesFromRealm[imageName]
-
-        let newWidth = self.view.bounds.size.width - 10
-        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
-
-        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
-        
-        let image1String = NSAttributedString(attachment: image1Attachment)
-        fullString.append(image1String)
-        textView.attributedText = fullString
+//        let newWidth = self.view.bounds.size.width - 10
+//        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
+//
+//        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
+//
+//        let image1String = NSAttributedString(attachment: image1Attachment)
+//        fullString.append(image1String)
+//        textView.attributedText = fullString
         
         
         
@@ -265,21 +263,6 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     //MARK: - DIFFERENT METHODS
-    // random name creator
-    func randomAlphaNumericString(length: Int) -> String {
-        let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let allowedCharsCount = UInt32(allowedChars.count)
-        var randomString = ""
-        
-        for _ in 0..<length {
-            let randomNum = Int(arc4random_uniform(allowedCharsCount))
-            let randomIndex = allowedChars.index(allowedChars.startIndex, offsetBy: randomNum)
-            let newCharacter = allowedChars[randomIndex]
-            randomString += String(newCharacter)
-        }
-        
-        return randomString
-    }
     
 }
 
