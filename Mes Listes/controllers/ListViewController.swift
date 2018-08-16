@@ -61,9 +61,10 @@ class ListViewController: SwipeTableViewController, UITextFieldDelegate, UIGestu
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        
+        var listeName: String
         if let liste = lists?[indexPath.row] {
-
+            listeName = liste.name
+            
             if liste.done == true {
                 let attributedString = NSMutableAttributedString.init(string: liste.name)
                 attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
@@ -79,7 +80,10 @@ class ListViewController: SwipeTableViewController, UITextFieldDelegate, UIGestu
             cell.textLabel?.text = "You haven't created a list yet"
         }
 
-       // cell.backgroundColor = colorize(hex: 0xD1C5CA)
+      tableView.separatorColor = UIColor.clear
+        tableView.backgroundColor = UIColor.clear
+
+       cell.backgroundColor = colorize(hex: 0xD1C5CA)
         return cell
     }
 

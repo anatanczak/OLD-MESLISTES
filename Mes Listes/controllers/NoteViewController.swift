@@ -17,7 +17,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     let imagePicker = UIImagePickerController()
     var addedImage: UIImage?
     var imageName = ""
-    var arrayOfIamgesFromRealm = [UIImage]()
+    var dictionaryOfIamgesFromRealm: [String: UIImage] = [:]
     
     //MARK: - OUTLETS
     @IBOutlet weak var doneButtonPressed: UIButton!
@@ -59,16 +59,29 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     
     @IBAction func photoButtonPressed(_ sender: UIButton) {
-        /*
-         1. create a string from the date to ID the image
-         2. get the cursor position
-         3. add this ID string to the text (and the new line sign)
-         ( - > if the use button in ImagePicker was tapped the sting stays
-          - > esle delete it from the text)
-         3. change image ID from the old version to the new version (date)
-         4. insert image instead of the ID string
-         */
+//    1. create a string from the date to ID the image
+         let date = Date()
+         let dateFormatter = DateFormatter()
+         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        imageName = "\n" + dateFormatter.string(from: date) + "\n"
+         
+//         2. get the cursor position
+        var cursorPosition1: Int
+        getCursor()
+        
+        
+//         3. add this ID string to the text (and the new line sign)
+//         ( - > if the use button in ImagePicker was tapped the sting stays
+//          - > esle delete it from the text)
+        
+//         4. insert image instead of the ID string
+        
+
         openCamera()
+        
+        getImagesAndPutThemInDictionary()
+        
+        
     }
     
     //MARK: - VEIW DID LOAD
@@ -79,7 +92,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         textView.text = currentItem?.noteInput ?? ""
         
-        getImagesAndPutThemInArray()
+        getImagesAndPutThemInDictionary()
         
         NotificationCenter.default.addObserver(self, selector: #selector(NoteViewController.updateTextView(notification:)), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
         
@@ -102,7 +115,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     
-    //save images to realm
+    ///saves images to realm
     
     func saveImagesToRealm (_ nameofImage: String) {
         if let selectedItem = currentItem {
@@ -142,20 +155,22 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     // retrieve image from the picker
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController (_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage{
             addedImage = originalImage
+            textView.text!.append(contentsOf: imageName)
             
-            imageName = randomAlphaNumericString(length: 10)
+//            imageName = randomAlphaNumericString(length: 10)
+//
+//            if let selectedItem = currentItem {
+//                if selectedItem.imagenames.isEmpty == false {
+//                    if selectedItem.imagenames.contains(imageName){
+//                        imageName.append("12")
+//                    }
+//                }
+//            }
             
-            if let selectedItem = currentItem {
-                if selectedItem.imagenames.isEmpty == false {
-                    if selectedItem.imagenames.contains(imageName){
-                        imageName.append("12")
-                    }
-                }
-            }
             saveImage(the: addedImage!, called: imageName)
             
             saveImagesToRealm(imageName)
@@ -169,9 +184,10 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         print("Cancelled")
+        
     }
     
-    // save the image to the documents directory
+    /// save the image to the documents directory
     func saveImage (the imageToSave: UIImage, called imageName: String) {
         
         //creates an instance of the FileManager
@@ -191,14 +207,14 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
     }
     
-    func getImagesAndPutThemInArray () {
+    func getImagesAndPutThemInDictionary () {
         let fileManager = FileManager.default
         if let selectedItem = currentItem {
             for nameOfImage in selectedItem.imagenames {
                 let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(nameOfImage)
                 if fileManager.fileExists(atPath: imagePath){
                     let newImage = UIImage(contentsOfFile: imagePath)
-                    arrayOfIamgesFromRealm.append(newImage!)
+                    dictionaryOfIamgesFromRealm[nameOfImage] = newImage
                 }else{
                     print("Panic! No Image!")
                     
@@ -211,19 +227,40 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // attaching an image to the text
     
     func attachImagesToText () {
+        
+        let fullStringFromTextView = textView.text!
+
         let fullString = NSMutableAttributedString(string: textView.text!)
+        
         let image1Attachment = NSTextAttachment()
-        image1Attachment.image = arrayOfIamgesFromRealm[0]
-       // image1Attachment.setImageHeight(height: 230)
+        image1Attachment.image = dictionaryOfIamgesFromRealm[imageName]
+
         let newWidth = self.view.bounds.size.width - 10
-       let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
-        print((image1Attachment.image?.size.height)!)
-        print((image1Attachment.image?.size.width)!)
+        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
+
         image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
         
         let image1String = NSAttributedString(attachment: image1Attachment)
         fullString.append(image1String)
         textView.attributedText = fullString
+        
+        
+        
+        
+        
+//        let fullString = NSMutableAttributedString(string: textView.text!)
+//        let image1Attachment = NSTextAttachment()
+//        image1Attachment.image = arrayOfIamgesFromRealm[0]
+//       // image1Attachment.setImageHeight(height: 230)
+//        let newWidth = self.view.bounds.size.width - 10
+//       let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
+//        print((image1Attachment.image?.size.height)!)
+//        print((image1Attachment.image?.size.width)!)
+//        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
+//
+//        let image1String = NSAttributedString(attachment: image1Attachment)
+//        fullString.append(image1String)
+//        textView.attributedText = fullString
 
     }
     
