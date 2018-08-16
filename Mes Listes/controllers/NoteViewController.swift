@@ -32,7 +32,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         if doneButtonPressed.titleLabel?.text == "Save"{
         saveUserInput()
         dismiss(animated: true, completion: nil)
-        }else{
+        } else {
             textView.resignFirstResponder()
         }
     }
@@ -344,6 +344,7 @@ extension NoteViewController: UITextViewDelegate {
 //}
 
 extension UIImage {
+    
     func upOrientationImage() -> UIImage? {
         switch imageOrientation {
         case .up:
