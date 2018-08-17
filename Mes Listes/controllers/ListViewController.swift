@@ -11,10 +11,12 @@ import RealmSwift
 import UserNotifications
 import EventKit
 import SwipeCellKit
+import SnapKit
 
 class ListViewController: UIViewController {
     
     //MARK: - Properties
+    let backgroundImageView: UIImageView = UIImageView()
     let tableView = UITableView()
     let backgroundImage = #imageLiteral(resourceName: "liste-background-image")
     
@@ -29,16 +31,22 @@ class ListViewController: UIViewController {
     //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+       
         prepareNavigationBar()
+      
         prepareView()
-        
-
+        prepareLayout()
     }
     
     func prepareNavigationBar () {
         let title = "meslistes"
         self.title = title
+        
         let rightNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "camera-icon"), style: .plain, target: self, action: #selector (rightBarButtonAction))
+        
+        self.navigationController?.navigationBar.backgroundColor = UIColor.clear
+        self.navigationController?.navigationBar.isTranslucent = true
+        
         self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
     }
     
@@ -55,6 +63,12 @@ class ListViewController: UIViewController {
         let statusBarHeight: CGFloat = 20.0
         let navigationBarHeight = (self.navigationController?.navigationBar.frame.height)!
         
+        //backgroundImageView
+        backgroundImageView.image = backgroundImage
+        backgroundImageView.contentMode = .scaleAspectFit
+        view.addSubview(backgroundImageView)
+        
+        //tableView
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ListeTableViewCell.self, forCellReuseIdentifier: "ListeTableViewController")
@@ -64,6 +78,17 @@ class ListViewController: UIViewController {
         //tableView - separator height?
         tableView.frame = CGRect(x: 0, y: statusBarHeight + navigationBarHeight, width: self.view.bounds.size.width, height: self.view.bounds.size.height - (statusBarHeight + navigationBarHeight))
         view.addSubview(tableView)
+    }
+    
+    //MARK: - Layout
+    private func prepareLayout() {
+        //backgroundImageView
+        backgroundImageView.snp.makeConstraints { (make) in
+            make.left.equalToSuperview()
+            make.top.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
     }
     
     //MARK: - REALM FUNCTIONS
@@ -93,7 +118,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 73
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -102,25 +127,8 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         cell.delegate = self
         
         
-       // var listeName: String
-        
-        if let liste = lists?[indexPath.row] {
-          //  listeName = liste.name
-            
-            if liste.done == true {
-                let attributedString = NSMutableAttributedString.init(string: liste.name)
-                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
-                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
-                cell.textLabel?.attributedText = attributedString
-                
-            }else{
-                let attributedString = NSMutableAttributedString.init(string: liste.name)
-                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
-                cell.textLabel?.attributedText = attributedString
-            }
-        }else{
-            cell.textLabel?.text = "You haven't created a list yet"
-        }
+        cell.fillWith(model: lists?[indexPath.row])
+
 
         //cell.backgroundColor = colorize(hex: 0xD1C5CA)
         return cell

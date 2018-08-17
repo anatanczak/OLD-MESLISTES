@@ -7,4 +7,6 @@ target 'Mes Listes' do
   # Pods for Mes Listes
 pod 'RealmSwift'
 pod 'SwipeCellKit'
+pod 'SnapKit', '~> 4.0'
+
 end

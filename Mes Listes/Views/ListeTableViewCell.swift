@@ -19,6 +19,9 @@ class ListeTableViewCell: SwipeTableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+     
+        prepareCellView()
+        prepareLayout()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,13 +36,68 @@ class ListeTableViewCell: SwipeTableViewCell {
         titleLabel.text = ""
         titleLabel.textAlignment = .left
         titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .ultraLight)
-        titleLabel.frame = CGRect(x: 30.0, y: 15.5, width: screen - 40, height: 42)
+        //titleLabel.frame = CGRect(x: 30.0, y: 15.5, width: screen - 40, height: 42)
         contentView.addSubview(titleLabel)
         
         //iconView
         iconView.image = #imageLiteral(resourceName: "camera-icon")
-        iconView.frame = CGRect(x: 20.0, y: 15.5, width: 42, height: 42)
+        iconView.contentMode = .scaleAspectFit
+        //iconView.frame = CGRect(x: 20.0, y: 15.5, width: 42, height: 42)
         contentView.addSubview(iconView)
+    }
+    
+    private func prepareLayout() {
+        //titleLabel
+        let standartImageWidthHeight: CGFloat = 42.0
+        let iPhone6SreenWidth: CGFloat = 375.0
+        let multiplier: CGFloat = standartImageWidthHeight/iPhone6SreenWidth
+        
+        let iconSideOffset: CGFloat = 15.5
+        
+        let iconWidth = UIScreen.main.bounds.size.width * multiplier
+        
+        //initin cg rect by  origin pint and size
+        let point = CGPoint(x: 0, y: 0)
+        let size = CGSize(width: 10, height: 10)
+        let rect = CGRect(origin: point, size: size)
+        
+        iconView.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().offset(iconSideOffset)
+            make.top.equalToSuperview().offset(iconSideOffset)
+            make.bottom.equalToSuperview().offset(-iconSideOffset)
+            make.size.equalTo(CGSize(width: iconWidth,
+                                     height: iconWidth))
+        }
+        
+        //titleLabel
+        titleLabel.snp.makeConstraints { [weak self] (make) in
+            guard let `self` = self else { return }
+            make.left.equalTo(self.iconView.snp.right).offset(20.0)
+            make.top.equalToSuperview().offset(iconSideOffset)
+            make.bottom.equalToSuperview().offset(-iconSideOffset)
+            make.right.equalToSuperview().offset(-iconSideOffset)
+        }
+        
+        //iconView
+    }
+    
+    func fillWith(model: Liste?) {
+        if let liste = model {
+            //  listeName = liste.name
+            
+            if liste.done == true {
+                let attributedString = NSMutableAttributedString.init(string: liste.name)
+                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
+                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
+                titleLabel.attributedText = attributedString
+            } else {
+                let attributedString = NSMutableAttributedString.init(string: liste.name)
+                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
+                titleLabel.attributedText = attributedString
+            }
+        } else {
+            titleLabel.text = "You haven't created a list yet"
+        }
     }
     
     //MARK: - OTHERS

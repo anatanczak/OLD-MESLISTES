@@ -80,7 +80,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
         openCamera()
         
-getImagesAndPutThemInArray()
+        getImagesAndPutThemInArray()
         
         
     }
@@ -160,15 +160,17 @@ getImagesAndPutThemInArray()
     func imagePickerController (_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            /* you get image from picker -> image put ro textView */
             addedImage = originalImage
             textView.text!.append(contentsOf: imageName)
+            attachImagesToText(image: originalImage)
             
-            
-            saveImage(the: addedImage!, called: imageName)
-            
-            saveImagesToRealm(imageName)
-
-            
+            /* in background thread need save image and all logic that is not related to UI*/
+            DispatchQueue.global().async { [weak self] in
+                guard let `self` = self else { return }
+                self.saveImage(the: self.addedImage!, called: self.imageName)
+                self.saveImagesToRealm(self.imageName)
+            }
         }
         
         //Dismiss the UIImagePicker after selection
@@ -223,24 +225,24 @@ getImagesAndPutThemInArray()
  
     // attaching an image to the text
     
-    func attachImagesToText () {
+    func attachImagesToText(image: UIImage) {
         
-//        let fullStringFromTextView = textView.text!
-//
-//        let fullString = NSMutableAttributedString(string: textView.text!)
-//
-//        let image1Attachment = NSTextAttachment()
-//        image1Attachment.image = arrayOfImagesFromRealm[0]
-//        print()
+        let fullStringFromTextView = textView.text!
 
-//        let newWidth = self.view.bounds.size.width - 10
-//        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
-//
-//        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
-//
-//        let image1String = NSAttributedString(attachment: image1Attachment)
-//        fullString.append(image1String)
-//        textView.attributedText = fullString
+        let fullString = NSMutableAttributedString(string: textView.text!)
+
+        let image1Attachment = NSTextAttachment()
+        image1Attachment.image = image
+        print()
+
+        let newWidth = self.view.bounds.size.width - 10
+        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
+
+        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
+
+        let image1String = NSAttributedString(attachment: image1Attachment)
+        fullString.append(image1String)
+        textView.attributedText = fullString
         
         
         

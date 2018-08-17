@@ -17,3 +17,9 @@ class Liste: Object {
     //forward relationship to item class
     let items = List<Item>()
 }
+
+class ListModel {
+    var name: String = ""
+    var doneState: Bool?
+    var importantState: Bool?
+}
