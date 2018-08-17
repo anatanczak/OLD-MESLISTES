@@ -261,11 +261,11 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
     
     //hides the keyboard when tapped somewhere else
     func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-        tap.delegate = self
-    
+//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListViewController.dismissKeyboard))
+//        tap.cancelsTouchesInView = false
+//        view.addGestureRecognizer(tap)
+//        tap.delegate = self
+//    
     }
     
     @objc func dismissKeyboard() {
