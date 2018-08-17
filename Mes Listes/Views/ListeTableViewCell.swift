@@ -7,8 +7,13 @@
 //
 
 import UIKit
+import SwipeCellKit
 
-class ListeTableViewCell: UITableViewCell {
+class ListeTableViewCell: SwipeTableViewCell {
+    
+    //MARK/ - Views
+    var imageView = UIImageView()
+    var titleLabel = UILabel()
 
     override func awakeFromNib() {
         super.awakeFromNib()
