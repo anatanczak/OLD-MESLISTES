@@ -225,22 +225,22 @@ getImagesAndPutThemInArray()
     
     func attachImagesToText () {
         
-//        let fullStringFromTextView = textView.text!
-//
-//        let fullString = NSMutableAttributedString(string: textView.text!)
-//
-//        let image1Attachment = NSTextAttachment()
-//        image1Attachment.image = arrayOfImagesFromRealm[0]
-//        print()
+        let fullStringFromTextView = textView.text!
 
-//        let newWidth = self.view.bounds.size.width - 10
-//        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
-//
-//        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
-//
-//        let image1String = NSAttributedString(attachment: image1Attachment)
-//        fullString.append(image1String)
-//        textView.attributedText = fullString
+        let fullString = NSMutableAttributedString(string: textView.text!)
+
+        let image1Attachment = NSTextAttachment()
+        image1Attachment.image = arrayOfImagesFromRealm[0]
+        print()
+
+        let newWidth = self.view.bounds.size.width - 10
+        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
+
+        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
+
+        let image1String = NSAttributedString(attachment: image1Attachment)
+        fullString.append(image1String)
+        textView.attributedText = fullString
         
         
         
