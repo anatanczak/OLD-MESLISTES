@@ -19,6 +19,7 @@
 		4C239AA720D51B73004A0089 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C239AA420D51B73004A0089 /* Main.storyboard */; };
 		4C239AA820D51B73004A0089 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C239AA520D51B73004A0089 /* ListViewController.swift */; };
 		4C25E0C720ED3564003AF851 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C25E0C620ED3564003AF851 /* NoteViewController.swift */; };
+		4CA5BE312126E9EA00EB6457 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE302126E9EA00EB6457 /* Coordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		4C239AA420D51B73004A0089 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		4C239AA520D51B73004A0089 /* ListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		4C25E0C620ED3564003AF851 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
+		4CA5BE302126E9EA00EB6457 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		728AAED0934248CEE6DA1D88 /* Pods-Mes Listes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.debug.xcconfig"; sourceTree = "<group>"; };
 		FDEA6D9EE3FABA11FD24A774 /* Pods-Mes Listes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,6 +75,7 @@
 		4C239A9020D51B36004A0089 /* Mes Listes */ = {
 			isa = PBXGroup;
 			children = (
+				4CA5BE302126E9EA00EB6457 /* Coordinator.swift */,
 				4C239A9120D51B36004A0089 /* AppDelegate.swift */,
 				4C239AA920D51B8D004A0089 /* Data Model */,
 				4C239AAA20D51B9A004A0089 /* controllers */,
@@ -270,6 +273,7 @@
 				4C239AA820D51B73004A0089 /* ListViewController.swift in Sources */,
 				4C239AA620D51B73004A0089 /* Liste.swift in Sources */,
 				4C1DFC0820DFEBB200F3D459 /* ItemTableViewController.swift in Sources */,
+				4CA5BE312126E9EA00EB6457 /* Coordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
