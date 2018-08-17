@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Qu4-cW-rvP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -29,9 +29,6 @@
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
-                                    <connections>
-                                        <action selector="textFieldPrimaryActionTriggered:" destination="jyI-yk-usi" eventType="primaryActionTriggered" id="cvD-pk-i1G"/>
-                                    </connections>
                                 </textField>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZZa-1h-jJJ">
                                     <rect key="frame" x="312" y="14" width="52" height="30"/>
@@ -41,9 +38,6 @@
                                     <state key="normal" title="Save">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </state>
-                                    <connections>
-                                        <action selector="saveButtonTapped:" destination="jyI-yk-usi" eventType="touchUpInside" id="wYb-La-XQq"/>
-                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -65,7 +59,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="lists" id="gJl-ve-eBd"/>
                     <connections>
-                        <outlet property="listTextField" destination="uwE-Nf-ePW" id="GJn-n1-BTf"/>
                         <segue destination="yim-2V-cis" kind="presentation" identifier="goToPopup" modalPresentationStyle="overCurrentContext" id="IR2-mO-uKX"/>
                         <segue destination="Unx-TD-956" kind="show" identifier="goToItem" id="kfx-QC-Um3"/>
                     </connections>

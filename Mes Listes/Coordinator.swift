@@ -56,5 +56,8 @@ class Coordinator: NSObject {
         let navController = UINavigationController(rootViewController: currentVC)
         window!.rootViewController = navController
         window!.makeKeyAndVisible()
+        
+        //does it make navigationbar clear?
+        navController.view.backgroundColor = UIColor.clear
     }
 }
