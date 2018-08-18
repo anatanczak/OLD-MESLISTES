@@ -59,8 +59,11 @@ class ListViewController: UIViewController {
     @objc func rightBarButtonAction () {
         let userTextInputVC = UserTextInputViewController()
         userTextInputVC.isList = true
+        userTextInputVC.createListe = createListe
+
         self.navigationController?.present(userTextInputVC, animated: true, completion: nil)
         self.modalPresentationStyle = .overCurrentContext
+        
     }
     
     func prepareView () {
@@ -295,6 +298,21 @@ extension ListViewController: SwipeTableViewCellDelegate {
     }
     
     //MARK: - DIFFERENT METHODS
+    
+    ///creates a liste and saves it in Realm
+    func createListe (_ liste: Liste) ->() {
+
+        save(list: liste)
+        tableView.reloadData()
+    }
+//    ///adds icon to a liste and saves iconName in Realm
+//    func addIconNameToListe (_ iconName: String)->() {
+//        let newListe = Liste()
+//        newListe.iconName = iconName
+//        sa
+//    }
+
+    
     
     func threeHardCodedExamples () {
         let fisrtListe = Liste()

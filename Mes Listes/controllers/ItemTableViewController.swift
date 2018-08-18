@@ -245,6 +245,13 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
  
     
     //MARK: - DIFFERENT METHODS
+    func createItem (_ itemTitle: String)->() {
+        
+    }
+    func addIconNameToItem (_ iconName: String) ->() {
+        
+    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToNote" {

@@ -19,10 +19,10 @@ class UserTextInputViewController: UIViewController {
     let saveButton = UIButton()
     let cancelButton = UIButton()
     
-    var createListe: ((_ listeName: String)->())?
-    var addIconNameToListe: ((_ iconName: String) ->())?
-    var createItem: ((_ itemTitle: String)->())?
-    var addIconNameToItem: ((_ iconName: String) ->())?
+    var createListe: ((_ liste: Liste)->())?
+//    var addIconNameToListe: ((_ iconName: String) ->())?
+//    var createItem: ((_ itemTitle: String)->())?
+//    var addIconNameToItem: ((_ iconName: String) ->())?
     
     /// property that indicates which controller opens the userInputController
     var isList = false
@@ -57,22 +57,24 @@ class UserTextInputViewController: UIViewController {
         saveButton.setTitle("Save", for: .normal)
         saveButton.backgroundColor = UIColor.blue
         saveButton.frame = CGRect(x: self.view.bounds.size.width/2, y: self.view.bounds.size.height - 100, width: self.view.bounds.size.width/2 - 30, height: 20)
-        saveButton.s
+        saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
         self.view.addSubview(saveButton)
     }
     
     @objc func saveButtonAction () {
         if textFild.text != "" && textFild.text != nil {
             if isList {
-                createListe!(textFild.text!)
+                let newListe = Liste()
+                newListe.name = textFild.text!
                 if let iconNameLocal = iconName {
-                    addIconNameToListe!(iconNameLocal)
+                    newListe.iconName = iconNameLocal
                 }
+                createListe!(newListe)
             }else{
-                createItem!(textFild.text!)
-                if let iconNameLocal = iconName {
-                    addIconNameToItem!(iconNameLocal)
-                }
+//                createItem!(textFild.text!)
+//                if let iconNameLocal = iconName {
+//                    addIconNameToItem!(iconNameLocal)
+//                }
             }
         }
         dismiss(animated: true, completion: nil)
