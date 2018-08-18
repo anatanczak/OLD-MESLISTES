@@ -19,13 +19,22 @@ class UserTextInputViewController: UIViewController {
     let saveButton = UIButton()
     let cancelButton = UIButton()
     
+    var createListe: ((_ listeName: String)->())?
+    var addIconNameToListe: ((_ iconName: String) ->())?
+    var createItem: ((_ itemTitle: String)->())?
+    var addIconNameToItem: ((_ iconName: String) ->())?
+    
     /// property that indicates which controller opens the userInputController
     var isList = false
+    
+    ///
+    var iconName: String?
     
     //Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         prepareView()
+
     }
     
     func prepareView () {
@@ -48,11 +57,25 @@ class UserTextInputViewController: UIViewController {
         saveButton.setTitle("Save", for: .normal)
         saveButton.backgroundColor = UIColor.blue
         saveButton.frame = CGRect(x: self.view.bounds.size.width/2, y: self.view.bounds.size.height - 100, width: self.view.bounds.size.width/2 - 30, height: 20)
+        saveButton.s
         self.view.addSubview(saveButton)
     }
     
-    @objc saveButtonAction () {
-    
+    @objc func saveButtonAction () {
+        if textFild.text != "" && textFild.text != nil {
+            if isList {
+                createListe!(textFild.text!)
+                if let iconNameLocal = iconName {
+                    addIconNameToListe!(iconNameLocal)
+                }
+            }else{
+                createItem!(textFild.text!)
+                if let iconNameLocal = iconName {
+                    addIconNameToItem!(iconNameLocal)
+                }
+            }
+        }
+        dismiss(animated: true, completion: nil)
     }
     
     //MARK: - DIFFERENT METHODS
