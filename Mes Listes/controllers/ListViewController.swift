@@ -33,27 +33,31 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
        
         prepareNavigationBar()
-      
         prepareView()
         prepareLayout()
+        
+        if isAppAlreadyLaunchedOnce() {
+            loadLists()
+        }else{
+            threeHardCodedExamples()
+            loadLists()
+        }
     }
     
     func prepareNavigationBar () {
         
         let title = "meslistes"
         self.title = title    
-        let rightNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "camera-icon"), style: .plain, target: self, action: #selector (rightBarButtonAction))
-
+        let rightNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "plus-icon"), style: .plain, target: self, action: #selector (rightBarButtonAction))
+        rightNavigationButton.tintColor = UIColor.white
+        //moves image in the item
+        //rightNavigationButton.imageInsets  = .init(top: 10, left: 0, bottom: -1, right: 10)
+       
         self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
     }
     
     @objc func rightBarButtonAction () {
-        print("-->rightBarButtonPressed")
-        let firstListe = Liste()
-        firstListe.name = "Shopping List"
-        save(list: firstListe)
-        loadLists()
-        print(lists ?? "realm is empty")
+
     }
     
     func prepareView () {
@@ -131,12 +135,8 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListeTableViewController", for: indexPath) as! ListeTableViewCell
         cell.delegate = self
-        
-        
         cell.fillWith(model: lists?[indexPath.row])
 
-
-        //cell.backgroundColor = colorize(hex: 0xD1C5CA)
         return cell
     }
 }
@@ -150,37 +150,46 @@ extension ListViewController: SwipeTableViewCellDelegate {
         if orientation == .left {
             guard isSwipeRightEnabled else { return nil }
             
+            //STRIKE OUT
             let strikeOut = SwipeAction(style: .default, title: "Strike Out") { (action, indexPath) in
-                
                 self.strikeOut(at: indexPath)
             }
             
+            //REMINDER
             let setReminder = SwipeAction(style: .default, title: "Reminder") { action, indexPath in
-                
                 self.updateModelByAddingAReminder(at: indexPath)
-                
             }
             setReminder.image = UIImage(named: "reminder-icon")
             
-            
+            //CALENDAR
             let addEventToCalendar = SwipeAction(style: .default, title: "Calendar") { (action, indexPath) in
-                
                 self.addEventToCalendar(at: indexPath)
             }
+            addEventToCalendar.image = #imageLiteral(resourceName: "calendar-icon")
+            
             return[strikeOut, setReminder, addEventToCalendar]
             
         }else{
-            
+            //DELETE
             let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-                
-                self.updateModel(at: indexPath)
-                
+                self.deleteListe(at: indexPath)
             }
-            // customize the action appearance
-            deleteAction.image = UIImage(named: "delete-icon")
+            deleteAction.image = #imageLiteral(resourceName: "trash-icon")
+            
             return [deleteAction]
         }
         
+    }
+    //makes different expansion styles possible (such as deleting by swiping till it disappears)
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        
+        var options = SwipeTableOptions()
+        
+        
+        //diferent expansion styles
+        options.expansionStyle = orientation == .left ? .selection : .destructive
+        
+        return options
     }
     
     func updateModelByAddingAReminder(at indexpath: IndexPath) {
@@ -213,7 +222,7 @@ extension ListViewController: SwipeTableViewCellDelegate {
     }
     
     //deletes the list
-    func updateModel(at indexpath: IndexPath) {
+    func deleteListe (at indexpath: IndexPath) {
         if let listForDeletion = self.lists?[indexpath.row]{
             do {
                 try self.realm.write {
@@ -282,6 +291,39 @@ extension ListViewController: SwipeTableViewCellDelegate {
         }
     }
     
+    //MARK: - DIFFERENT METHODS
+    
+    func threeHardCodedExamples () {
+        let fisrtListe = Liste()
+        fisrtListe.name = "SHOPPING LIST"
+        fisrtListe.iconName = "shopping-icon"
+        save(list: fisrtListe)
+        
+        let secondListe = Liste()
+        secondListe.name = "TO DO"
+        secondListe.iconName = "todo-icon"
+        save(list: secondListe)
+        
+        let thirdListe = Liste()
+        thirdListe.name = "TRAVELPACK"
+        thirdListe.iconName = "airplane-icon"
+        save(list: thirdListe)
+        
+    }
+    
+    //Checks if the app is being launched for the first time
+    func isAppAlreadyLaunchedOnce()->Bool{
+        let defaults = UserDefaults.standard
+        
+        if let isAppAlreadyLaunchedOnce = defaults.string(forKey: "isAppAlreadyLaunchedOnce"){
+            print("App already launched : \(isAppAlreadyLaunchedOnce)")
+            return true
+        }else{
+            defaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+            print("App launched first time")
+            return false
+        }
+    }
 }
 
 
@@ -309,7 +351,7 @@ extension ListViewController: SwipeTableViewCellDelegate {
 
 
 
-//MARK: - DIFFERENT METHODS
+
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        if segue.identifier == "goToItem" {
 //            let destinationVC = segue.destination as! ItemTableViewController

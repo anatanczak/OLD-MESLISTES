@@ -22,6 +22,8 @@
 		4CA5BE312126E9EA00EB6457 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE302126E9EA00EB6457 /* Coordinator.swift */; };
 		4CA5BE342126FB1100EB6457 /* ListeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE332126FB1100EB6457 /* ListeTableViewCell.swift */; };
 		4CA5BE3C2127772D00EB6457 /* Fontfabric.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4CA5BE3B2127772D00EB6457 /* Fontfabric.otf */; };
+		4CA5BE3E2128766900EB6457 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE3D2128766900EB6457 /* ItemTableViewCell.swift */; };
+		4CA5BE40212876E800EB6457 /* UserTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE3F212876E800EB6457 /* UserTextInputViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		4CA5BE302126E9EA00EB6457 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		4CA5BE332126FB1100EB6457 /* ListeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeTableViewCell.swift; sourceTree = "<group>"; };
 		4CA5BE3B2127772D00EB6457 /* Fontfabric.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontfabric.otf; sourceTree = "<group>"; };
+		4CA5BE3D2128766900EB6457 /* ItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
+		4CA5BE3F212876E800EB6457 /* UserTextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTextInputViewController.swift; sourceTree = "<group>"; };
 		728AAED0934248CEE6DA1D88 /* Pods-Mes Listes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.debug.xcconfig"; sourceTree = "<group>"; };
 		FDEA6D9EE3FABA11FD24A774 /* Pods-Mes Listes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -102,6 +106,7 @@
 		4C239AAA20D51B9A004A0089 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4CA5BE3F212876E800EB6457 /* UserTextInputViewController.swift */,
 				4C239AA520D51B73004A0089 /* ListViewController.swift */,
 				4C25E0C620ED3564003AF851 /* NoteViewController.swift */,
 				4C1DFC0720DFEBB200F3D459 /* ItemTableViewController.swift */,
@@ -126,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				4CA5BE332126FB1100EB6457 /* ListeTableViewCell.swift */,
+				4CA5BE3D2128766900EB6457 /* ItemTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -275,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C25E0C720ED3564003AF851 /* NoteViewController.swift in Sources */,
+				4CA5BE40212876E800EB6457 /* UserTextInputViewController.swift in Sources */,
 				4C239A9220D51B36004A0089 /* AppDelegate.swift in Sources */,
 				4C1EB04920D7A0DC0056F1B5 /* DatePickerPopupViewController.swift in Sources */,
 				4C2158CB20DC0C7700403BCE /* SwipeTableViewController.swift in Sources */,
@@ -283,6 +290,7 @@
 				4C239AA620D51B73004A0089 /* Liste.swift in Sources */,
 				4CA5BE342126FB1100EB6457 /* ListeTableViewCell.swift in Sources */,
 				4C1DFC0820DFEBB200F3D459 /* ItemTableViewController.swift in Sources */,
+				4CA5BE3E2128766900EB6457 /* ItemTableViewCell.swift in Sources */,
 				4CA5BE312126E9EA00EB6457 /* Coordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

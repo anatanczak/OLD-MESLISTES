@@ -40,7 +40,7 @@ class ListeTableViewCell: SwipeTableViewCell {
         contentView.addSubview(titleLabel)
         
         //iconView
-        iconView.image = #imageLiteral(resourceName: "camera-icon")
+        iconView.image = nil
         iconView.contentMode = .scaleAspectFit
         //iconView.frame = CGRect(x: 20.0, y: 15.5, width: 42, height: 42)
         contentView.addSubview(iconView)
@@ -83,8 +83,12 @@ class ListeTableViewCell: SwipeTableViewCell {
     
     func fillWith(model: Liste?) {
         if let liste = model {
-            //  listeName = liste.name
+            //set icon
+            if let listeIconName = liste.iconName {
+                iconView.image = UIImage(named: listeIconName)
+            }
             
+            //set title
             if liste.done == true {
                 let attributedString = NSMutableAttributedString.init(string: liste.name)
                 attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
@@ -95,9 +99,13 @@ class ListeTableViewCell: SwipeTableViewCell {
                 attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
                 titleLabel.attributedText = attributedString
             }
+            
+            // delete this code if there are 3 hardcoded listes
         } else {
             titleLabel.text = "You haven't created a list yet"
         }
+        
+        
     }
     
     //MARK: - OTHERS

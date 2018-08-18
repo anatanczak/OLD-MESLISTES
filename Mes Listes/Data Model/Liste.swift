@@ -13,13 +13,8 @@ class Liste: Object {
     @objc dynamic var name: String = ""
     @objc dynamic var done: Bool = false
     @objc dynamic var important : Bool = false
+    @objc dynamic var iconName: String?
     
     //forward relationship to item class
     let items = List<Item>()
-}
-
-class ListModel {
-    var name: String = ""
-    var doneState: Bool?
-    var importantState: Bool?
 }
