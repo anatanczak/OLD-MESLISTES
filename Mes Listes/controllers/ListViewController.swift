@@ -57,7 +57,10 @@ class ListViewController: UIViewController {
     }
     
     @objc func rightBarButtonAction () {
-
+        let userTextInputVC = UserTextInputViewController()
+        userTextInputVC.isList = true
+        self.navigationController?.present(userTextInputVC, animated: true, completion: nil)
+        self.modalPresentationStyle = .overCurrentContext
     }
     
     func prepareView () {

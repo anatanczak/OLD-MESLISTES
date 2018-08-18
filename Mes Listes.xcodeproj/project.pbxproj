@@ -106,12 +106,12 @@
 		4C239AAA20D51B9A004A0089 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4CA5BE3F212876E800EB6457 /* UserTextInputViewController.swift */,
 				4C239AA520D51B73004A0089 /* ListViewController.swift */,
-				4C25E0C620ED3564003AF851 /* NoteViewController.swift */,
 				4C1DFC0720DFEBB200F3D459 /* ItemTableViewController.swift */,
-				4C2158CA20DC0C7700403BCE /* SwipeTableViewController.swift */,
+				4C25E0C620ED3564003AF851 /* NoteViewController.swift */,
+				4CA5BE3F212876E800EB6457 /* UserTextInputViewController.swift */,
 				4C1EB04820D7A0DC0056F1B5 /* DatePickerPopupViewController.swift */,
+				4C2158CA20DC0C7700403BCE /* SwipeTableViewController.swift */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
