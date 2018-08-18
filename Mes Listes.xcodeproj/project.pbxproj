@@ -21,6 +21,7 @@
 		4C25E0C720ED3564003AF851 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C25E0C620ED3564003AF851 /* NoteViewController.swift */; };
 		4CA5BE312126E9EA00EB6457 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE302126E9EA00EB6457 /* Coordinator.swift */; };
 		4CA5BE342126FB1100EB6457 /* ListeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE332126FB1100EB6457 /* ListeTableViewCell.swift */; };
+		4CA5BE3C2127772D00EB6457 /* Fontfabric.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4CA5BE3B2127772D00EB6457 /* Fontfabric.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		4C25E0C620ED3564003AF851 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		4CA5BE302126E9EA00EB6457 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		4CA5BE332126FB1100EB6457 /* ListeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeTableViewCell.swift; sourceTree = "<group>"; };
+		4CA5BE3B2127772D00EB6457 /* Fontfabric.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontfabric.otf; sourceTree = "<group>"; };
 		728AAED0934248CEE6DA1D88 /* Pods-Mes Listes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.debug.xcconfig"; sourceTree = "<group>"; };
 		FDEA6D9EE3FABA11FD24A774 /* Pods-Mes Listes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,6 +116,7 @@
 			children = (
 				4C239AA420D51B73004A0089 /* Main.storyboard */,
 				4C239A9820D51B37004A0089 /* Assets.xcassets */,
+				4CA5BE352127703E00EB6457 /* Fonts */,
 				4C239A9A20D51B37004A0089 /* LaunchScreen.storyboard */,
 			);
 			path = "supporting files";
@@ -125,6 +128,14 @@
 				4CA5BE332126FB1100EB6457 /* ListeTableViewCell.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		4CA5BE352127703E00EB6457 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4CA5BE3B2127772D00EB6457 /* Fontfabric.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		DA08D1F700BCAF402E0E9967 /* Pods */ = {
@@ -207,6 +218,7 @@
 				4C239A9C20D51B37004A0089 /* LaunchScreen.storyboard in Resources */,
 				4C239A9920D51B37004A0089 /* Assets.xcassets in Resources */,
 				4C239AA720D51B73004A0089 /* Main.storyboard in Resources */,
+				4CA5BE3C2127772D00EB6457 /* Fontfabric.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,10 +421,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6QQ85WV9R8;
+				DEVELOPMENT_TEAM = 5L8ZCK6563;
 				INFOPLIST_FILE = "Mes Listes/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anaviktoriv.Mes-Listes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -426,10 +441,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6QQ85WV9R8;
+				DEVELOPMENT_TEAM = 5L8ZCK6563;
 				INFOPLIST_FILE = "Mes Listes/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anaviktoriv.Mes-Listes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

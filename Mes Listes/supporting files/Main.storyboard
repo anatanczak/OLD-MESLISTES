@@ -4,11 +4,15 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Fontfabric.otf">
+            <string>ZingSansRustR-BaseLD</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--lists-->
         <scene sceneID="miy-bo-wzP">
@@ -79,11 +83,11 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0AB-pF-yv8">
+                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0AB-pF-yv8">
                                     <rect key="frame" x="8" y="6" width="287" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <nil key="textColor"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <fontDescription key="fontDescription" name="ZingSansRustR-BaseLD" family="Zing Sans Rust Regular" pointSize="17"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>
                                         <action selector="textFieldPrimaryActionTriggered:" destination="Unx-TD-956" eventType="primaryActionTriggered" id="86N-Xp-Ixm"/>
@@ -332,6 +336,6 @@
         <image name="photo-library-icon-1" width="42" height="42"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IR2-mO-uKX"/>
+        <segue reference="GMd-pV-FY4"/>
     </inferredMetricsTieBreakers>
 </document>

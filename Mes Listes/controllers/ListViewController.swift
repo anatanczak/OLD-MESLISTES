@@ -39,14 +39,11 @@ class ListViewController: UIViewController {
     }
     
     func prepareNavigationBar () {
+        
         let title = "meslistes"
-        self.title = title
-        
+        self.title = title    
         let rightNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "camera-icon"), style: .plain, target: self, action: #selector (rightBarButtonAction))
-        
-        self.navigationController?.navigationBar.backgroundColor = UIColor.clear
-        self.navigationController?.navigationBar.isTranslucent = true
-        
+
         self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
     }
     
@@ -55,15 +52,16 @@ class ListViewController: UIViewController {
         let firstListe = Liste()
         firstListe.name = "Shopping List"
         save(list: firstListe)
+        loadLists()
         print(lists ?? "realm is empty")
     }
     
     func prepareView () {
-        self.view.backgroundColor = UIColor(patternImage: backgroundImage)
+        // (UIApplication.shared.value(forKey: "statusBar") as? UIView)?.backgroundColor = .clear
         let statusBarHeight: CGFloat = 20.0
         let navigationBarHeight = (self.navigationController?.navigationBar.frame.height)!
         
-        //backgroundImageView
+       // backgroundImageView
         backgroundImageView.image = backgroundImage
         backgroundImageView.contentMode = .scaleAspectFit
         view.addSubview(backgroundImageView)
@@ -103,7 +101,15 @@ class ListViewController: UIViewController {
             print("Error saving massage\(error)")
         }
     }
+    
+    //retrieves data from the database
+        func loadLists () {
+            lists = realm.objects(Liste.self)
+            lists = lists?.sorted(byKeyPath: "name", ascending: true)
+            tableView.reloadData()
+        }
 }
+
 //MARK: - TableView DataSource and Delegate
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -299,12 +305,7 @@ extension ListViewController: SwipeTableViewCellDelegate {
 
 
 
-//retrieves data from the database
-//    func loadLists () {
-//        lists = realm.objects(Liste.self)
-//        lists = lists?.sorted(byKeyPath: "name", ascending: true)
-//        tableView.reloadData()
-//    }
+
 
 
 

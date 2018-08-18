@@ -9,12 +9,12 @@
 import Foundation
 import UIKit
 
-class Coordinator: NSObject {
+class Coordinator {
     
     var window: UIWindow!
     
     init(window: UIWindow) {
-        super.init()
+
         self.window = window
         
         setup()
@@ -57,7 +57,16 @@ class Coordinator: NSObject {
         window!.rootViewController = navController
         window!.makeKeyAndVisible()
         
-        //does it make navigationbar clear?
-        navController.view.backgroundColor = UIColor.clear
+        //make navigationbar transparent
+        navController.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navController.navigationBar.shadowImage = UIImage()
+        navController.navigationBar.isTranslucent = true
+        
+        // ajust title vertically
+        navController.navigationBar.setTitleVerticalPositionAdjustment(5, for: .default)
+        
+        //change title font
+        let attributes = [NSAttributedStringKey.font: UIFont(name: "Zing Sans Rust Regular", size: 35)!, NSAttributedStringKey.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = attributes
     }
 }
