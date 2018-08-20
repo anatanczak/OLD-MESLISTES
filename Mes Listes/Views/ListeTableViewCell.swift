@@ -56,10 +56,10 @@ class ListeTableViewCell: SwipeTableViewCell {
         
         let iconWidth = UIScreen.main.bounds.size.width * multiplier
         
-        //initin cg rect by  origin pint and size
-        let point = CGPoint(x: 0, y: 0)
-        let size = CGSize(width: 10, height: 10)
-        let rect = CGRect(origin: point, size: size)
+//        //initing cg rect by  origin pint and size
+//        let point = CGPoint(x: 0, y: 0)
+//        let size = CGSize(width: 10, height: 10)
+//        let rect = CGRect(origin: point, size: size)
         
         iconView.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(iconSideOffset)
@@ -116,6 +116,7 @@ class ListeTableViewCell: SwipeTableViewCell {
     }
     override func prepareForReuse() {
         titleLabel.text = nil
+        iconView.image = nil
         
     }
 

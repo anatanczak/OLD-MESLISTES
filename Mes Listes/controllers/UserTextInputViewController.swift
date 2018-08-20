@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class UserTextInputViewController: UIViewController {
     
@@ -14,15 +15,16 @@ class UserTextInputViewController: UIViewController {
     let underView = UIView()
     let textFild = UITextField()
     let titleLabel = UILabel()
-    //let collectionIconView = UICollectionView()
+    let collectionIconView = UICollectionView(frame: CGRect(x: 119, y: 420.5, width: 383, height: 124.5), collectionViewLayout: UICollectionViewFlowLayout.init())
     let moreButton = UIButton()
     let saveButton = UIButton()
     let cancelButton = UIButton()
+    var keyboardHeight: CGFloat = 0.0
     
     var createListe: ((_ liste: Liste)->())?
-//    var addIconNameToListe: ((_ iconName: String) ->())?
-//    var createItem: ((_ itemTitle: String)->())?
-//    var addIconNameToItem: ((_ iconName: String) ->())?
+    //    var addIconNameToListe: ((_ iconName: String) ->())?
+    //    var createItem: ((_ itemTitle: String)->())?
+    //    var addIconNameToItem: ((_ iconName: String) ->())?
     
     /// property that indicates which controller opens the userInputController
     var isList = false
@@ -31,34 +33,57 @@ class UserTextInputViewController: UIViewController {
     var iconName: String?
     
     //Life Cycle
+
     override func viewDidLoad() {
+
         super.viewDidLoad()
         prepareView()
-
+        //textFild.becomeFirstResponder()
     }
     
     func prepareView () {
-        
         self.modalPresentationStyle = .overCurrentContext
         self.view.backgroundColor = UIColor.clear
-        //underView
-        underView.backgroundColor = colorize(hex: 0x7393a7)
         
-        underView.frame = CGRect(x: 20, y: 80, width: self.view.bounds.size.width - 40, height: self.view.bounds.size.height - 160)
+
+        //underView
+        underView.backgroundColor = UIColor.blue
+        
+        underView.frame = CGRect(x: 0, y: 0, width: 442, height: 301.5)
         self.view.addSubview(underView)
         
         //textField
         textFild.placeholder = "Type the name of the list" //need to change placeholder if it was called from ItemViewController
-        textFild.backgroundColor = UIColor.white
-        textFild.frame = CGRect(x: 30, y: 85, width: self.view.bounds.size.width - 60, height: 30)
+        textFild.backgroundColor = colorize(hex: 0xE8ECF1)
+        //textFild.frame = CGRect(x: 119, y: 369, width: 383, height: 46.5)
         self.view.addSubview(textFild)
+        
+        //collectionView
+        collectionIconView.backgroundColor = UIColor.white
+        self.view.addSubview(collectionIconView)
         
         //saveButton
         saveButton.setTitle("Save", for: .normal)
         saveButton.backgroundColor = UIColor.blue
-        saveButton.frame = CGRect(x: self.view.bounds.size.width/2, y: self.view.bounds.size.height - 100, width: self.view.bounds.size.width/2 - 30, height: 20)
+        //saveButton.frame = CGRect(x: 89.5, y: self.view.bounds.size.height - (453.5+96), width: 221, height: 20)
         saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
         self.view.addSubview(saveButton)
+    }
+    func prepareLayout () {
+        let standardUnderViewWidth: CGFloat = self.view.bounds.size.width
+        let standardUnderViewHeight: CGFloat = 191.0
+        let iPhone678SreenHeight: CGFloat = 667.0
+        let multiplier: CGFloat = standardUnderViewHeight/iPhone678SreenHeight
+        let underViewHeight = UIScreen.main.bounds.size.height * multiplier
+        let underViewSideOffset = 30.0
+        //let standardBottomOffSet = 
+        
+        //underView
+        underView.snp.makeConstraints { (make) in
+           make.left.equalToSuperview().offset(underViewSideOffset)
+            make.right.equalToSuperview().offset(underViewSideOffset)
+            make.bottom
+        }
     }
     
     @objc func saveButtonAction () {
@@ -71,16 +96,17 @@ class UserTextInputViewController: UIViewController {
                 }
                 createListe!(newListe)
             }else{
-//                createItem!(textFild.text!)
-//                if let iconNameLocal = iconName {
-//                    addIconNameToItem!(iconNameLocal)
-//                }
+                //                createItem!(textFild.text!)
+                //                if let iconNameLocal = iconName {
+                //                    addIconNameToItem!(iconNameLocal)
+                //                }
             }
         }
         dismiss(animated: true, completion: nil)
     }
     
     //MARK: - DIFFERENT METHODS
+
     func colorize (hex: Int, alpha: Double = 1.0) -> UIColor {
         let red = Double((hex & 0xFF0000) >> 16) / 255.0
         let green = Double((hex & 0xFF00) >> 8) / 255.0
@@ -91,7 +117,9 @@ class UserTextInputViewController: UIViewController {
 }
 
 extension UserTextInputViewController: UITextFieldDelegate {
-    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        textFild.resignFirstResponder()
+    }
 }
 
 extension UserTextInputViewController: UICollectionViewDelegate {

@@ -10,15 +10,20 @@ import UIKit
 import RealmSwift
 import UserNotifications
 import EventKit
+import SwipeCellKit
 
-class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class ItemTableViewController: UIViewController {
     
-    //MARK: - GLOBAL VARIABLES
+    //MARK: - Properties
     let realm = try! Realm()
     var items : Results <Item>?
     var selectedItem = 0
     var nameOfTheSelectedListe = ""
     var selectedItemForTheCalendar = ""
+    var isSwipeRightEnabled = true
+    
+    let backgoundImageView = UIImageView()
+    let tableView = UITableView()
     
     var selectedListe : Liste? {
         didSet {
@@ -26,112 +31,146 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
         }
     }
     
-    //MARK: - IBACTIONS
-    @IBAction func saveItemButton(_ sender: UIButton) {
-                userInputHandeled()
-    }
-    @IBAction func textFieldPrimaryActionTriggered(_ sender: Any) {
-        userInputHandeled()
-    }
-    
-    
-    //MARK: - IBOUTLETS
-    @IBOutlet weak var navigationTitle: UINavigationItem!
-   
-    @IBOutlet weak var itemTextField: UITextField!
-    
-    
     //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.itemTextField.delegate = self
-        navigationTitle.title = selectedListe?.name
-        itemTextField.placeholder = "Add a new item."
-        itemTextField.clearsOnBeginEditing = true
-        loadItems()
-        hideKeyboardWhenTappedAround()
     }
-    
-        // MARK: - TABLE VIEW DELEGATE METHODS
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let currentItem = items?[indexPath.row]
-        if currentItem?.hasNote == true {
-            performSegue(withIdentifier: "goToNote", sender: self)
-        }
-    }
-    
-    
-    // MARK: - TABLE VIEW DATA SOURSE
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return items?.count ?? 1
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        
-        if let item = items?[indexPath.row] {
-            
-            if item.done == true {
-                let attributedString = NSMutableAttributedString.init(string: item.title)
-                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: item.title.count))
-                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
-                cell.textLabel?.attributedText = attributedString
-                
-            }else{
-                let attributedString = NSMutableAttributedString.init(string: item.title)
-                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
-                cell.textLabel?.attributedText = attributedString
-            }
-        }else{
-            cell.textLabel?.text = "You haven't created an item yet"
-        }
-        
-       // cell.backgroundColor = colorize(hex: 0xD1C5CA)
-        
-        return cell
-    }
-    
-    //MARK: - REALM FUNCTIONS
     
     func userInputHandeled(){
         
-        if let currentListe = self.selectedListe {
-            if itemTextField.text != "" && itemTextField.text != "Add a new item." {
-                
-                do {
-                    try self.realm.write {
-                        let newItem = Item()
-                        newItem.title = itemTextField.text!
-                        currentListe.items.append(newItem)
-                    }
-                }catch{
-                    print("Error saving item\(error)")
-                }
-                DispatchQueue.main.async {
-                    self.itemTextField.resignFirstResponder()
-                }
-                itemTextField.text = "Add a new item."
-                itemTextField.clearsOnBeginEditing = true
-                tableView.reloadData()
-            }
-        }
+        //        if let currentListe = self.selectedListe {
+        //            if itemTextField.text != "" && itemTextField.text != "Add a new item." {
+        //
+        //                do {
+        //                    try self.realm.write {
+        //                        let newItem = Item()
+        //                        newItem.title = itemTextField.text!
+        //                        currentListe.items.append(newItem)
+        //                    }
+        //                }catch{
+        //                    print("Error saving item\(error)")
+        //                }
+        //                DispatchQueue.main.async {
+        //                    self.itemTextField.resignFirstResponder()
+        //                }
+        //                itemTextField.text = "Add a new item."
+        //                itemTextField.clearsOnBeginEditing = true
+        //                tableView.reloadData()
+        //            }
+        //        }
     }
-  
+    
     //retrieves data from the database
     func loadItems () {
         items = selectedListe?.items.sorted(byKeyPath: "title", ascending: true)
         tableView.reloadData()
     }
-  
-        //MARK: - METHODS FOR SWIPE ACTIONS
     
+}
+
+extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
+    // MARK: - TABLE VIEW DELEGATE METHODS DATA SOURCE
     
-    override func updateModel(at indexpath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //        let currentItem = items?[indexPath.row]
+        //        if currentItem?.hasNote == true {
+        //            performSegue(withIdentifier: "goToNote", sender: self)
+        //        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return items?.count ?? 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemTableViewCell", for: indexPath) as! ItemTableViewCell
+        
+        //        if let item = items?[indexPath.row] {
+        //
+        //            if item.done == true {
+        //                let attributedString = NSMutableAttributedString.init(string: item.title)
+        //                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: item.title.count))
+        //                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
+        //                cell.textLabel?.attributedText = attributedString
+        //
+        //            }else{
+        //                let attributedString = NSMutableAttributedString.init(string: item.title)
+        //                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
+        //                cell.textLabel?.attributedText = attributedString
+        //            }
+        //        }else{
+        //            cell.textLabel?.text = "You haven't created an item yet"
+        //        }
+        
+        // cell.backgroundColor = colorize(hex: 0xD1C5CA)
+        
+        return cell
+    }
+}
+    //MARK: - REALM FUNCTIONS
+    
+
+extension ItemTableViewController: SwipeTableViewCellDelegate {
+    //MARK: - METHODS FOR SWIPE ACTIONS
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        //guard orientation == .right else { return nil }
+        
+        if orientation == .left {
+            guard isSwipeRightEnabled else { return nil }
+            
+            let strikeOut = SwipeAction(style: .default, title: "Strike Out") { (action, indexPath) in
+                
+                self.strikeOut(at: indexPath)
+            }
+            
+            let setReminder = SwipeAction(style: .default, title: "Reminder") { action, indexPath in
+                
+                self.updateModelByAddingAReminder(at: indexPath)
+                
+            }
+            setReminder.image = UIImage(named: "reminder-icon")
+            
+            
+            let addEventToCalendar = SwipeAction(style: .default, title: "Calendar") { (action, indexPath) in
+                
+                self.addEventToCalendar(at: indexPath)
+            }
+            return[strikeOut, setReminder, addEventToCalendar]
+            
+        }else{
+            
+            let createNote = SwipeAction(style: .default, title: "Note") { (action, indexPath) in
+                self.createNote(at: indexPath)
+            }
+            
+            let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+                
+                self.updateModel(at: indexPath)
+                
+            }
+            // customize the action appearance
+            deleteAction.image = UIImage(named: "delete-icon")
+            return [deleteAction, createNote]
+        }
+        
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        
+        var options = SwipeTableOptions()
+        
+        
+        //diferent expansion styles
+        options.expansionStyle = orientation == .left ? .selection : .destructive
+        
+        return options
+    }
+    
+    func updateModel(at indexpath: IndexPath) {
         if let itemForDeletion = self.items?[indexpath.row] {
             do {
                 try self.realm.write {
@@ -143,7 +182,7 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
         }
     }
     
-    override func updateModelByAddingAReminder(at indexpath: IndexPath) {
+    func updateModelByAddingAReminder(at indexpath: IndexPath) {
         
         selectedItem = indexpath.row
         
@@ -172,7 +211,7 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
         }
     }
     
-    override func addEventToCalendar(at indexpath: IndexPath) {
+    func addEventToCalendar(at indexpath: IndexPath) {
         
         selectedItem = indexpath.row
         selectedItemForTheCalendar = items![indexpath.row].title
@@ -211,7 +250,7 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
         }
     }
     
-    override func strikeOut(at indexPath: IndexPath) {
+    func strikeOut(at indexPath: IndexPath) {
         if let currentItem = self.items?[indexPath.row] {
             do {
                 try realm.write {
@@ -225,7 +264,7 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
         }
     }
     
-    override func createNote(at indexPath: IndexPath) {
+    func createNote(at indexPath: IndexPath) {
         selectedItem = indexPath.row
         
         if let currentItem = self.items?[indexPath.row] {
@@ -242,60 +281,26 @@ class ItemTableViewController: SwipeTableViewController, UITextFieldDelegate, UI
         }
         tableView.reloadData()
     }
- 
+}
+    
     
     //MARK: - DIFFERENT METHODS
-    func createItem (_ itemTitle: String)->() {
-        
-    }
-    func addIconNameToItem (_ iconName: String) ->() {
-        
-    }
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToNote" {
-            
-            let destinationVC = segue.destination as! NoteViewController
-            
-            destinationVC.currentItem = items?[selectedItem]
-            print(destinationVC.currentItem ?? "fuck")
-        }
-    }
+//    func createItem (_ itemTitle: String)->() {
+//
+//    }
+//    func addIconNameToItem (_ iconName: String) ->() {
+//
+//    }
+//
+//
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "goToNote" {
+//
+//            let destinationVC = segue.destination as! NoteViewController
+//
+//            destinationVC.currentItem = items?[selectedItem]
+//            print(destinationVC.currentItem ?? "fuck")
+//        }
+//    }
 
-    
-    //MARK: - GESTURE RECOGNITION AND TEXTFIELD METHODS
-    
-    //hides the keyboard when tapped somewhere else
-    func hideKeyboardWhenTappedAround() {
-//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListViewController.dismissKeyboard))
-//        tap.cancelsTouchesInView = false
-//        view.addGestureRecognizer(tap)
-//        tap.delegate = self
-//    
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-
-    }
-    
-    //function called by gestureRecognaizer and it returns false if it is a UIButton
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        // Don't handle button taps
-        print("false")
-        return !(touch.view is UIButton)
-        
-    }
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        
-        itemTextField.text = ""
-        return true
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return true
-    }
-}
 
