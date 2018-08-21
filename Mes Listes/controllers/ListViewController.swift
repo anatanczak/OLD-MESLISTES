@@ -61,7 +61,8 @@ class ListViewController: UIViewController {
         let userTextInputVC = UserTextInputViewController()
        // userTextInputVC.isListe = true
        // userTextInputVC.createListe = createListe
-       self.definesPresentationContext = true
+        userTextInputVC.modalPresentationStyle = .overCurrentContext
+        
         self.present(userTextInputVC, animated: true, completion: nil)
     }
     

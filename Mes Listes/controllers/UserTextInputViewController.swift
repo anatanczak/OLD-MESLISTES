@@ -16,14 +16,16 @@ class UserTextInputViewController: UIViewController {
         view.backgroundColor = UIColor.white
         return view
     }()
-    lazy var firstStackView: UIStackView  = {
-        let stackView = UIStackView(arrangedSubviews: [textField,
-                                                       tableView])
-        stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 10
-        return stackView
-    }()
+    
+//    lazy var firstStackView: UIStackView  = {
+//        let stackView = UIStackView(arrangedSubviews: [textField,
+//                                                       tableView])
+//        stackView.axis = .vertical
+//        stackView.distribution = .fillProportionally
+//        stackView.spacing = 10
+//        return stackView
+//    }()
+    
     lazy var buttonStackView: UIStackView  = {
         let stackView = UIStackView(arrangedSubviews: [saveButton,
                                                        cancelButton])
@@ -32,8 +34,12 @@ class UserTextInputViewController: UIViewController {
         stackView.spacing = 10
         return stackView
     }()
+    
     let textField = UITextField()
-    let tableView = UITableView()
+    //let tableView = UITableView()
+    
+    var collectionView: UICollectionView?
+    
     let saveButton = UIButton()
     let cancelButton = UIButton()
     
@@ -51,6 +57,7 @@ class UserTextInputViewController: UIViewController {
         super.viewDidLoad()
         //self.modalPresentationStyle = .overCurrentContext
         setupViews()
+        prepareCollectionView()
         setupLayouts()
     }
     
@@ -73,10 +80,11 @@ class UserTextInputViewController: UIViewController {
 
         
         //tableView
+        /*
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = UIColor.red
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "IconCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "IconCell")*/
         
         //save button
         saveButton.setTitle("Save", for: .normal)
@@ -87,15 +95,53 @@ class UserTextInputViewController: UIViewController {
         saveButton.backgroundColor = UIColor.blue
         saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
         
-        [mainView, firstStackView, buttonStackView].forEach {view.addSubview($0)}
+        [mainView, textField, buttonStackView].forEach { view.addSubview($0) }
+    }
+    
+    private func prepareCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        let viewWidth = (view.bounds.size.width - 80)/6
+
+        
+        layout.itemSize = CGSize(width: viewWidth, height: viewWidth)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        
+        let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.yellow
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        self.collectionView = collectionView
+        view.addSubview(collectionView)
     }
     
     func setupLayouts () {
-        mainView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.safeAreaLayoutGuide.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.safeAreaLayoutGuide.trailingAnchor, padding: .init(top: 100, left: 40, bottom: 300, right: 40) )
         
-        firstStackView.anchor(top: mainView.topAnchor, leading: mainView.leadingAnchor, bottom: nil, trailing: mainView.trailingAnchor, padding: .init(top: 10, left: 20, bottom: 0, right: 20))
+        mainView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                        leading: view.safeAreaLayoutGuide.leadingAnchor,
+                        bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                        trailing: view.safeAreaLayoutGuide.trailingAnchor,
+                        padding: .init(top: 100, left: 40, bottom: 300, right: 40) )
         
-        buttonStackView.anchor(top: nil, leading: mainView.leadingAnchor, bottom: mainView.bottomAnchor, trailing: mainView.trailingAnchor, padding: .init(top: 0, left: 20, bottom: 10, right: 20))
+        textField.anchor(top: mainView.topAnchor,
+                         leading: mainView.leadingAnchor,
+                         bottom: nil,
+                         trailing: mainView.trailingAnchor)
+        
+        collectionView?.anchor(top: textField.bottomAnchor,
+                               leading: mainView.leadingAnchor,
+                               bottom: buttonStackView.topAnchor,
+                               trailing: mainView.trailingAnchor)
+        
+        //firstStackView.anchor(top: mainView.topAnchor, leading: mainView.leadingAnchor, bottom: nil, trailing: mainView.trailingAnchor, padding: .init(top: 10, left: 20, bottom: 0, right: 20))
+        
+        buttonStackView.anchor(top: nil,
+                               leading: mainView.leadingAnchor,
+                               bottom: mainView.bottomAnchor,
+                               trailing: mainView.trailingAnchor,
+                               padding: .init(top: 0, left: 20, bottom: 10, right: 20))
     }
     
     //MARK: - Button Actions
@@ -174,7 +220,19 @@ extension UITextField {
 }
 
 
+extension UserTextInputViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        cell.backgroundColor = UIColor.green
+        
+        return cell
+    }
+}
 
 
 
