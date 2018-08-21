@@ -56,6 +56,7 @@ class Coordinator {
         let navController = UINavigationController(rootViewController: currentVC)
         window!.rootViewController = navController
         window!.makeKeyAndVisible()
+        window!.backgroundColor = UIColor.red
         
         //make navigationbar transparent
         navController.navigationBar.setBackgroundImage(UIImage(), for: .default)

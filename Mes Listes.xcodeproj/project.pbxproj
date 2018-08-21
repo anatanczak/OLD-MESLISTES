@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0275788A4B58FFC460D20C8E /* Pods_Mes_Listes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A93D742BF7FE4BCFE3ABA8E /* Pods_Mes_Listes.framework */; };
+		4C1C5898212C4E240084AF39 /* extensionAutoLAyOutAncors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1C5897212C4E240084AF39 /* extensionAutoLAyOutAncors.swift */; };
 		4C1DFC0820DFEBB200F3D459 /* ItemTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1DFC0720DFEBB200F3D459 /* ItemTableViewController.swift */; };
 		4C1DFC0A20DFF91800F3D459 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1DFC0920DFF91800F3D459 /* Item.swift */; };
 		4C1EB04920D7A0DC0056F1B5 /* DatePickerPopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EB04820D7A0DC0056F1B5 /* DatePickerPopupViewController.swift */; };
@@ -24,10 +25,12 @@
 		4CA5BE3C2127772D00EB6457 /* Fontfabric.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4CA5BE3B2127772D00EB6457 /* Fontfabric.otf */; };
 		4CA5BE3E2128766900EB6457 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE3D2128766900EB6457 /* ItemTableViewCell.swift */; };
 		4CA5BE40212876E800EB6457 /* UserTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE3F212876E800EB6457 /* UserTextInputViewController.swift */; };
+		4CA5BE43212AFE1700EB6457 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA5BE42212AFE1700EB6457 /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3A93D742BF7FE4BCFE3ABA8E /* Pods_Mes_Listes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mes_Listes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C1C5897212C4E240084AF39 /* extensionAutoLAyOutAncors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extensionAutoLAyOutAncors.swift; sourceTree = "<group>"; };
 		4C1DFC0720DFEBB200F3D459 /* ItemTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewController.swift; sourceTree = "<group>"; };
 		4C1DFC0920DFF91800F3D459 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		4C1EB04820D7A0DC0056F1B5 /* DatePickerPopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerPopupViewController.swift; sourceTree = "<group>"; };
@@ -46,6 +49,7 @@
 		4CA5BE3B2127772D00EB6457 /* Fontfabric.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontfabric.otf; sourceTree = "<group>"; };
 		4CA5BE3D2128766900EB6457 /* ItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
 		4CA5BE3F212876E800EB6457 /* UserTextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTextInputViewController.swift; sourceTree = "<group>"; };
+		4CA5BE42212AFE1700EB6457 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		728AAED0934248CEE6DA1D88 /* Pods-Mes Listes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.debug.xcconfig"; sourceTree = "<group>"; };
 		FDEA6D9EE3FABA11FD24A774 /* Pods-Mes Listes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mes Listes.release.xcconfig"; path = "Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,6 +123,7 @@
 		4C239AAB20D51BA7004A0089 /* supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				4CA5BE41212AFDF300EB6457 /* extensions */,
 				4C239AA420D51B73004A0089 /* Main.storyboard */,
 				4C239A9820D51B37004A0089 /* Assets.xcassets */,
 				4CA5BE352127703E00EB6457 /* Fonts */,
@@ -142,6 +147,15 @@
 				4CA5BE3B2127772D00EB6457 /* Fontfabric.otf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		4CA5BE41212AFDF300EB6457 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4C1C5897212C4E240084AF39 /* extensionAutoLAyOutAncors.swift */,
+				4CA5BE42212AFE1700EB6457 /* ViewController.swift */,
+			);
+			path = extensions;
 			sourceTree = "<group>";
 		};
 		DA08D1F700BCAF402E0E9967 /* Pods */ = {
@@ -284,10 +298,12 @@
 				4CA5BE40212876E800EB6457 /* UserTextInputViewController.swift in Sources */,
 				4C239A9220D51B36004A0089 /* AppDelegate.swift in Sources */,
 				4C1EB04920D7A0DC0056F1B5 /* DatePickerPopupViewController.swift in Sources */,
+				4C1C5898212C4E240084AF39 /* extensionAutoLAyOutAncors.swift in Sources */,
 				4C2158CB20DC0C7700403BCE /* SwipeTableViewController.swift in Sources */,
 				4C1DFC0A20DFF91800F3D459 /* Item.swift in Sources */,
 				4C239AA820D51B73004A0089 /* ListViewController.swift in Sources */,
 				4C239AA620D51B73004A0089 /* Liste.swift in Sources */,
+				4CA5BE43212AFE1700EB6457 /* ViewController.swift in Sources */,
 				4CA5BE342126FB1100EB6457 /* ListeTableViewCell.swift in Sources */,
 				4C1DFC0820DFEBB200F3D459 /* ItemTableViewController.swift in Sources */,
 				4CA5BE3E2128766900EB6457 /* ItemTableViewCell.swift in Sources */,
