@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class UserTextInputViewController: UIViewController {
     //MARK: - Views
@@ -16,16 +15,7 @@ class UserTextInputViewController: UIViewController {
         view.backgroundColor = UIColor.white
         return view
     }()
-    
-//    lazy var firstStackView: UIStackView  = {
-//        let stackView = UIStackView(arrangedSubviews: [textField,
-//                                                       tableView])
-//        stackView.axis = .vertical
-//        stackView.distribution = .fillProportionally
-//        stackView.spacing = 10
-//        return stackView
-//    }()
-    
+
     lazy var buttonStackView: UIStackView  = {
         let stackView = UIStackView(arrangedSubviews: [saveButton,
                                                        cancelButton])
@@ -36,10 +26,7 @@ class UserTextInputViewController: UIViewController {
     }()
     
     let textField = UITextField()
-    //let tableView = UITableView()
-    
     var collectionView: UICollectionView?
-    
     let saveButton = UIButton()
     let cancelButton = UIButton()
     
@@ -55,13 +42,12 @@ class UserTextInputViewController: UIViewController {
     //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //self.modalPresentationStyle = .overCurrentContext
         setupViews()
-        prepareCollectionView()
+        setupCollectionView()
         setupLayouts()
     }
     
-    func setupViews () {
+    private func setupViews () {
         
         self.modalPresentationStyle = .overCurrentContext
         self.view.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
@@ -78,34 +64,26 @@ class UserTextInputViewController: UIViewController {
         textField.setLeftPaddingPoints(10)
         textField.backgroundColor = colorize(hex: 0xE8ECF1)
 
-        
-        //tableView
-        /*
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.backgroundColor = UIColor.red
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "IconCell")*/
-        
         //save button
         saveButton.setTitle("Save", for: .normal)
         saveButton.backgroundColor = UIColor.blue
         saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
         //cancel button
-        cancelButton.setTitle("Save", for: .normal)
-        saveButton.backgroundColor = UIColor.blue
-        saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
+        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.backgroundColor = UIColor.blue
+        cancelButton.addTarget(self, action: #selector(cancelButtonAction), for: .touchUpInside)
         
         [mainView, textField, buttonStackView].forEach { view.addSubview($0) }
     }
     
-    private func prepareCollectionView() {
+    private func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
         let viewWidth = (view.bounds.size.width - 80)/6
 
         
         layout.itemSize = CGSize(width: viewWidth, height: viewWidth)
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.yellow
@@ -117,7 +95,7 @@ class UserTextInputViewController: UIViewController {
         view.addSubview(collectionView)
     }
     
-    func setupLayouts () {
+    private func setupLayouts () {
         
         mainView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                         leading: view.safeAreaLayoutGuide.leadingAnchor,
@@ -128,20 +106,20 @@ class UserTextInputViewController: UIViewController {
         textField.anchor(top: mainView.topAnchor,
                          leading: mainView.leadingAnchor,
                          bottom: nil,
-                         trailing: mainView.trailingAnchor)
-        
+                         trailing: mainView.trailingAnchor,
+                         padding: .init(top: 10, left: 10, bottom: 0, right: 10))
+
         collectionView?.anchor(top: textField.bottomAnchor,
                                leading: mainView.leadingAnchor,
                                bottom: buttonStackView.topAnchor,
-                               trailing: mainView.trailingAnchor)
-        
-        //firstStackView.anchor(top: mainView.topAnchor, leading: mainView.leadingAnchor, bottom: nil, trailing: mainView.trailingAnchor, padding: .init(top: 10, left: 20, bottom: 0, right: 20))
-        
-        buttonStackView.anchor(top: nil,
+                               trailing: mainView.trailingAnchor,
+                               padding: .init(top: 10, left: 10, bottom: 0, right: 10))
+
+        buttonStackView.anchor(top: collectionView?.bottomAnchor,
                                leading: mainView.leadingAnchor,
                                bottom: mainView.bottomAnchor,
                                trailing: mainView.trailingAnchor,
-                               padding: .init(top: 0, left: 20, bottom: 10, right: 20))
+                               padding: .init(top: 20, left: 10, bottom: 10, right: 10))
     }
     
     //MARK: - Button Actions
@@ -160,6 +138,9 @@ class UserTextInputViewController: UIViewController {
         }
             dismiss(animated: true, completion: nil)
         }
+    @objc func cancelButtonAction () {
+        dismiss(animated: true, completion: nil)
+    }
     
     //MARK: - DIFFERENT METHODS
     
@@ -173,53 +154,14 @@ class UserTextInputViewController: UIViewController {
 }
 
 
-
+//MARK: - TextFieldDelegate
 extension UserTextInputViewController: UITextFieldDelegate {
     //    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     //        textFild.resignFirstResponder()
     //    }
 }
 
-extension UserTextInputViewController: UITableViewDelegate, UITableViewDataSource {
-   
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 6
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "IconCell", for: indexPath)
-        cell.imageView?.image = #imageLiteral(resourceName: "airplane-icon")
-        cell.backgroundColor = UIColor.cyan
-        return cell
-    }
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    }
-    
-}
-
-extension UITextField {
-    func setLeftPaddingPoints(_ amount:CGFloat){
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
-        self.leftView = paddingView
-        self.leftViewMode = .always
-    }
-    func setRightPaddingPoints(_ amount:CGFloat) {
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
-        self.rightView = paddingView
-        self.rightViewMode = .always
-    }
-}
-
-
+//MARK: - UICollectionViewDelegate and DataSource
 extension UserTextInputViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
