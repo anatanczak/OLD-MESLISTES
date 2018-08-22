@@ -18,14 +18,11 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var addedImage: UIImage?
     var imageName = ""
     var arrayOfImagesFromRealm = [UIImage]()
-    var arrayOfImageNamesFromRealm = [String]()
     
     //MARK: - OUTLETS
-    @IBOutlet weak var doneButtonPressed: UIButton!
-    
-    @IBOutlet weak var nameLabel: UILabel!
-    
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var doneButtonPressed    : UIButton!
+    @IBOutlet weak var nameLabel            : UILabel!
+    @IBOutlet weak var textView             : UITextView!
     
     
     //MARK: - IBACTIONS
@@ -59,13 +56,23 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         openPhotoLibrary()
     }
     
+    func getNewNameForImage() -> String {
+        /*
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
+        let imageName = dateFormatter.string(from: date)*/
+        let random = "imageName"
+    
+        return random
+    }
     
     @IBAction func photoButtonPressed(_ sender: UIButton) {
 //    1. create a string from the date to ID the image
          let date = Date()
          let dateFormatter = DateFormatter()
          dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        imageName = "\n" + dateFormatter.string(from: date) + "\n"
+        imageName = dateFormatter.string(from: date)
          
 //         2. get the cursor position
         var cursorPosition1: Int
@@ -80,7 +87,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
         openCamera()
         
-getImagesAndPutThemInArray()
+        getImagesAndPutThemInArray()
         
         
     }
@@ -93,12 +100,23 @@ getImagesAndPutThemInArray()
         
         textView.text = currentItem?.noteInput ?? ""
         
-        getImagesAndPutThemInArray()
+        var names: [String] = []
+        var positions: [Int] = []
+        for imageObject in (currentItem?.imageObjects)! {
+            names.append(imageObject.name)
+            positions.append(imageObject.position)
+        }
+        
+        
+        let images = NoteStorageManager.shared.getImageForNoteItemName(noteName: (currentItem?.title)!, imagesNames: names)
+        
+        self.insertImagesToTextAndGetPosition(images: images, positions: positions)
+        print("\(images)")
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(NoteViewController.updateTextView(notification:)), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(NoteViewController.updateTextView(notification:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
-        
     }
     
     
@@ -118,14 +136,13 @@ getImagesAndPutThemInArray()
     
     ///saves images to realm
     
-    func saveImagesToRealm (_ nameofImage: String) {
+    func saveImagesToRealm (_ imageObject: NoteImageObject) {
         if let selectedItem = currentItem {
             do {
                 try realm.write {
-                    selectedItem.imagenames.append(nameofImage)
-                    print("saving nameOfImageToRealm-->\(selectedItem.imagenames)")
+                    selectedItem.imageObjects.append(imageObject)
                 }
-            }catch{
+            } catch {
                 print("error updating realm\(error)")
             }
         }
@@ -160,15 +177,22 @@ getImagesAndPutThemInArray()
     func imagePickerController (_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage{
-            addedImage = originalImage
-            textView.text!.append(contentsOf: imageName)
             
+            /* Appent image to text view. */
+            let position = self.attachImagesToTextAndGetPosition(image: originalImage)
+           
             
-            saveImage(the: addedImage!, called: imageName)
+            /* Will be going in background... */
+            let name = getNewNameForImage()
+            NoteStorageManager.shared.saveImage(the: originalImage,
+                                                called: name,
+                                                noteName: currentItem?.title ?? "NewNote")
             
-            saveImagesToRealm(imageName)
-
-            
+            let noteImageObject = NoteImageObject()
+            noteImageObject.name = name
+            noteImageObject.position = position
+            saveImagesToRealm(noteImageObject)
+            /* ..... */
         }
         
         //Dismiss the UIImagePicker after selection
@@ -182,13 +206,14 @@ getImagesAndPutThemInArray()
     }
     
     /// save the image to the documents directory
-    func saveImage (the imageToSave: UIImage, called imageName: String) {
+    func saveImage(the imageToSave: UIImage, called imageName: String) {
         
         //creates an instance of the FileManager
         let fileManager = FileManager.default
         
         //get the image path
         let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(imageName)
+       
         //get the image we took with camera
         let image = addedImage
         let orientedImage = image!.upOrientationImage()
@@ -198,10 +223,10 @@ getImagesAndPutThemInArray()
         
         //store it in the document directory
         fileManager.createFile(atPath: imagePath as String, contents: data, attributes: nil)
-
     }
     
     func getImagesAndPutThemInArray () {
+        /*
         let fileManager = FileManager.default
         if let selectedItem = currentItem {
             for nameOfImage in selectedItem.imagenames {
@@ -209,7 +234,7 @@ getImagesAndPutThemInArray()
                 if fileManager.fileExists(atPath: imagePath){
                     let newImage = UIImage(contentsOfFile: imagePath)
                     arrayOfImagesFromRealm.append(newImage!)
-                    arrayOfImageNamesFromRealm.append(nameOfImage)
+                    //arrayOfImageNamesFromRealm.append(nameOfImage)
                     
                     print("-->gettingImagesFromRealm\(arrayOfImageNamesFromRealm)\(arrayOfImagesFromRealm)")
                 }else{
@@ -218,11 +243,57 @@ getImagesAndPutThemInArray()
                 }
                 print(nameOfImage)
             }
-        }
+        }*/
     }
  
-    // attaching an image to the text
+    func attachImagesToTextAndGetPosition(image: UIImage) -> Int{
+        
+        let fullStringFromTextView = textView.text!
+        
+        let fullString = NSMutableAttributedString(string: fullStringFromTextView)
+        
+        let image1Attachment = NSTextAttachment()
+        image1Attachment.image = image
+        
+        let newWidth = self.view.bounds.size.width - 10
+        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
+        
+        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
+        
+        let image1String = NSAttributedString(attachment: image1Attachment)
+        fullString.append(image1String)
+        textView.attributedText = fullString
+        
+        return fullStringFromTextView.count
+    }
     
+    func insertImagesToTextAndGetPosition(images: [UIImage], positions: [Int]) -> Int{
+        
+        let fullStringFromTextView = textView.text!
+        
+        let fullString = NSMutableAttributedString(string: fullStringFromTextView)
+        
+        for image in images {
+            let index = images.index(of: image)!
+            
+            let image1Attachment = NSTextAttachment()
+            image1Attachment.image = image
+            
+            let newWidth = self.view.bounds.size.width - 10
+            let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
+            
+            image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
+            
+            let image1String = NSAttributedString(attachment: image1Attachment)
+            fullString.insert(image1String, at: positions[index])
+        }
+
+        textView.attributedText = fullString
+        
+        return fullStringFromTextView.count
+    }
+    
+    // attaching an image to the text
     func attachImagesToText () {
         
         let fullStringFromTextView = textView.text!
