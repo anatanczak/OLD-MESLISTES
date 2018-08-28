@@ -13,6 +13,7 @@ class UserTextInputViewController: UIViewController {
     let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
+        view.layer.cornerRadius = 10
         return view
     }()
 
@@ -78,12 +79,13 @@ class UserTextInputViewController: UIViewController {
     
     private func setupCollectionView() {
         let layout = UICollectionViewFlowLayout()
-        let viewWidth = (view.bounds.size.width - 80)/6
+        let viewWidth = 40
 
         
         layout.itemSize = CGSize(width: viewWidth, height: viewWidth)
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 1
+        layout.minimumInteritemSpacing = 1
+        
         
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.yellow
@@ -97,23 +99,31 @@ class UserTextInputViewController: UIViewController {
     
     private func setupLayouts () {
         
+//        mainView.translatesAutoresizingMaskIntoConstraints = false
+//        mainView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        mainView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+//        mainView.widthAnchor.constraint(equalToConstant: 270.0).isActive = true
+//        mainView.heightAnchor.constraint(equalToConstant: 180.0).isActive = true
+        
         mainView.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                         leading: view.safeAreaLayoutGuide.leadingAnchor,
-                        bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                        bottom: nil,
                         trailing: view.safeAreaLayoutGuide.trailingAnchor,
-                        padding: .init(top: 100, left: 40, bottom: 300, right: 40) )
+                        padding: .init(top: 200, left: (self.view.bounds.size.width - 270)/2, bottom: 0, right: (self.view.bounds.size.width - 270)/2),
+                        size: .init(width: 270, height: 180))
         
         textField.anchor(top: mainView.topAnchor,
                          leading: mainView.leadingAnchor,
                          bottom: nil,
                          trailing: mainView.trailingAnchor,
-                         padding: .init(top: 10, left: 10, bottom: 0, right: 10))
+                         padding: .init(top: 13, left: 16, bottom: 0, right: 16),
+                         size: .init(width: 238, height: 24))
 
         collectionView?.anchor(top: textField.bottomAnchor,
                                leading: mainView.leadingAnchor,
                                bottom: buttonStackView.topAnchor,
                                trailing: mainView.trailingAnchor,
-                               padding: .init(top: 10, left: 10, bottom: 0, right: 10))
+                               padding: .init(top: 5, left: 12.5, bottom: 9, right: 12.5))
 
         buttonStackView.anchor(top: collectionView?.bottomAnchor,
                                leading: mainView.leadingAnchor,
@@ -144,13 +154,7 @@ class UserTextInputViewController: UIViewController {
     
     //MARK: - DIFFERENT METHODS
     
-    func colorize (hex: Int, alpha: Double = 1.0) -> UIColor {
-        let red = Double((hex & 0xFF0000) >> 16) / 255.0
-        let green = Double((hex & 0xFF00) >> 8) / 255.0
-        let blue = Double((hex & 0xFF)) / 255.0
-        let color: UIColor = UIColor( red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha:CGFloat(alpha) )
-        return color
-    }
+
 }
 
 
@@ -165,7 +169,7 @@ extension UserTextInputViewController: UITextFieldDelegate {
 extension UserTextInputViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return 12
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

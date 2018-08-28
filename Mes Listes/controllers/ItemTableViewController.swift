@@ -21,8 +21,9 @@ class ItemTableViewController: UIViewController {
     var nameOfTheSelectedListe = ""
     var selectedItemForTheCalendar = ""
     var isSwipeRightEnabled = true
+    let backgroundImage = #imageLiteral(resourceName: "liste-background-image")
     
-    let backgoundImageView = UIImageView()
+    let backgroundImageView = UIImageView()
     let tableView = UITableView()
     
     var selectedListe : Liste? {
@@ -31,10 +32,68 @@ class ItemTableViewController: UIViewController {
         }
     }
     
-    //MARK: - VIEW DID LOAD
+    //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
+        setupViews()
+        setupLayout()
         
+    }
+    private func setupNavigationBar () {
+        
+        let title = selectedListe?.name ?? "meslistes"
+        self.title = title
+        var rightImage = UIImage(named: "plus-icon")
+        rightImage = rightImage?.withRenderingMode(.alwaysOriginal)
+        let rightNavigationButton = UIBarButtonItem(image: rightImage, style: .plain, target: self, action: #selector (rightBarButtonAction))
+        rightNavigationButton.tintColor = UIColor.white
+  
+        self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
+        
+        let leftNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back-button-icon") , style: .plain, target: self, action: #selector(leftBarButtonAction))
+        leftNavigationButton.tintColor = UIColor.white
+        
+        leftNavigationButton.imageInsets  = .init(top: 0, left: -4, bottom: 0, right: 0)
+        self.navigationItem.setLeftBarButton(leftNavigationButton, animated: false)
+
+    }
+    
+    private func setupViews () {
+        
+        let statusBarHeight: CGFloat = 20.0
+        let navigationBarHeight = (self.navigationController?.navigationBar.frame.height)!
+        
+        // backgroundImageView
+        backgroundImageView.image = backgroundImage
+        backgroundImageView.contentMode = .scaleAspectFit
+        view.addSubview(backgroundImageView)
+        
+        //tableView
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(ListeTableViewCell.self, forCellReuseIdentifier: "ItemTableViewCell")
+        tableView.backgroundColor = UIColor.clear
+        tableView.separatorColor = UIColor.white
+        tableView.separatorStyle = .singleLine
+        tableView.separatorInset = .init(top: 0, left: 0, bottom: 0, right: 0)
+        tableView.frame = CGRect(x: 0, y: statusBarHeight + navigationBarHeight, width: self.view.bounds.size.width, height: self.view.bounds.size.height - (statusBarHeight + navigationBarHeight))
+        view.addSubview(tableView)
+    }
+    
+    private func setupLayout() {
+        
+        backgroundImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+    }
+    
+    //MARK: - ACTIONS
+    @objc func rightBarButtonAction () {
+        
+    }
+    
+    @objc func leftBarButtonAction () {
+        _ = navigationController?.popToRootViewController(animated: true)
+        print("--> left button Pressed")
     }
     
     func userInputHandeled(){
@@ -70,7 +129,8 @@ class ItemTableViewController: UIViewController {
 }
 
 extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
-    // MARK: - TABLE VIEW DELEGATE METHODS DATA SOURCE
+    
+// MARK: - TABLE VIEW DELEGATE METHODS DATA SOURCE
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //        let currentItem = items?[indexPath.row]
@@ -87,27 +147,13 @@ extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemTableViewCell", for: indexPath) as! ItemTableViewCell
-        
-        //        if let item = items?[indexPath.row] {
-        //
-        //            if item.done == true {
-        //                let attributedString = NSMutableAttributedString.init(string: item.title)
-        //                attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: item.title.count))
-        //                attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
-        //                cell.textLabel?.attributedText = attributedString
-        //
-        //            }else{
-        //                let attributedString = NSMutableAttributedString.init(string: item.title)
-        //                attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
-        //                cell.textLabel?.attributedText = attributedString
-        //            }
-        //        }else{
-        //            cell.textLabel?.text = "You haven't created an item yet"
-        //        }
-        
-        // cell.backgroundColor = colorize(hex: 0xD1C5CA)
-        
+        cell.delegate = self
+        cell.fillWith(model: items?[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
 }
     //MARK: - REALM FUNCTIONS

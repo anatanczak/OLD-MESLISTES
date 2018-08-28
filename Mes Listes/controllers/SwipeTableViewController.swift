@@ -45,12 +45,12 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         if orientation == .left {
             guard isSwipeRightEnabled else { return nil }
             
-            let strikeOut = SwipeAction(style: .default, title: "Strike Out") { (action, indexPath) in
+            let strikeOut = SwipeAction(style: .default, title: "") { (action, indexPath) in
                 
                 self.strikeOut(at: indexPath)
             }
             
-            let setReminder = SwipeAction(style: .default, title: "Reminder") { action, indexPath in
+            let setReminder = SwipeAction(style: .default, title: "") { action, indexPath in
                 
                 self.updateModelByAddingAReminder(at: indexPath)
                 
@@ -58,7 +58,7 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
             setReminder.image = UIImage(named: "reminder-icon")
            
             
-            let addEventToCalendar = SwipeAction(style: .default, title: "Calendar") { (action, indexPath) in
+            let addEventToCalendar = SwipeAction(style: .default, title: "") { (action, indexPath) in
                 
                 self.addEventToCalendar(at: indexPath)
             }
@@ -115,13 +115,6 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         //creates a note
     }
     
-    func colorize (hex: Int, alpha: Double = 1.0) -> UIColor {
-        let red = Double((hex & 0xFF0000) >> 16) / 255.0
-        let green = Double((hex & 0xFF00) >> 8) / 255.0
-        let blue = Double((hex & 0xFF)) / 255.0
-        let color: UIColor = UIColor( red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha:CGFloat(alpha) )
-        return color
-    }
 }
 
 

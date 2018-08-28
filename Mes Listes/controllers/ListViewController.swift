@@ -32,9 +32,9 @@ class ListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
        
-        prepareNavigationBar()
-        prepareView()
-        prepareLayout()
+        setupNavigationBar()
+        setupView()
+        setupLayout()
         
         if isAppAlreadyLaunchedOnce() {
             loadLists()
@@ -44,30 +44,45 @@ class ListViewController: UIViewController {
         }
     }
     
-    func prepareNavigationBar () {
+    private func setupNavigationBar () {
         
         let title = "meslistes"
-        self.title = title    
-        let rightNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "plus-icon"), style: .plain, target: self, action: #selector (rightBarButtonAction))
+        self.title = title
+        var rightImage = UIImage(named: "plus-icon")
+        rightImage = rightImage?.withRenderingMode(.alwaysOriginal)
+        let rightNavigationButton = UIBarButtonItem(image: rightImage, style: .plain, target: self, action: #selector (rightBarButtonAction))
         rightNavigationButton.tintColor = UIColor.white
+        //rightNavigationButton.image?.stretchableImage(withLeftCapWidth: 20, topCapHeight: 20)
         //moves image in the item
-        //rightNavigationButton.imageInsets  = .init(top: 10, left: 0, bottom: -1, right: 10)
+
        
         self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
+        
+        let leftNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "menu-icon"), style: .plain, target: self, action: #selector(leftBarButtonAction))
+        leftNavigationButton.tintColor = UIColor.white
+        
+        leftNavigationButton.imageInsets  = .init(top: 0, left: -4, bottom: 0, right: 0)
+        self.navigationItem.setLeftBarButton(leftNavigationButton, animated: false)
     }
     
+    //MARK: - Button ACTIONS
     @objc func rightBarButtonAction () {
         
         let userTextInputVC = UserTextInputViewController()
-       // userTextInputVC.isListe = true
-       // userTextInputVC.createListe = createListe
+        userTextInputVC.isListe = true
+        userTextInputVC.createListe = createListe
         userTextInputVC.modalPresentationStyle = .overCurrentContext
         
         self.present(userTextInputVC, animated: true, completion: nil)
     }
     
-    func prepareView () {
-        // (UIApplication.shared.value(forKey: "statusBar") as? UIView)?.backgroundColor = .clear
+    @objc func leftBarButtonAction () {
+        
+    }
+    
+    //MARK: - Layout
+    private func setupView () {
+
         let statusBarHeight: CGFloat = 20.0
         let navigationBarHeight = (self.navigationController?.navigationBar.frame.height)!
         
@@ -88,16 +103,12 @@ class ListViewController: UIViewController {
         view.addSubview(tableView)
     }
     
-    //MARK: - Layout
-    private func prepareLayout() {
-        //backgroundImageView
-        backgroundImageView.snp.makeConstraints { (make) in
-            make.left.equalToSuperview()
-            make.top.equalToSuperview()
-            make.right.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
+
+    private func setupLayout() {
+
+        backgroundImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
     }
+    
     
     //MARK: - REALM FUNCTIONS
     
@@ -125,6 +136,14 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     
     // delegate methods
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let itemVC = ItemTableViewController()
+        
+        if let selectedListWithValue = lists?[indexPath.row] {
+        itemVC.selectedListe = selectedListWithValue
+        }
+        
+        self.show(itemVC, sender: self)
         
     }
     
@@ -157,30 +176,35 @@ extension ListViewController: SwipeTableViewCellDelegate {
             guard isSwipeRightEnabled else { return nil }
             
             //STRIKE OUT
-            let strikeOut = SwipeAction(style: .default, title: "Strike Out") { (action, indexPath) in
+            let strikeOut = SwipeAction(style: .default, title: nil) { (action, indexPath) in
                 self.strikeOut(at: indexPath)
             }
+            strikeOut.image = #imageLiteral(resourceName: "strikeout-icon")
+            strikeOut.backgroundColor = self.colorize(hex: 0xF0D6E2)
             
             //REMINDER
-            let setReminder = SwipeAction(style: .default, title: "Reminder") { action, indexPath in
+            let setReminder = SwipeAction(style: .default, title: nil) { action, indexPath in
                 self.updateModelByAddingAReminder(at: indexPath)
             }
             setReminder.image = UIImage(named: "reminder-icon")
+            setReminder.backgroundColor = self.colorize(hex: 0xF0D6E2)
             
             //CALENDAR
-            let addEventToCalendar = SwipeAction(style: .default, title: "Calendar") { (action, indexPath) in
+            let addEventToCalendar = SwipeAction(style: .default, title: nil) { (action, indexPath) in
                 self.addEventToCalendar(at: indexPath)
             }
             addEventToCalendar.image = #imageLiteral(resourceName: "calendar-icon")
+            addEventToCalendar.backgroundColor = self.colorize(hex: 0xF0D6E2)
             
             return[strikeOut, setReminder, addEventToCalendar]
             
         }else{
             //DELETE
-            let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            let deleteAction = SwipeAction(style: .destructive, title: nil) { action, indexPath in
                 self.deleteListe(at: indexPath)
             }
             deleteAction.image = #imageLiteral(resourceName: "trash-icon")
+            deleteAction.backgroundColor = self.colorize(hex: 0xF25D61)
             
             return [deleteAction]
         }

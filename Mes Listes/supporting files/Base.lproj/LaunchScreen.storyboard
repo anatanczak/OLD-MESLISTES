@@ -17,12 +17,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="loading-page-image" translatesAutoresizingMaskIntoConstraints="NO" id="WhE-ZA-uiX">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loading-page-image" translatesAutoresizingMaskIntoConstraints="NO" id="WhE-ZA-uiX">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="WhE-ZA-uiX" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="7Bi-bs-Yhn"/>
+                            <constraint firstItem="WhE-ZA-uiX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="HsS-gV-FRu"/>
+                            <constraint firstItem="WhE-ZA-uiX" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="MGL-JG-Y7N"/>
+                            <constraint firstItem="WhE-ZA-uiX" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="UDt-iO-F8b"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>

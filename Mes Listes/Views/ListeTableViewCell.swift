@@ -20,22 +20,22 @@ class ListeTableViewCell: SwipeTableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
      
-        prepareCellView()
-        prepareLayout()
+        setupCellView()
+        setupLayout()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    func prepareCellView () {
+    private func setupCellView () {
         let screen = UIScreen.main.bounds.size.width
         contentView.backgroundColor = UIColor.white
         
         //titleLabel
         titleLabel.text = ""
         titleLabel.textAlignment = .left
-        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .ultraLight)
+        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .light)
         //titleLabel.frame = CGRect(x: 30.0, y: 15.5, width: screen - 40, height: 42)
         contentView.addSubview(titleLabel)
         
@@ -46,42 +46,30 @@ class ListeTableViewCell: SwipeTableViewCell {
         contentView.addSubview(iconView)
     }
     
-    private func prepareLayout() {
-        //titleLabel
-        let standartImageWidthHeight: CGFloat = 42.0
+    private func setupLayout() {
+        
+        let standartImageWidthHeight: CGFloat = 45.0
         let iPhone6SreenWidth: CGFloat = 375.0
         let multiplier: CGFloat = standartImageWidthHeight/iPhone6SreenWidth
         
-        let iconSideOffset: CGFloat = 15.5
+        let iconSideOffset: CGFloat = 47.0
+        let iconUpperLowerOffset: CGFloat = 12.5
         
         let iconWidth = UIScreen.main.bounds.size.width * multiplier
         
-//        //initing cg rect by  origin pint and size
-//        let point = CGPoint(x: 0, y: 0)
-//        let size = CGSize(width: 10, height: 10)
-//        let rect = CGRect(origin: point, size: size)
+
         
-        iconView.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().offset(iconSideOffset)
-            make.top.equalToSuperview().offset(iconSideOffset)
-            make.bottom.equalToSuperview().offset(-iconSideOffset)
-            make.size.equalTo(CGSize(width: iconWidth,
-                                     height: iconWidth))
-        }
+        iconView.anchor(top: contentView.topAnchor, leading: contentView.leadingAnchor, bottom: contentView.bottomAnchor, trailing: titleLabel.leadingAnchor, padding: .init(top: iconUpperLowerOffset, left: iconSideOffset, bottom: iconUpperLowerOffset, right: 30), size: .init(width: 45.0, height: 45.0))
         
-        //titleLabel
-        titleLabel.snp.makeConstraints { [weak self] (make) in
-            guard let `self` = self else { return }
-            make.left.equalTo(self.iconView.snp.right).offset(20.0)
-            make.top.equalToSuperview().offset(iconSideOffset)
-            make.bottom.equalToSuperview().offset(-iconSideOffset)
-            make.right.equalToSuperview().offset(-iconSideOffset)
-        }
         
-        //iconView
+        
+        titleLabel.anchor(top: contentView.topAnchor, leading: iconView.trailingAnchor, bottom: contentView.bottomAnchor, trailing: contentView.trailingAnchor, padding: .init(top: iconUpperLowerOffset, left: 27 , bottom: iconUpperLowerOffset, right: 39))
+        
+       
     }
     
     func fillWith(model: Liste?) {
+       
         if let liste = model {
             //set icon
             if let listeIconName = liste.iconName {
@@ -90,12 +78,12 @@ class ListeTableViewCell: SwipeTableViewCell {
             
             //set title
             if liste.done == true {
-                let attributedString = NSMutableAttributedString.init(string: liste.name)
+                let attributedString = NSMutableAttributedString.init(string: liste.name.uppercased())
                 attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: liste.name.count))
                 attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: liste.name.count))
                 titleLabel.attributedText = attributedString
             } else {
-                let attributedString = NSMutableAttributedString.init(string: liste.name)
+                let attributedString = NSMutableAttributedString.init(string: liste.name.uppercased())
                 attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: liste.name.count))
                 titleLabel.attributedText = attributedString
             }
