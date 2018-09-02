@@ -18,7 +18,7 @@ class ListViewController: UIViewController {
     //MARK: - Properties
     let backgroundImageView: UIImageView = UIImageView()
     let tableView = UITableView()
-    let backgroundImage = #imageLiteral(resourceName: "liste-background-image")
+    let backgroundImage = #imageLiteral(resourceName: "background-image")
     
     let realm = try! Realm()
     var lists : Results <Liste>?
@@ -69,7 +69,6 @@ class ListViewController: UIViewController {
     @objc func rightBarButtonAction () {
         
         let userTextInputVC = UserTextInputViewController()
-        userTextInputVC.isListe = true
         userTextInputVC.createListe = createListe
         userTextInputVC.modalPresentationStyle = .overCurrentContext
         
@@ -341,7 +340,7 @@ extension ListViewController: SwipeTableViewCellDelegate {
     func threeHardCodedExamples () {
         let fisrtListe = Liste()
         fisrtListe.name = "SHOPPING LIST"
-        fisrtListe.iconName = "shopping-icon"
+        fisrtListe.iconName = "shopping-cart-icon"
         save(list: fisrtListe)
         
         let secondListe = Liste()

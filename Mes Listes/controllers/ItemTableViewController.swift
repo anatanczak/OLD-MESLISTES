@@ -21,7 +21,8 @@ class ItemTableViewController: UIViewController {
     var nameOfTheSelectedListe = ""
     var selectedItemForTheCalendar = ""
     var isSwipeRightEnabled = true
-    let backgroundImage = #imageLiteral(resourceName: "liste-background-image")
+    let backgroundImage = #imageLiteral(resourceName: "background-image")
+
     
     let backgroundImageView = UIImageView()
     let tableView = UITableView()
@@ -72,7 +73,7 @@ class ItemTableViewController: UIViewController {
         //tableView
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(ListeTableViewCell.self, forCellReuseIdentifier: "ItemTableViewCell")
+        tableView.register(ItemTableViewCell.self, forCellReuseIdentifier: "ItemTableViewCell")
         tableView.backgroundColor = UIColor.clear
         tableView.separatorColor = UIColor.white
         tableView.separatorStyle = .singleLine
@@ -88,7 +89,7 @@ class ItemTableViewController: UIViewController {
     
     //MARK: - ACTIONS
     @objc func rightBarButtonAction () {
-        
+        alertAppearForUserInput()
     }
     
     @objc func leftBarButtonAction () {
@@ -96,28 +97,51 @@ class ItemTableViewController: UIViewController {
         print("--> left button Pressed")
     }
     
-    func userInputHandeled(){
+    //MARK: - Different Methods
+    
+    func alertAppearForUserInput () {
+        var alertTextField = UITextField()
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.view.tintColor = UIColor.black
+        let action = UIAlertAction(title: "OK", style: .default) { (action) in
+            if alertTextField.text != nil && alertTextField.text != "" {
+                self.userInputHandeled(text: alertTextField.text!)
+                self.tableView.reloadData()
+            }
+        }
         
-        //        if let currentListe = self.selectedListe {
-        //            if itemTextField.text != "" && itemTextField.text != "Add a new item." {
-        //
-        //                do {
-        //                    try self.realm.write {
-        //                        let newItem = Item()
-        //                        newItem.title = itemTextField.text!
-        //                        currentListe.items.append(newItem)
-        //                    }
-        //                }catch{
-        //                    print("Error saving item\(error)")
-        //                }
-        //                DispatchQueue.main.async {
-        //                    self.itemTextField.resignFirstResponder()
-        //                }
-        //                itemTextField.text = "Add a new item."
-        //                itemTextField.clearsOnBeginEditing = true
-        //                tableView.reloadData()
-        //            }
-        //        }
+        let actionCancel = UIAlertAction(title: "Cancel", style: .default) { (actionCancel) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        alert.addTextField { (textField) in
+            textField.attributedPlaceholder = NSAttributedString(string: "name your new item...", attributes: [
+                .foregroundColor: UIColor.init(red: 140/255, green: 140/255, blue: 140/255, alpha: 1) /*colorize(hex: 0x8C8C8C)*/,
+                .font: UIFont.systemFont(ofSize: 13.0, weight: .light),
+                ])
+            textField.setLeftPaddingPoints(10)
+            alertTextField = textField
+        }
+        alert.addAction(actionCancel)
+        alert.addAction(action)
+
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func userInputHandeled(text: String){
+        
+        if let currentListe = self.selectedListe {
+            
+            do {
+                try self.realm.write {
+                    let newItem = Item()
+                    newItem.title = text
+                    currentListe.items.append(newItem)
+                }
+            }catch{
+                print("Error saving item\(error)")
+            }
+    }
     }
     
     //retrieves data from the database
@@ -328,7 +352,19 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
         tableView.reloadData()
     }
 }
-    
+
+//extension UITextField {
+//    
+//    func textbottommboarder(frame1 : CGRect){
+//        let border = UIView()
+//        let width = CGFloat(2.0)
+//        border.backgroundColor = UIColor.lightGray
+//        border.frame = CGRect(x: 0, y: self.frame.size.height - width, width:  frame1.width, height: 10)
+//        self.layer.addSublayer(border.layer)
+//        self.layer.masksToBounds = true
+//    }
+//}
+//    
     
     //MARK: - DIFFERENT METHODS
 //    func createItem (_ itemTitle: String)->() {
