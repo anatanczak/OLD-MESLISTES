@@ -167,7 +167,7 @@ class UserTextInputViewController: UIViewController {
         textField.widthAnchor.constraint(equalToConstant: 238).isActive = true
         textField.heightAnchor.constraint(equalToConstant: 24).isActive = true
         textField.centerXAnchor.constraint(equalTo: mainView.centerXAnchor).isActive = true
-        textField.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 13).isActive = true
+        textField.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 16).isActive = true
         
         NSLayoutConstraint.activate([
 
@@ -177,10 +177,10 @@ class UserTextInputViewController: UIViewController {
             subViewForCollectionView.widthAnchor.constraint(equalToConstant: 250),
             subViewForCollectionView.heightAnchor.constraint(equalToConstant: 83),
             subViewForCollectionView.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
-            subViewForCollectionView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 8.5),
+            subViewForCollectionView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 10),
             
             //buttonStackView top subViewForColle- 8,5, bottom  trailing and leading to mainView
-            buttonStackView.topAnchor.constraint(equalTo: subViewForCollectionView.bottomAnchor, constant: 8.5),
+            buttonStackView.topAnchor.constraint(equalTo: subViewForCollectionView.bottomAnchor, constant: 10),
             buttonStackView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor),
             buttonStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor),
             buttonStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor)
