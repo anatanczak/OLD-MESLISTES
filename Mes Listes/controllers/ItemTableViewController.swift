@@ -53,7 +53,7 @@ class ItemTableViewController: UIViewController {
         self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
         
         let leftNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back-button-icon") , style: .plain, target: self, action: #selector(leftBarButtonAction))
-        leftNavigationButton.tintColor = UIColor.white
+        leftNavigationButton.tintColor = .black
         
         leftNavigationButton.imageInsets  = .init(top: 0, left: -4, bottom: 0, right: 0)
         self.navigationItem.setLeftBarButton(leftNavigationButton, animated: false)
@@ -187,44 +187,48 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
     //MARK: - METHODS FOR SWIPE ACTIONS
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        //guard orientation == .right else { return nil }
-        
+
         if orientation == .left {
             guard isSwipeRightEnabled else { return nil }
             
-            let strikeOut = SwipeAction(style: .default, title: "Strike Out") { (action, indexPath) in
+            let strikeOut = SwipeAction(style: .default, title: nil) { (action, indexPath) in
                 
                 self.strikeOut(at: indexPath)
             }
+            strikeOut.image = #imageLiteral(resourceName: "strikeout-item-icon")
             
-            let setReminder = SwipeAction(style: .default, title: "Reminder") { action, indexPath in
+            strikeOut.backgroundColor = self.colorize(hex: 0xF0D6E2)
+            
+            let setReminder = SwipeAction(style: .default, title: nil) { action, indexPath in
                 
                 self.updateModelByAddingAReminder(at: indexPath)
                 
             }
-            setReminder.image = UIImage(named: "reminder-icon")
+            setReminder.image = #imageLiteral(resourceName: "reminder-item-icon")
+            setReminder.backgroundColor = self.colorize(hex: 0xF0D6E2)
             
-            
-            let addEventToCalendar = SwipeAction(style: .default, title: "Calendar") { (action, indexPath) in
+            let addEventToCalendar = SwipeAction(style: .default, title: nil) { (action, indexPath) in
                 
                 self.addEventToCalendar(at: indexPath)
             }
+            addEventToCalendar.image = #imageLiteral(resourceName: "calendar-item-icon")
+            addEventToCalendar.backgroundColor = self.colorize(hex: 0xF0D6E2)
+            
             return[strikeOut, setReminder, addEventToCalendar]
             
         }else{
             
-            let createNote = SwipeAction(style: .default, title: "Note") { (action, indexPath) in
-                self.createNote(at: indexPath)
-            }
-            
-            let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            let deleteAction = SwipeAction(style: .destructive, title: nil) { action, indexPath in
                 
                 self.updateModel(at: indexPath)
                 
             }
             // customize the action appearance
-            deleteAction.image = UIImage(named: "delete-icon")
-            return [deleteAction, createNote]
+            deleteAction.image = #imageLiteral(resourceName: "delete-item-icon")
+            deleteAction.backgroundColor = self.colorize(hex: 0xF25D61)
+            
+            
+            return [deleteAction]
         }
         
     }
@@ -232,11 +236,11 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
         
         var options = SwipeTableOptions()
-        
+
         
         //diferent expansion styles
         options.expansionStyle = orientation == .left ? .selection : .destructive
-        
+        options.minimumButtonWidth = 45.0
         return options
     }
     

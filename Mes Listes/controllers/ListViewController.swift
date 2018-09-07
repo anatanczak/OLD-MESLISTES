@@ -51,18 +51,18 @@ class ListViewController: UIViewController {
         var rightImage = UIImage(named: "plus-icon")
         rightImage = rightImage?.withRenderingMode(.alwaysOriginal)
         let rightNavigationButton = UIBarButtonItem(image: rightImage, style: .plain, target: self, action: #selector (rightBarButtonAction))
-        rightNavigationButton.tintColor = UIColor.white
+//        rightNavigationButton.tintColor = UIColor.black
         //rightNavigationButton.image?.stretchableImage(withLeftCapWidth: 20, topCapHeight: 20)
         //moves image in the item
 
        
         self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
         
-        let leftNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "menu-icon"), style: .plain, target: self, action: #selector(leftBarButtonAction))
-        leftNavigationButton.tintColor = UIColor.white
-        
-        leftNavigationButton.imageInsets  = .init(top: 0, left: -4, bottom: 0, right: 0)
-        self.navigationItem.setLeftBarButton(leftNavigationButton, animated: false)
+//        let leftNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "menu-icon"), style: .plain, target: self, action: #selector(leftBarButtonAction))
+//        leftNavigationButton.tintColor = UIColor.white
+//        
+//        leftNavigationButton.imageInsets  = .init(top: 0, left: -4, bottom: 0, right: 0)
+//        self.navigationItem.setLeftBarButton(leftNavigationButton, animated: false)
     }
     
     //MARK: - Button ACTIONS
@@ -87,7 +87,7 @@ class ListViewController: UIViewController {
         
        // backgroundImageView
         backgroundImageView.image = backgroundImage
-        backgroundImageView.contentMode = .scaleAspectFit
+        backgroundImageView.contentMode = .scaleAspectFill
         view.addSubview(backgroundImageView)
         
         //tableView
@@ -95,8 +95,9 @@ class ListViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(ListeTableViewCell.self, forCellReuseIdentifier: "ListeTableViewController")
         tableView.backgroundColor = UIColor.clear
-        tableView.separatorColor = UIColor.green
+        tableView.separatorColor = UIColor.init(red: 251/255, green: 251/255, blue: 251/255, alpha: 1)
         tableView.separatorStyle = .singleLine
+        tableView.separatorInset = .zero
         //tableView - separator height?
         tableView.frame = CGRect(x: 0, y: statusBarHeight + navigationBarHeight, width: self.view.bounds.size.width, height: self.view.bounds.size.height - (statusBarHeight + navigationBarHeight))
         view.addSubview(tableView)
@@ -152,7 +153,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return 70
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -217,6 +218,7 @@ extension ListViewController: SwipeTableViewCellDelegate {
         
         //diferent expansion styles
         options.expansionStyle = orientation == .left ? .selection : .destructive
+        options.minimumButtonWidth = 70.0
         
         return options
     }

@@ -40,10 +40,14 @@ class ItemTableViewCell: SwipeTableViewCell {
         titleLabel.textAlignment = .left
         titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .light)
         
-        iconView.image = #imageLiteral(resourceName: "emty-circle - icon")
+        iconView.image = #imageLiteral(resourceName: "emty-circle-icon")
         iconView.contentMode = .scaleAspectFit
         
-        noteButton.setImage(#imageLiteral(resourceName: "strikeout-icon"), for: .normal)
+        noteButton.setImage(#imageLiteral(resourceName: "note-icon"), for: .normal)
+        noteButton.contentHorizontalAlignment = .fill
+        noteButton.contentVerticalAlignment = .fill
+        noteButton.imageView?.contentMode = .scaleAspectFit
+        
         noteButton.addTarget(self, action: #selector(noteButtonAction), for: .touchUpInside)
         [titleLabel, iconView, noteButton].forEach { contentView.addSubview($0) }
         
@@ -56,13 +60,14 @@ class ItemTableViewCell: SwipeTableViewCell {
         
 
         
-        iconView.anchor(top: contentView.topAnchor, leading: contentView.leadingAnchor, bottom: contentView.bottomAnchor, trailing: titleLabel.leadingAnchor, padding: .init(top: iconUpperLowerOffset, left: iconSideOffset, bottom: iconUpperLowerOffset, right: 30), size: .init(width: 45.0, height: 45.0))
+        iconView.anchor(top: contentView.topAnchor, leading: contentView.leadingAnchor, bottom: contentView.bottomAnchor, trailing: titleLabel.leadingAnchor, padding: .init(top: iconUpperLowerOffset, left: iconSideOffset, bottom: iconUpperLowerOffset, right: 30), size: .init(width: 12.0, height: 12.0))
         
         
         
         titleLabel.anchor(top: contentView.topAnchor, leading: iconView.trailingAnchor, bottom: contentView.bottomAnchor, trailing: noteButton.leadingAnchor, padding: .init(top: iconUpperLowerOffset, left: 27 , bottom: iconUpperLowerOffset, right: 10))
         
-        noteButton.anchor(top: contentView.topAnchor, leading: titleLabel.trailingAnchor, bottom: contentView.bottomAnchor, trailing: contentView.trailingAnchor, padding: .init(top: iconUpperLowerOffset, left: 5, bottom: iconUpperLowerOffset, right: 10))
+        noteButton.anchor(top: contentView.topAnchor, leading: titleLabel.trailingAnchor, bottom: contentView.bottomAnchor, trailing: contentView.trailingAnchor, padding: .init(top: 2, left: 5, bottom: 2, right: 2),
+            size: .init(width: 17, height: 25))
         
     }
     
@@ -81,14 +86,24 @@ class ItemTableViewCell: SwipeTableViewCell {
                         attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: item.title.count))
                         attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
                         titleLabel.attributedText = attributedString
+                        
+                        iconView.image = #imageLiteral(resourceName: "full-circle-icon")
         
                     }else{
                         let attributedString = NSMutableAttributedString.init(string: item.title)
                         attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
                         titleLabel.attributedText = attributedString
+                        
+                        iconView.image = #imageLiteral(resourceName: "emty-circle-icon")
                     }
                 }else{
                     titleLabel.text = "You haven't created an item yet"
                 }
+    }
+    
+    override func prepareForReuse() {
+        titleLabel.text = nil
+        iconView.image = nil
+        
     }
 }

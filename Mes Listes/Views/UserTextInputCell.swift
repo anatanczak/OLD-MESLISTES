@@ -18,6 +18,7 @@ class UserTextInputCell: UICollectionViewCell {
         let imageView = UIImageView(frame: .zero)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(imageView)
+        
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             imageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),

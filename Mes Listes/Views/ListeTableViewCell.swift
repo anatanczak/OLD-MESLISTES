@@ -29,7 +29,6 @@ class ListeTableViewCell: SwipeTableViewCell {
     }
     
     private func setupCellView () {
-        let screen = UIScreen.main.bounds.size.width
         contentView.backgroundColor = UIColor.white
         
         //titleLabel
@@ -47,25 +46,47 @@ class ListeTableViewCell: SwipeTableViewCell {
     }
     
     private func setupLayout() {
+
+        let iconWidthHeightForAllDevices: CGFloat = 45
         
-        let standartImageWidthHeight: CGFloat = 45.0
-        let iPhone6SreenWidth: CGFloat = 375.0
-        let multiplier: CGFloat = standartImageWidthHeight/iPhone6SreenWidth
+        // iconView Layout
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            iconView.widthAnchor.constraint(equalToConstant: iconWidthHeightForAllDevices),
+            iconView.heightAnchor.constraint(equalToConstant: iconWidthHeightForAllDevices),
+            iconView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            { let constraint = iconView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 30)
+                //constraint.priority = UILayoutPriority(749)
+                return constraint
+            }(),
+            ])
+        //titleLabel Layout
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleLabel.heightAnchor.constraint(equalToConstant: iconWidthHeightForAllDevices),
+            titleLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 30),
+            titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 5)
+            ])
+
         
-        let iconSideOffset: CGFloat = 47.0
-        let iconUpperLowerOffset: CGFloat = 12.5
         
-        let iconWidth = UIScreen.main.bounds.size.width * multiplier
+//        let iconWidth = UIScreen.main.bounds.size.width * multiplier
+        
+//        let iconSideOffset: CGFloat = 47.0
+//        let iconUpperLowerOffset: CGFloat = 12.5
+//
+
         
 
         
-        iconView.anchor(top: contentView.topAnchor, leading: contentView.leadingAnchor, bottom: contentView.bottomAnchor, trailing: titleLabel.leadingAnchor, padding: .init(top: iconUpperLowerOffset, left: iconSideOffset, bottom: iconUpperLowerOffset, right: 30), size: .init(width: 45.0, height: 45.0))
-        
-        
-        
-        titleLabel.anchor(top: contentView.topAnchor, leading: iconView.trailingAnchor, bottom: contentView.bottomAnchor, trailing: contentView.trailingAnchor, padding: .init(top: iconUpperLowerOffset, left: 27 , bottom: iconUpperLowerOffset, right: 39))
-        
-       
+//        iconView.anchor(top: contentView.topAnchor, leading: contentView.leadingAnchor, bottom: contentView.bottomAnchor, trailing: titleLabel.leadingAnchor, padding: .init(top: iconUpperLowerOffset, left: iconSideOffset, bottom: iconUpperLowerOffset, right: 30), size: .init(width: 45.0, height: 45.0))
+//
+//
+//
+//        titleLabel.anchor(top: contentView.topAnchor, leading: iconView.trailingAnchor, bottom: contentView.bottomAnchor, trailing: contentView.trailingAnchor, padding: .init(top: iconUpperLowerOffset, left: 27 , bottom: iconUpperLowerOffset, right: 39))
+//
+//
     }
     
     func fillWith(model: Liste?) {

@@ -67,7 +67,7 @@ class Coordinator {
         navController.navigationBar.setTitleVerticalPositionAdjustment(5, for: .default)
         
         //change title font
-        let attributes = [NSAttributedStringKey.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedStringKey.foregroundColor: UIColor.white]
+        let attributes = [NSAttributedStringKey.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedStringKey.foregroundColor: UIColor.black]
         UINavigationBar.appearance().titleTextAttributes = attributes
     }
 }
