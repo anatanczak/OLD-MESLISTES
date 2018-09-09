@@ -52,4 +52,5 @@ class UserTextInputCell: UICollectionViewCell {
         imageView.image = model
         imageView.contentMode = .scaleAspectFit
     }
+    
 }
