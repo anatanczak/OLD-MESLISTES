@@ -47,7 +47,7 @@ class UserTextInputViewController: UIViewController {
     //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //stextField.becomeFirstResponder()
+        //textField.becomeFirstResponder()
         setupViews()
         setupCollectionView()
         setupLayouts()
@@ -59,17 +59,20 @@ class UserTextInputViewController: UIViewController {
     @objc func keyboardWillShow(notification: Notification) {
 
 //        let keyboardSize = (notification.userInfo?  [UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-//        var distanceToMove =  (self.view.bounds.height/2) + 50
+//       var distanceToMove = (self.view.bounds.height/2) + 100
 //        if let keyboardHeight = keyboardSize?.height {
-//       //distanceToMove = self.view.bounds.height
+//        distanceToMove = (self.view.bounds.height - keyboardHeight) - 50
 //        }
-        if #available(iOS 11.0, *){
-           
-        }
-        else {
-            //????
-        }
-
+//        if #available(iOS 11.0, *){
+//
+//        }
+//        else {
+//            //????
+//        }
+        yConstraintWithKeyBoard.isActive = true
+        
+        yConstraintNoKeyBoard.isActive = false
+       
         UIView.animate(withDuration: 0.5){
             self.view.layoutIfNeeded()
         }
@@ -77,9 +80,9 @@ class UserTextInputViewController: UIViewController {
     
     @objc func keyboardWillHide(notification: Notification){
         //put the view down
-        UIView.animate(withDuration: 0.5){
+//????
             self.view.layoutIfNeeded()
-        }
+
     }
     
     override func viewWillLayoutSubviews() {
@@ -156,12 +159,15 @@ class UserTextInputViewController: UIViewController {
         
         //mainView Yconstraints
         yConstraintNoKeyBoard = mainView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        yConstraintWithKeyBoard = mainView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -200)
+        yConstraintNoKeyBoard.priority = UILayoutPriority(999)
+        
+        yConstraintWithKeyBoard = mainView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100)
+        yConstraintWithKeyBoard.priority = UILayoutPriority(999)
 
         mainView.widthAnchor.constraint(equalToConstant: 270).isActive = true
         mainView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         mainView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        yConstraintWithKeyBoard.isActive = true
+        yConstraintNoKeyBoard.isActive = true
         
         //text field width 238, height 24, centeredX, 13 from top
         textField.widthAnchor.constraint(equalToConstant: 238).isActive = true
@@ -169,23 +175,18 @@ class UserTextInputViewController: UIViewController {
         textField.centerXAnchor.constraint(equalTo: mainView.centerXAnchor).isActive = true
         textField.topAnchor.constraint(equalTo: mainView.topAnchor, constant: 16).isActive = true
         
-        NSLayoutConstraint.activate([
-
-
-            
-            //subView width, height , centerX , 8,5 from top
-            subViewForCollectionView.widthAnchor.constraint(equalToConstant: 250),
-            subViewForCollectionView.heightAnchor.constraint(equalToConstant: 83),
-            subViewForCollectionView.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
-            subViewForCollectionView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 10),
-            
-            //buttonStackView top subViewForColle- 8,5, bottom  trailing and leading to mainView
-            buttonStackView.topAnchor.constraint(equalTo: subViewForCollectionView.bottomAnchor, constant: 10),
-            buttonStackView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor),
-            buttonStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor),
-            buttonStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor)
-        ])
+        //subView width, height , centerX , 8,5 from top
+        subViewForCollectionView.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        subViewForCollectionView.heightAnchor.constraint(equalToConstant: 83).isActive = true
+        subViewForCollectionView.centerXAnchor.constraint(equalTo: mainView.centerXAnchor).isActive = true
+        subViewForCollectionView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 10).isActive = true
         
+        //buttonStackView top subViewForColle- 8,5, bottom  trailing and leading to mainView
+        buttonStackView.topAnchor.constraint(equalTo: subViewForCollectionView.bottomAnchor, constant: 10).isActive = true
+        buttonStackView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor).isActive = true
+        buttonStackView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor).isActive = true
+        buttonStackView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor).isActive = true
+
         if let localCollectionView = collectionView {
             localCollectionView.translatesAutoresizingMaskIntoConstraints = false
             localCollectionView.topAnchor.constraint(equalTo: subViewForCollectionView.topAnchor).isActive = true
@@ -219,8 +220,7 @@ class UserTextInputViewController: UIViewController {
         }
     }
         @objc func cancelButtonAction () {
-            dismiss(animated: true, completion: nil)
-
+        dismiss(animated: true, completion: nil)
         }
 
 }
@@ -229,19 +229,19 @@ class UserTextInputViewController: UIViewController {
 
     //MARK: - TextFieldDelegate
     extension UserTextInputViewController: UITextFieldDelegate {
-//            override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//                textField.resignFirstResponder()
-//            }
-//        func textFieldDidBeginEditing (_ textField: UITextField) {
-//            print("is working")
-//
-//                mainView.translatesAutoresizingMaskIntoConstraints = false
-//                mainView.widthAnchor.constraint(equalToConstant: 270).isActive = true
-//                mainView.heightAnchor.constraint(equalToConstant: 200).isActive = true
-//                mainView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100)
-//mainView.updateConstraints()
-//            self.view.layoutIfNeeded()
-//        }
+            override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+                textField.resignFirstResponder()
+            }
+        func textFieldDidBeginEditing (_ textField: UITextField) {
+            print("is working")
+            yConstraintWithKeyBoard.isActive = true
+            
+            yConstraintNoKeyBoard.isActive = false
+            
+            UIView.animate(withDuration: 0.5){
+                self.view.layoutIfNeeded()
+            }
+        }
     }
 
     //MARK: - UICollectionViewDelegate and DataSource
