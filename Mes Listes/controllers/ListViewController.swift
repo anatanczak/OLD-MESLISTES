@@ -48,6 +48,8 @@ class ListViewController: UIViewController {
         
         let title = "meslistes"
         self.title = title
+        let attributes = [NSAttributedStringKey.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedStringKey.foregroundColor: UIColor.black]
+        navigationController?.navigationBar.titleTextAttributes = attributes
         var rightImage = UIImage(named: "plus-icon")
         rightImage = rightImage?.withRenderingMode(.alwaysOriginal)
         let rightNavigationButton = UIBarButtonItem(image: rightImage, style: .plain, target: self, action: #selector (rightBarButtonAction))
@@ -341,17 +343,17 @@ extension ListViewController: SwipeTableViewCellDelegate {
     
     func threeHardCodedExamples () {
         let fisrtListe = Liste()
-        fisrtListe.name = "SHOPPING LIST"
+        fisrtListe.name = "Shopping list"
         fisrtListe.iconName = "shopping-cart-icon"
         save(list: fisrtListe)
         
         let secondListe = Liste()
-        secondListe.name = "TO DO"
+        secondListe.name = "To do"
         secondListe.iconName = "todo-icon"
         save(list: secondListe)
         
         let thirdListe = Liste()
-        thirdListe.name = "TRAVELPACK"
+        thirdListe.name = "Travelpack"
         thirdListe.iconName = "airplane-icon"
         save(list: thirdListe)
         

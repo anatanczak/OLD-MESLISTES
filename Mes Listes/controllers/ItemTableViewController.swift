@@ -45,6 +45,11 @@ class ItemTableViewController: UIViewController {
         
         let title = selectedListe?.name ?? "meslistes"
         self.title = title
+        
+      let attributes = [NSAttributedStringKey.font: UIFont(name: "Helvetica", size: 14.5)!, NSAttributedStringKey.foregroundColor: UIColor.black]
+//        UINavigationBar.appearance().titleTextAttributes = attributes
+        navigationController?.navigationBar.titleTextAttributes = attributes
+        
         var rightImage = UIImage(named: "plus-icon")
         rightImage = rightImage?.withRenderingMode(.alwaysOriginal)
         let rightNavigationButton = UIBarButtonItem(image: rightImage, style: .plain, target: self, action: #selector (rightBarButtonAction))
@@ -67,7 +72,7 @@ class ItemTableViewController: UIViewController {
         
         // backgroundImageView
         backgroundImageView.image = backgroundImage
-        backgroundImageView.contentMode = .scaleAspectFit
+        backgroundImageView.contentMode = .scaleAspectFill
         view.addSubview(backgroundImageView)
         
         //tableView
@@ -93,6 +98,8 @@ class ItemTableViewController: UIViewController {
     }
     
     @objc func leftBarButtonAction () {
+        let attributes = [NSAttributedStringKey.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedStringKey.foregroundColor: UIColor.black]
+        navigationController?.navigationBar.titleTextAttributes = attributes
         _ = navigationController?.popToRootViewController(animated: true)
         print("--> left button Pressed")
     }
