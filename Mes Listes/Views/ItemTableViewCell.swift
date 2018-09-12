@@ -43,7 +43,7 @@ class ItemTableViewCell: SwipeTableViewCell {
         iconView.image = #imageLiteral(resourceName: "emty-circle-icon")
         iconView.contentMode = .scaleAspectFit
         
-        noteButton.setImage(#imageLiteral(resourceName: "note-icon"), for: .normal)
+        noteButton.setImage(#imageLiteral(resourceName: "note-icon-gray"), for: .normal)
         noteButton.contentHorizontalAlignment = .fill
         noteButton.contentVerticalAlignment = .fill
         noteButton.imageView?.contentMode = .scaleAspectFit
@@ -86,15 +86,13 @@ class ItemTableViewCell: SwipeTableViewCell {
                         attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: item.title.count))
                         attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
                         titleLabel.attributedText = attributedString
-                        
-                        iconView.image = #imageLiteral(resourceName: "full-circle-icon")
+                        noteButton.setImage(#imageLiteral(resourceName: "note-icon-rose"), for: .normal)
         
                     }else{
                         let attributedString = NSMutableAttributedString.init(string: item.title)
                         attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
                         titleLabel.attributedText = attributedString
-                        
-                        iconView.image = #imageLiteral(resourceName: "emty-circle-icon")
+                        noteButton.imageView?.image = #imageLiteral(resourceName: "note-icon-gray")
                     }
                 }else{
                     titleLabel.text = "You haven't created an item yet"
@@ -104,6 +102,6 @@ class ItemTableViewCell: SwipeTableViewCell {
     override func prepareForReuse() {
         titleLabel.text = nil
         iconView.image = nil
-        
+        noteButton.imageView?.image = nil
     }
 }

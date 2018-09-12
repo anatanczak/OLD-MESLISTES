@@ -94,7 +94,12 @@ class ItemTableViewController: UIViewController {
     
     //MARK: - ACTIONS
     @objc func rightBarButtonAction () {
-        alertAppearForUserInput()
+        //alertAppearForUserInput()
+        let userTextInputVC = TextInputForItemVC()
+       userTextInputVC.createItem = createItem(_:)
+        userTextInputVC.modalPresentationStyle = .overCurrentContext
+        
+        self.present(userTextInputVC, animated: true, completion: nil)
     }
     
     @objc func leftBarButtonAction () {
@@ -106,43 +111,18 @@ class ItemTableViewController: UIViewController {
     
     //MARK: - Different Methods
     
-    func alertAppearForUserInput () {
-        var alertTextField = UITextField()
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
-        alert.view.tintColor = UIColor.black
-        let action = UIAlertAction(title: "OK", style: .default) { (action) in
-            if alertTextField.text != nil && alertTextField.text != "" {
-                self.userInputHandeled(text: alertTextField.text!)
-                self.tableView.reloadData()
-            }
-        }
-        
-        let actionCancel = UIAlertAction(title: "Cancel", style: .default) { (actionCancel) in
-            self.dismiss(animated: true, completion: nil)
-        }
-        
-        alert.addTextField { (textField) in
-            textField.attributedPlaceholder = NSAttributedString(string: "name your new item...", attributes: [
-                .foregroundColor: UIColor.init(red: 140/255, green: 140/255, blue: 140/255, alpha: 1) /*colorize(hex: 0x8C8C8C)*/,
-                .font: UIFont.systemFont(ofSize: 13.0, weight: .light),
-                ])
-            textField.setLeftPaddingPoints(10)
-            alertTextField = textField
-        }
-        alert.addAction(actionCancel)
-        alert.addAction(action)
-
-        present(alert, animated: true, completion: nil)
+    func createItem (_ item: Item) ->() {
+        userInputHandeled(newItem: item)
+        tableView.reloadData()
     }
-    
-    func userInputHandeled(text: String){
+    func userInputHandeled(newItem: Item){
         
         if let currentListe = self.selectedListe {
             
             do {
                 try self.realm.write {
-                    let newItem = Item()
-                    newItem.title = text
+//                    let newItem = Item()
+//                    newItem.title = text
                     currentListe.items.append(newItem)
                 }
             }catch{

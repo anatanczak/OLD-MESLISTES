@@ -21,7 +21,7 @@ class UserTextInputViewController: UIViewController {
     
     lazy var buttonStackView: UIStackView  = {
         let stackView = UIStackView(arrangedSubviews: [cancelButton,
-                                                        saveButton])
+                                                        oKButton])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 0
@@ -32,7 +32,7 @@ class UserTextInputViewController: UIViewController {
     let subViewForCollectionView = UIView()
     
     var collectionView: UICollectionView?
-    let saveButton = UIButton()
+    let oKButton = UIButton()
     let cancelButton = UIButton()
     
     //MARK: - GLOBAL VARIABLES
@@ -45,7 +45,7 @@ class UserTextInputViewController: UIViewController {
     
     let roseIconNamesArray = ["todo-icon-rose", "star-icon-rose", "airplane-icon-rose", "shopping-cart-icon-rose", "home-icon-rose", "clothes-icon-rose", "gift-icon-rose", "bag-icon-rose", "light-bulb-icon-rose", "sport-icon-rose", "cooking-icon-rose", "book-icon-rose"]
     
-   // var anotherCellWasSelected = false
+   
     
     var selectedIndexPath: IndexPath?
 
@@ -61,15 +61,13 @@ class UserTextInputViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
     }
     
-
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         UIView.animate(withDuration: 1) {
             self.backgroundColorView.alpha = 1.0
-
         }
-                    self.textField.becomeFirstResponder()
+        self.textField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -83,12 +81,7 @@ class UserTextInputViewController: UIViewController {
     }
     
     private func setupViews () {
-        
-        //modalPresentationStyle = .overCurrentContext
-
-        //scrollView.isScrollEnabled = false
-        //self.processOpeningAndClosingKeyboard(forScrollView: scrollView)
-        
+   
         backgroundColorView.backgroundColor = UIColor.black.withAlphaComponent(0.34)
         backgroundColorView.isOpaque = false
         backgroundColorView.alpha = 0.0
@@ -114,10 +107,10 @@ class UserTextInputViewController: UIViewController {
         subViewForCollectionView.backgroundColor = .clear
     
         //save button
-        saveButton.setTitle("OK", for: .normal)
-        saveButton.backgroundColor = UIColor.clear
-        saveButton.setTitleColor(UIColor.black, for: .normal)
-        saveButton.addTarget(self, action: #selector(saveButtonAction), for: .touchUpInside)
+        oKButton.setTitle("OK", for: .normal)
+        oKButton.backgroundColor = UIColor.clear
+        oKButton.setTitleColor(UIColor.black, for: .normal)
+        oKButton.addTarget(self, action: #selector(oKButtonAction), for: .touchUpInside)
 
 
         //cancel button
@@ -153,6 +146,7 @@ class UserTextInputViewController: UIViewController {
         backgroundColorView.snp.makeConstraints { (make) in
             make.left.top.right.bottom.equalToSuperview()
         }
+        
         mainView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(self.view.bounds.height/2 - 100)
             make.centerX.equalToSuperview()
@@ -186,12 +180,12 @@ class UserTextInputViewController: UIViewController {
         super.viewDidLayoutSubviews()
         cancelButton.addBorder(side: .Top, color: alertViewGrayColor, width: 1)
         cancelButton.addBorder(side: .Right, color: alertViewGrayColor, width: 0.5)
-        saveButton.addBorder(side: .Top, color: alertViewGrayColor, width: 1)
-        saveButton.addBorder(side: .Left, color: alertViewGrayColor, width: 0.5)
+        oKButton.addBorder(side: .Top, color: alertViewGrayColor, width: 1)
+        oKButton.addBorder(side: .Left, color: alertViewGrayColor, width: 0.5)
     }
 
     //MARK: - Button Actions
-    @objc func saveButtonAction () {
+    @objc func oKButtonAction () {
         
         if textField.text != "" && textField.text != nil {
             let newListe = Liste()
@@ -277,23 +271,14 @@ extension UserTextInputViewController: UITextFieldDelegate {
         return true
     }
     func textFieldDidBeginEditing (_ textField: UITextField) {
-        //            print("is working")
-        //            yConstraintWithKeyBoard.isActive = true
-        //
-        //            yConstraintNoKeyBoard.isActive = false
-        //
-        //            UIView.animate(withDuration: 0.5){
-        //                self.view.layoutIfNeeded()
-        //            }
+//        UIView.animate(withDuration: 0.3) { [weak self] in
+//            guard let `self` = self else { return }
+//            self.mainView.snp.updateConstraints({ (make) in
+//                make.top.equalToSuperview().offset(100)
+//            })
+//            self.view.layoutIfNeeded()
         
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let `self` = self else { return }
-            self.mainView.snp.updateConstraints({ (make) in
-                make.top.equalToSuperview().offset(100)
-            })
-            self.view.layoutIfNeeded()
-            
-        }
+//        }
     }
 }
 
