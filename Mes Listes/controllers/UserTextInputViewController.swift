@@ -50,25 +50,28 @@ class UserTextInputViewController: UIViewController {
     var selectedIndexPath: IndexPath?
 
     //MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupCollectionView()
         setupLayouts()
-
+        textField.becomeFirstResponder()
     
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
     }
+
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         UIView.animate(withDuration: 1) {
             self.backgroundColorView.alpha = 1.0
+            self.mainView.snp.updateConstraints({ (make) in
+            })
         }
-        self.textField.becomeFirstResponder()
-    }
+            self.view.layoutIfNeeded()
+        }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -77,7 +80,7 @@ class UserTextInputViewController: UIViewController {
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        //setupLayouts()
+        
     }
     
     private func setupViews () {
@@ -148,8 +151,9 @@ class UserTextInputViewController: UIViewController {
         }
         
         mainView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(self.view.bounds.height/2 - 100)
+           // make.top.equalToSuperview().offset(self.view.bounds.height/2)
             make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-100)
             //make.size.equalTo(CGSize(width: 270, height: 200))
         }
         textField.snp.makeConstraints { (make) in
@@ -201,6 +205,7 @@ class UserTextInputViewController: UIViewController {
             }) { [weak self]  (isComplete) in
                 guard let `self` = self else { return }
                 self.dismiss(animated: true, completion: nil)
+                self.textField.resignFirstResponder()
             }
         }else if textField.text == "" && textField.text != nil{
             UIView.animate(withDuration: 2, animations: { [weak self] in
@@ -227,59 +232,14 @@ class UserTextInputViewController: UIViewController {
         }) { [weak self]  (isComplete) in
             guard let `self` = self else { return }
             self.dismiss(animated: true, completion: nil)
+            self.textField.resignFirstResponder()
         }
     }
-
-    
-        //MARK: - DIFFERENT METHODS
-@objc func keyboardWillShow(notification: Notification) {
-    
-    let keyboardSize = (notification.userInfo?  [UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-    var distanceToMove = (self.view.bounds.height/2) + 100
-    if let keyboardHeight = keyboardSize?.height {
-        distanceToMove = (self.view.bounds.height - keyboardHeight) - (self.mainView.bounds.height + 50)
-    }
-    
-    UIView.animate(withDuration: 0.3) { [weak self] in
-        guard let `self` = self else { return }
-        self.mainView.snp.updateConstraints({ (make) in
-            make.top.equalToSuperview().offset(distanceToMove)
-        })
-        self.view.layoutIfNeeded()
-    }
-}
-
-@objc func keyboardWillHide(notification: Notification){
-    
-    UIView.animate(withDuration: 0.3) { [weak self] in
-        guard let `self` = self else { return }
-        self.mainView.snp.updateConstraints({ (make) in
-            make.top.equalToSuperview().offset(self.view.bounds.height/2 - 100)
-        })
-        self.view.layoutIfNeeded()
-    }
-}
 }
 
 //MARK: - TextFieldDelegate
 extension UserTextInputViewController: UITextFieldDelegate {
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //textField.resignFirstResponder()
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return true
-    }
-    func textFieldDidBeginEditing (_ textField: UITextField) {
-//        UIView.animate(withDuration: 0.3) { [weak self] in
-//            guard let `self` = self else { return }
-//            self.mainView.snp.updateConstraints({ (make) in
-//                make.top.equalToSuperview().offset(100)
-//            })
-//            self.view.layoutIfNeeded()
-        
-//        }
-    }
+
 }
 
 //MARK: - UICollectionViewDelegate and DataSource
@@ -291,10 +251,6 @@ extension UserTextInputViewController: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-        
-        let image = UIImage (named: iconNamesArray[indexPath.row])
-       // cell.fillWith(model: image!)
-        //cell.backgroundColor = UIColor(patternImage: image!)
         cell.layer.contents = UIImage(named: iconNamesArray[indexPath.row])?.cgImage
         cell.contentMode = .scaleAspectFit
         return cell
@@ -303,17 +259,12 @@ extension UserTextInputViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if let unwrappedSelectedIndexPath = selectedIndexPath {
- 
-            //let image = UIImage (named: iconNamesArray[unwrappedSelectedIndexPath.row])
-            
+
             let cellToUnselect = collectionView.cellForItem(at: unwrappedSelectedIndexPath)
-            
-            //cellToUnselect?.contentView.backgroundColor = UIColor(patternImage: image!)
+
             cellToUnselect?.layer.contents = UIImage (named: iconNamesArray[unwrappedSelectedIndexPath.row])?.cgImage
             cellToUnselect?.contentMode = .scaleAspectFit
         }
-        
-        //let roseImage = UIImage(named: roseIconNamesArray[indexPath.row])
         let cell = collectionView.cellForItem(at: indexPath)
        
         cell?.layer.contents = UIImage(named: roseIconNamesArray[indexPath.row])?.cgImage
@@ -323,19 +274,3 @@ extension UserTextInputViewController: UICollectionViewDelegate, UICollectionVie
     }
 
 }
-
-
-//    func registerForKeyboardDidShowNotification(view: UIView, usingBlock block: ((CGSize?) -> Void)? = nil) {
-//        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardDidShow, object: nil, queue: nil, using: { [weak view] (notification) -> Void in
-//            guard let `view` = view else { return }
-//
-//            let userInfo = notification.userInfo!
-//            let keyboardSize = (userInfo[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue.size
-//            self.keyboardHeight = keyboardSize.height
-//            print("keyboardwill appear")
-//            block?(keyboardSize)
-//        })
-//    }
-//
-
-

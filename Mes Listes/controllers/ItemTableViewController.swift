@@ -98,7 +98,7 @@ class ItemTableViewController: UIViewController {
         let userTextInputVC = TextInputForItemVC()
        userTextInputVC.createItem = createItem(_:)
         userTextInputVC.modalPresentationStyle = .overCurrentContext
-        
+               
         self.present(userTextInputVC, animated: true, completion: nil)
     }
     
@@ -109,7 +109,7 @@ class ItemTableViewController: UIViewController {
         print("--> left button Pressed")
     }
     
-    //MARK: - Different Methods
+    //MARK: - Different Methods REALM
     
     func createItem (_ item: Item) ->() {
         userInputHandeled(newItem: item)
@@ -138,11 +138,9 @@ class ItemTableViewController: UIViewController {
     }
     
 }
-
-extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
-    
 // MARK: - TABLE VIEW DELEGATE METHODS DATA SOURCE
-    
+extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
+   
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //        let currentItem = items?[indexPath.row]
         //        if currentItem?.hasNote == true {
@@ -159,6 +157,7 @@ extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemTableViewCell", for: indexPath) as! ItemTableViewCell
         cell.delegate = self
+        cell.itemDelegate = self
         cell.fillWith(model: items?[indexPath.row])
         return cell
     }
@@ -167,12 +166,19 @@ extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
         return UITableViewAutomaticDimension
     }
 }
-    //MARK: - REALM FUNCTIONS
-    
 
-extension ItemTableViewController: SwipeTableViewCellDelegate {
-    //MARK: - METHODS FOR SWIPE ACTIONS
+//MARK: - Cell Delegate
+extension ItemTableViewController: ItemTableViewCellDelegate {
+    func cellDidTapOnNoteButton() {
+        //create an alert to ask if user wants to create a note to this item
+        let noteVC = NoteViewController()
+        
+    }
+    }
     
+    //MARK: - METHODS FOR SWIPE ACTIONS
+extension ItemTableViewController: SwipeTableViewCellDelegate {
+
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
 
         if orientation == .left {
@@ -343,37 +349,3 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
         tableView.reloadData()
     }
 }
-
-//extension UITextField {
-//    
-//    func textbottommboarder(frame1 : CGRect){
-//        let border = UIView()
-//        let width = CGFloat(2.0)
-//        border.backgroundColor = UIColor.lightGray
-//        border.frame = CGRect(x: 0, y: self.frame.size.height - width, width:  frame1.width, height: 10)
-//        self.layer.addSublayer(border.layer)
-//        self.layer.masksToBounds = true
-//    }
-//}
-//    
-    
-    //MARK: - DIFFERENT METHODS
-//    func createItem (_ itemTitle: String)->() {
-//
-//    }
-//    func addIconNameToItem (_ iconName: String) ->() {
-//
-//    }
-//
-//
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "goToNote" {
-//
-//            let destinationVC = segue.destination as! NoteViewController
-//
-//            destinationVC.currentItem = items?[selectedItem]
-//            print(destinationVC.currentItem ?? "fuck")
-//        }
-//    }
-
-

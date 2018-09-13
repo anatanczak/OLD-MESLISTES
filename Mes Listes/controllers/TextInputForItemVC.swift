@@ -19,9 +19,6 @@ class TextInputForItemVC: UIViewController {
     let cancelButton = UIButton()
     let textField = UITextField()
     
-    var yConstraintNoKeyboard: NSLayoutConstraint?
-    var yConstraintWithKeyboard: NSLayoutConstraint?
-    
     let alertViewGrayColor = UIColor(red: 224.0/255.0, green: 224.0/255.0, blue: 224.0/255.0, alpha: 1)
     
     lazy var buttonStackView: UIStackView  = {
@@ -35,13 +32,13 @@ class TextInputForItemVC: UIViewController {
     
     
     //MARK: - Life cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupLayout()
+        textField.becomeFirstResponder()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -50,7 +47,7 @@ class TextInputForItemVC: UIViewController {
         UIView.animate(withDuration: 1) {
             self.backgroundColorView.alpha = 1.0
         }
-        self.textField.becomeFirstResponder()
+        //self.textField.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -77,7 +74,7 @@ class TextInputForItemVC: UIViewController {
         mainView.layer.cornerRadius = 13
         
         //textField
-        textField.delegate = self
+        //textField.delegate = self
         textField.attributedPlaceholder = NSAttributedString(string: "name your new item...", attributes: [
             .foregroundColor: colorize(hex: 0x8C8C8C),
             .font: UIFont.systemFont(ofSize: 13.0, weight: .light),
@@ -114,16 +111,11 @@ class TextInputForItemVC: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        yConstraintNoKeyboard = mainView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        yConstraintNoKeyboard?.priority = UILayoutPriority(999)
-        yConstraintWithKeyboard = mainView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100)
-        yConstraintWithKeyboard?.priority = UILayoutPriority(999)
-        
         NSLayoutConstraint.activate([
             mainView.widthAnchor.constraint(equalToConstant: 270),
             mainView.heightAnchor.constraint(equalToConstant: 104),
             mainView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            yConstraintNoKeyboard!,
+            mainView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100),
             
             textField.widthAnchor.constraint(equalToConstant: 238),
             textField.heightAnchor.constraint(equalToConstant: 24),
@@ -139,12 +131,14 @@ class TextInputForItemVC: UIViewController {
     
     //MARK: - ACTIONS
     @objc func cancelButtonAction () {
+       
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
             guard let `self` = self else { return }
             self.backgroundColorView.alpha = 0.0
         }) { [weak self]  (isComplete) in
             guard let `self` = self else { return }
             self.dismiss(animated: true, completion: nil)
+             self.textField.resignFirstResponder()
         }
     }
     
@@ -161,15 +155,16 @@ class TextInputForItemVC: UIViewController {
             }) { [weak self]  (isComplete) in
                 guard let `self` = self else { return }
                 self.dismiss(animated: true, completion: nil)
+                self.textField.resignFirstResponder()
             }
         }else if textField.text == "" && textField.text != nil{
-            UIView.animate(withDuration: 2, animations: { [weak self] in
+            UIView.animate(withDuration: 1, animations: { [weak self] in
                 guard let `self` = self else { return }
                 self.textField.backgroundColor = UIColor.init(red: 240/255, green: 214/255, blue: 226/255, alpha: 1)
                 self.view.layoutIfNeeded()
             })
             
-            UIView.animate(withDuration: 2, animations: { [weak self] in
+            UIView.animate(withDuration: 1, animations: { [weak self] in
                 guard let `self` = self else { return }
                 self.textField.backgroundColor = .clear
                 self.view.layoutIfNeeded()
@@ -179,55 +174,10 @@ class TextInputForItemVC: UIViewController {
             print("text field is nill")
         }
     }
-    //MARK: - Different methods
-    @objc func keyboardWillShow(notification: Notification) {
-        
-        let keyboardSize = (notification.userInfo?  [UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-//        var distanceToMove = (self.view.bounds.height/2) + 100
-//        if let keyboardHeight = keyboardSize?.height {
-//            distanceToMove = (self.view.bounds.height - keyboardHeight) - (self.mainView.bounds.height + 50)
-//        }
-        self.yConstraintNoKeyboard?.isActive = false
-        self.yConstraintWithKeyboard?.isActive = true
-        
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let `self` = self else { return }
-
-            self.view.layoutIfNeeded()
-        }
-    }
     
-    @objc func keyboardWillHide(notification: Notification){
-        
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let `self` = self else { return }
-            self.yConstraintNoKeyboard?.isActive = true
-            self.yConstraintWithKeyboard?.isActive = false
-//            self.mainView.snp.updateConstraints({ (make) in
-//                make.top.equalToSuperview().offset(self.view.bounds.height/2 - 100)
-//            })
-            self.view.layoutIfNeeded()
-        }
-    }
 }
 
 //MARK: - TextFieldDelegate
-extension TextInputForItemVC: UITextFieldDelegate {
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //textField.resignFirstResponder()
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return true
-    }
-    func textFieldDidBeginEditing (_ textField: UITextField) {
-//        UIView.animate(withDuration: 0.3) {
-//            [weak self] in
-//            guard let `self` = self else { return }
+//extension TextInputForItemVC: UITextFieldDelegate {
 //
-//
-//            self.view.layoutIfNeeded()
-//
-//        }
-    }
-    }
+//    }

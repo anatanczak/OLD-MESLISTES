@@ -9,7 +9,13 @@
 import UIKit
 import SwipeCellKit
 
+protocol ItemTableViewCellDelegate: NSObjectProtocol {
+    func cellDidTapOnNoteButton()
+}
+
 class ItemTableViewCell: SwipeTableViewCell {
+    
+    weak var itemDelegate: ItemTableViewCellDelegate?
 
     //MARK: - Views
     let iconView = UIImageView()
@@ -74,6 +80,7 @@ class ItemTableViewCell: SwipeTableViewCell {
     //MARK: - ACTIONS
     @objc func noteButtonAction () {
         //create an alert which asks if thhe user want to create a note for this item
+        itemDelegate?.cellDidTapOnNoteButton()
     }
 
     //MARK: - DIFFERENT METHHODS
