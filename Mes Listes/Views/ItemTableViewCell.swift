@@ -10,7 +10,7 @@ import UIKit
 import SwipeCellKit
 
 protocol ItemTableViewCellDelegate: NSObjectProtocol {
-    func cellDidTapOnNoteButton()
+    func cellDidTapOnNoteButton(cell: ItemTableViewCell)
 }
 
 class ItemTableViewCell: SwipeTableViewCell {
@@ -80,7 +80,7 @@ class ItemTableViewCell: SwipeTableViewCell {
     //MARK: - ACTIONS
     @objc func noteButtonAction () {
         //create an alert which asks if thhe user want to create a note for this item
-        itemDelegate?.cellDidTapOnNoteButton()
+        itemDelegate?.cellDidTapOnNoteButton(cell: self)
     }
 
     //MARK: - DIFFERENT METHHODS
@@ -93,22 +93,31 @@ class ItemTableViewCell: SwipeTableViewCell {
                         attributedString.addAttribute(.strikethroughStyle, value: 2, range: NSRange.init(location: 0, length: item.title.count))
                         attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
                         titleLabel.attributedText = attributedString
-                        noteButton.setImage(#imageLiteral(resourceName: "note-icon-rose"), for: .normal)
+                        
         
                     }else{
                         let attributedString = NSMutableAttributedString.init(string: item.title)
                         attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
                         titleLabel.attributedText = attributedString
-                        noteButton.imageView?.image = #imageLiteral(resourceName: "note-icon-gray")
+                        
                     }
+                    
+                    if item.hasNote {
+                        noteButton.setImage(#imageLiteral(resourceName: "note-icon-rose"), for: .normal)
+                    }else{
+                        noteButton.setImage(#imageLiteral(resourceName: "note-icon-gray"), for: .normal)
+                    }
+                    
                 }else{
                     titleLabel.text = "You haven't created an item yet"
                 }
+        
+        
     }
     
     override func prepareForReuse() {
         titleLabel.text = nil
-        iconView.image = nil
+      
         noteButton.imageView?.image = nil
     }
 }

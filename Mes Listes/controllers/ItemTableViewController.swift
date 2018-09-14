@@ -43,11 +43,10 @@ class ItemTableViewController: UIViewController {
     }
     private func setupNavigationBar () {
         
-        let title = selectedListe?.name ?? "meslistes"
+        let title = selectedListe?.name.uppercased() ?? "meslistes"
         self.title = title
         
-      let attributes = [NSAttributedStringKey.font: UIFont(name: "Helvetica", size: 14.5)!, NSAttributedStringKey.foregroundColor: UIColor.black]
-//        UINavigationBar.appearance().titleTextAttributes = attributes
+      let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 19, weight: .light), NSAttributedStringKey.foregroundColor: UIColor.black]
         navigationController?.navigationBar.titleTextAttributes = attributes
         
         var rightImage = UIImage(named: "plus-icon")
@@ -106,7 +105,7 @@ class ItemTableViewController: UIViewController {
         let attributes = [NSAttributedStringKey.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedStringKey.foregroundColor: UIColor.black]
         navigationController?.navigationBar.titleTextAttributes = attributes
         _ = navigationController?.popToRootViewController(animated: true)
-        print("--> left button Pressed")
+        
     }
     
     //MARK: - Different Methods REALM
@@ -142,6 +141,7 @@ class ItemTableViewController: UIViewController {
 extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         //        let currentItem = items?[indexPath.row]
         //        if currentItem?.hasNote == true {
         //            performSegue(withIdentifier: "goToNote", sender: self)
@@ -159,6 +159,7 @@ extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
         cell.delegate = self
         cell.itemDelegate = self
         cell.fillWith(model: items?[indexPath.row])
+        
         return cell
     }
     
@@ -169,10 +170,20 @@ extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
 
 //MARK: - Cell Delegate
 extension ItemTableViewController: ItemTableViewCellDelegate {
-    func cellDidTapOnNoteButton() {
+    func cellDidTapOnNoteButton(cell: ItemTableViewCell) {
         //create an alert to ask if user wants to create a note to this item
-        let noteVC = NoteViewController()
+        guard let indexPath = self.tableView.indexPath(for: cell) else {
+            // Note, this shouldn't happen - how did the user tap on a button that wasn't on screen?
+            return
+        }
         
+        let noteVC = NoteViewController()
+        if let selectedCurrentItem = items?[indexPath.row] {
+            noteVC.currentItem = selectedCurrentItem
+        }
+        self.show(noteVC, sender: self)
+        
+        tableView.reloadData()
     }
     }
     
