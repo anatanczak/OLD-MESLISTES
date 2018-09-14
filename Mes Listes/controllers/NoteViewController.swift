@@ -1,11 +1,3 @@
-//
-//  NoteViewController.swift
-//  Mes Listes
-//
-//  Created by Anastasiia Tanczak on 04/07/2018.
-//  Copyright © 2018 Ana Viktoriv. All rights reserved.
-//
-
 import UIKit
 import RealmSwift
 
@@ -15,8 +7,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var currentItem: Item?
     let realm = try! Realm()
     let imagePicker = UIImagePickerController()
-    var addedImage: UIImage?
-    var imageName = ""
+    //var addedImage: UIImage?
     var arrayOfImagesFromRealm = [UIImage]()
     
     //MARK: - OUTLETS
@@ -51,45 +42,21 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
     }
     
-    
     @IBAction func photoLibraryButtonPressed(_ sender: UIButton) {
         openPhotoLibrary()
     }
     
     func getNewNameForImage() -> String {
-        /*
-        let date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd-HH-mm-ss"
-        let imageName = dateFormatter.string(from: date)*/
-        let random = "imageName"
+        //!!! check for the same names
+        let randomInt = arc4random_uniform(30000000)
+        
+        let random = String(randomInt)
     
         return random
     }
     
     @IBAction func photoButtonPressed(_ sender: UIButton) {
-//    1. create a string from the date to ID the image
-         let date = Date()
-         let dateFormatter = DateFormatter()
-         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        imageName = dateFormatter.string(from: date)
-         
-//         2. get the cursor position
-        var cursorPosition1: Int
-        getCursor()
-        
-        
-//         3. add this ID string to the text (and the new line sign)
-//         ( - > if the use button in ImagePicker was tapped the sting stays
-//          - > esle delete it from the text)
-        
-//         4. insert image instead of the ID string
 
-        openCamera()
-        
-        getImagesAndPutThemInArray()
-        
-        
     }
     
     //MARK: - VEIW DID LOAD
@@ -100,8 +67,11 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         textView.text = currentItem?.noteInput ?? ""
         
+        //Array of names
         var names: [String] = []
+        //Array of positions
         var positions: [Int] = []
+        //iterate over array/list of imageObjects(if there are any) and fill in arrays names and positions
         for imageObject in (currentItem?.imageObjects)! {
             names.append(imageObject.name)
             positions.append(imageObject.position)
@@ -110,7 +80,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         let images = NoteStorageManager.shared.getImageForNoteItemName(noteName: (currentItem?.title)!, imagesNames: names)
         
-        self.insertImagesToTextAndGetPosition(images: images, positions: positions)
+       self.insertImagesToTextAndGetPosition(images: images, positions: positions)
         print("\(images)")
         
         
@@ -132,8 +102,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             }
         }
     }
-    
-    
+ 
     ///saves images to realm
     
     func saveImagesToRealm (_ imageObject: NoteImageObject) {
@@ -150,19 +119,19 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     //MARK: - WORKING WITH CAMERA AND IMAGES
     
-    func openCamera(){
-        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)){
-            imagePicker.sourceType = UIImagePickerControllerSourceType.camera
-            imagePicker.allowsEditing = false
-            imagePicker.delegate = self
-            self.present(imagePicker, animated: true, completion: nil)
-        }
-        else{
-            let alert  = UIAlertController(title: "Warning", message: "You don't have camera", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
+//    func openCamera(){
+//        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)){
+//            imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+//            imagePicker.allowsEditing = false
+//            imagePicker.delegate = self
+//            self.present(imagePicker, animated: true, completion: nil)
+//        }
+//        else{
+//            let alert  = UIAlertController(title: "Warning", message: "You don't have camera", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//            self.present(alert, animated: true, completion: nil)
+//        }
+//    }
     
     //Choose image from camera roll
     func openPhotoLibrary(){
@@ -178,7 +147,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage{
             
-            /* Appent image to text view. */
+            /* Append image to text view. */
             let position = self.attachImagesToTextAndGetPosition(image: originalImage)
            
             
@@ -206,45 +175,45 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     /// save the image to the documents directory
-    func saveImage(the imageToSave: UIImage, called imageName: String) {
-        
-        //creates an instance of the FileManager
-        let fileManager = FileManager.default
-        
-        //get the image path
-        let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(imageName)
-       
-        //get the image we took with camera
-        let image = addedImage
-        let orientedImage = image!.upOrientationImage()
-        
-        //get the PNG data for this image
-        let data = UIImagePNGRepresentation(orientedImage!)
-        
-        //store it in the document directory
-        fileManager.createFile(atPath: imagePath as String, contents: data, attributes: nil)
-    }
+//    func saveImage(the imageToSave: UIImage, called imageName: String) {
+//
+//        //creates an instance of the FileManager
+//        let fileManager = FileManager.default
+//
+//        //get the image path
+//        let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(imageName)
+//
+//        //get the image we took with camera
+//        let image = addedImage
+//        let orientedImage = image!.upOrientationImage()
+//
+//        //get the PNG data for this image
+//        let data = UIImagePNGRepresentation(orientedImage!)
+//
+//        //store it in the document directory
+//        fileManager.createFile(atPath: imagePath as String, contents: data, attributes: nil)
+//    }
     
-    func getImagesAndPutThemInArray () {
-        /*
-        let fileManager = FileManager.default
-        if let selectedItem = currentItem {
-            for nameOfImage in selectedItem.imagenames {
-                let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(nameOfImage)
-                if fileManager.fileExists(atPath: imagePath){
-                    let newImage = UIImage(contentsOfFile: imagePath)
-                    arrayOfImagesFromRealm.append(newImage!)
-                    //arrayOfImageNamesFromRealm.append(nameOfImage)
-                    
-                    print("-->gettingImagesFromRealm\(arrayOfImageNamesFromRealm)\(arrayOfImagesFromRealm)")
-                }else{
-                    print("Panic! No Image!")
-                    
-                }
-                print(nameOfImage)
-            }
-        }*/
-    }
+//    func getImagesAndPutThemInArray () {
+//        /*
+//        let fileManager = FileManager.default
+//        if let selectedItem = currentItem {
+//            for nameOfImage in selectedItem.imagenames {
+//                let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(nameOfImage)
+//                if fileManager.fileExists(atPath: imagePath){
+//                    let newImage = UIImage(contentsOfFile: imagePath)
+//                    arrayOfImagesFromRealm.append(newImage!)
+//                    //arrayOfImageNamesFromRealm.append(nameOfImage)
+//
+//                    print("-->gettingImagesFromRealm\(arrayOfImageNamesFromRealm)\(arrayOfImagesFromRealm)")
+//                }else{
+//                    print("Panic! No Image!")
+//
+//                }
+//                print(nameOfImage)
+//            }
+//        }*/
+//    }
  
     func attachImagesToTextAndGetPosition(image: UIImage) -> Int{
         
@@ -294,47 +263,25 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     // attaching an image to the text
-    func attachImagesToText () {
-        
-        let fullStringFromTextView = textView.text!
-
-        let fullString = NSMutableAttributedString(string: textView.text!)
-
-        let image1Attachment = NSTextAttachment()
-        image1Attachment.image = arrayOfImagesFromRealm[0]
-        print()
-
-        let newWidth = self.view.bounds.size.width - 10
-        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
-
-        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
-
-        let image1String = NSAttributedString(attachment: image1Attachment)
-        fullString.append(image1String)
-        textView.attributedText = fullString
-        
-        
-        
-        
-        
+//    func attachImagesToText () {
+//
+//        let fullStringFromTextView = textView.text!
+//
 //        let fullString = NSMutableAttributedString(string: textView.text!)
+//
 //        let image1Attachment = NSTextAttachment()
-//        image1Attachment.image = arrayOfIamgesFromRealm[0]
-//       // image1Attachment.setImageHeight(height: 230)
+//        image1Attachment.image = arrayOfImagesFromRealm[0]
+//        print()
+//
 //        let newWidth = self.view.bounds.size.width - 10
-//       let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
-//        print((image1Attachment.image?.size.height)!)
-//        print((image1Attachment.image?.size.width)!)
+//        let newHeight = ((image1Attachment.image?.size.height)! * newWidth)/(image1Attachment.image?.size.width)!
+//
 //        image1Attachment.bounds = CGRect(x: 0, y: image1Attachment.bounds.origin.y, width: newWidth, height: newHeight)
 //
 //        let image1String = NSAttributedString(attachment: image1Attachment)
 //        fullString.append(image1String)
 //        textView.attributedText = fullString
-
-    }
-    
-    //MARK: - DIFFERENT METHODS
-    
+//    }
 }
 
 //MARK: - TEXT METHODS
@@ -350,7 +297,7 @@ extension NoteViewController: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         // what happens when the user finishes editing the textView
         doneButtonPressed.setTitle("Save", for: .normal)
-        getCursor()
+        //getCursor()
     }
     
     // makes the text in a textview not to hide behind the keyboard
@@ -371,32 +318,18 @@ extension NoteViewController: UITextViewDelegate {
         textView.scrollRangeToVisible(textView.selectedRange)
     }
     
-    func getCursor () {
-        let startPosition: UITextPosition = textView.beginningOfDocument
-        let endPosition: UITextPosition = textView.endOfDocument
-        let selectedRange: UITextRange? = textView.selectedTextRange
-        
-        if let selectedRange = textView.selectedTextRange {
-            let cursorPosition = textView.offset(from: startPosition, to: selectedRange.start)
-            
-            print("-->CursorPosition is\(cursorPosition)")
-        }
-    }
-    
-}
-
-//extension NSTextAttachment {
-//    func setImageHeight(height: CGFloat) {
-//        guard let image = image else { return }
-//        let ratio = image.size.width / image.size.height
+//    func getCursor () {
+//        let startPosition: UITextPosition = textView.beginningOfDocument
+//        let endPosition: UITextPosition = textView.endOfDocument
+//        let selectedRange: UITextRange? = textView.selectedTextRange
 //
+//        if let selectedRange = textView.selectedTextRange {
+//            let cursorPosition = textView.offset(from: startPosition, to: selectedRange.start)
 //
-////        bounds = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: ratio * height, height: height)
-////bounds = CGRect(x: 0, y: bounds.origin.y, width: wi, height: <#T##CGFloat#>)
-//        //(bounds.origin.x, bounds.origin.y, ratio * height, height)
+//            print("-->CursorPosition is\(cursorPosition)")
+//        }
 //    }
-//}
-
+}
 extension UIImage {
     
     func upOrientationImage() -> UIImage? {
@@ -412,7 +345,3 @@ extension UIImage {
         }
     }
 }
-
-
-
-
