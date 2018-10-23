@@ -28,17 +28,17 @@ extension UIViewController {
     }
     
     func registerForKeyboardDidShowNotification(scrollView: UIScrollView, usingBlock block: ((CGSize?) -> Void)? = nil) {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardDidShow, object: nil, queue: nil, using: { [weak scrollView] (notification) -> Void in
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidShowNotification, object: nil, queue: nil, using: { [weak scrollView] (notification) -> Void in
             let userInfo = notification.userInfo
             guard let scrollView = scrollView else { return }
-            guard let keyboardSizeUserInfo = userInfo?[UIKeyboardFrameEndUserInfoKey] else {
+            guard let keyboardSizeUserInfo = userInfo?[UIResponder.keyboardFrameEndUserInfoKey] else {
                 block?(nil)
                 
                 return
             }
             
             let keyboardSize = (keyboardSizeUserInfo as AnyObject).cgRectValue.size
-            let contentInsets = UIEdgeInsetsMake(scrollView.contentInset.top, scrollView.contentInset.left, keyboardSize.height, scrollView.contentInset.right)
+            let contentInsets = UIEdgeInsets.init(top: scrollView.contentInset.top, left: scrollView.contentInset.left, bottom: keyboardSize.height, right: scrollView.contentInset.right)
             
             scrollView.setContentInsetAndScrollIndicatorInsets(edgeInsets: contentInsets)
             block?(keyboardSize)
@@ -46,9 +46,9 @@ extension UIViewController {
     }
     
     func registerForKeyboardWillHideNotification(scrollView: UIScrollView, usingBlock block: (() -> Void)? = nil) {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: nil, using: {  [weak scrollView] (notification) -> Void in
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: nil, using: {  [weak scrollView] (notification) -> Void in
             guard let scrollView = scrollView else { return }
-            let contentInsets = UIEdgeInsetsMake(scrollView.contentInset.top, scrollView.contentInset.left, 0, scrollView.contentInset.right)
+            let contentInsets = UIEdgeInsets.init(top: scrollView.contentInset.top, left: scrollView.contentInset.left, bottom: 0, right: scrollView.contentInset.right)
             scrollView.setContentInsetAndScrollIndicatorInsets(edgeInsets: contentInsets)
             block?()
         })

@@ -46,7 +46,7 @@ class ItemTableViewController: UIViewController {
         let title = selectedListe?.name.uppercased() ?? "meslistes"
         self.title = title
         
-      let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 19, weight: .light), NSAttributedStringKey.foregroundColor: UIColor.black]
+      let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 19, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.black]
         navigationController?.navigationBar.titleTextAttributes = attributes
         
         var rightImage = UIImage(named: "plus-icon")
@@ -102,7 +102,7 @@ class ItemTableViewController: UIViewController {
     }
     
     @objc func leftBarButtonAction () {
-        let attributes = [NSAttributedStringKey.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedStringKey.foregroundColor: UIColor.black]
+        let attributes = [NSAttributedString.Key.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedString.Key.foregroundColor: UIColor.black]
         navigationController?.navigationBar.titleTextAttributes = attributes
         _ = navigationController?.popToRootViewController(animated: true)
         
@@ -164,7 +164,7 @@ extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 }
 
@@ -278,7 +278,7 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
         let content = UNMutableNotificationContent()
         content.title = "Don't forget!!!"
         content.body = items![selectedItem].title
-        content.sound = UNNotificationSound.default()
+        content.sound = UNNotificationSound.default
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: "TestIdentifier", content: content, trigger: trigger)
         

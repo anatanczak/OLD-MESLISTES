@@ -10,14 +10,21 @@ import UIKit
 import SwipeCellKit
 
 class ListeTableViewCell: SwipeTableViewCell {
-    
+    //MARK: - Constants
+    private let labelFontSize: CGFloat = 14
+    private let iconWidthHeightForAllDevices: CGFloat = 45
+    private let paddingFromLeadingEdge: CGFloat = 30
+    private let distanceBetweenIconViewAndTitlelabel: CGFloat = 30
+    private let paddingToTrailingEdge: CGFloat = 20
+   // private let paddingTopAndBottom: CGFloat = 8
+
     //MARK: - Views
     var iconView = UIImageView()
     var titleLabel = UILabel()
 
     //MARK: - Implementation
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
      
         setupCellView()
@@ -34,59 +41,49 @@ class ListeTableViewCell: SwipeTableViewCell {
         //titleLabel
         titleLabel.text = ""
         titleLabel.textAlignment = .left
-        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .light)
-        //titleLabel.frame = CGRect(x: 30.0, y: 15.5, width: screen - 40, height: 42)
+        
+        var myFont = UIFont.systemFont(ofSize: labelFontSize, weight: .light)
+        //var myFont = UIFont.preferredFont(forTextStyle: .body).withSize(labelFontSize)
+        myFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: myFont)
+        titleLabel.font = myFont
+       
+        // titleLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .light)
         contentView.addSubview(titleLabel)
         
         //iconView
         iconView.image = nil
         iconView.contentMode = .scaleAspectFit
-        //iconView.frame = CGRect(x: 20.0, y: 15.5, width: 42, height: 42)
         contentView.addSubview(iconView)
     }
     
+    //TODO: make dynamic type work
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setNeedsDisplay()
+        setNeedsLayout()
+    }
+    
     private func setupLayout() {
-
-        let iconWidthHeightForAllDevices: CGFloat = 45
-        
+   
         // iconView Layout
         iconView.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             iconView.widthAnchor.constraint(equalToConstant: iconWidthHeightForAllDevices),
             iconView.heightAnchor.constraint(equalToConstant: iconWidthHeightForAllDevices),
             iconView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            { let constraint = iconView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 30)
-                //constraint.priority = UILayoutPriority(749)
+            { let constraint = iconView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: paddingFromLeadingEdge)
                 return constraint
             }(),
             ])
+        
         //titleLabel Layout
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         NSLayoutConstraint.activate([
-            titleLabel.heightAnchor.constraint(equalToConstant: iconWidthHeightForAllDevices),
             titleLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 30),
-            titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 5)
+            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: distanceBetweenIconViewAndTitlelabel),
+            titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: paddingToTrailingEdge)
             ])
-
-        
-        
-//        let iconWidth = UIScreen.main.bounds.size.width * multiplier
-        
-//        let iconSideOffset: CGFloat = 47.0
-//        let iconUpperLowerOffset: CGFloat = 12.5
-//
-
-        
-
-        
-//        iconView.anchor(top: contentView.topAnchor, leading: contentView.leadingAnchor, bottom: contentView.bottomAnchor, trailing: titleLabel.leadingAnchor, padding: .init(top: iconUpperLowerOffset, left: iconSideOffset, bottom: iconUpperLowerOffset, right: 30), size: .init(width: 45.0, height: 45.0))
-//
-//
-//
-//        titleLabel.anchor(top: contentView.topAnchor, leading: iconView.trailingAnchor, bottom: contentView.bottomAnchor, trailing: contentView.trailingAnchor, padding: .init(top: iconUpperLowerOffset, left: 27 , bottom: iconUpperLowerOffset, right: 39))
-//
-//
     }
     
     func fillWith(model: Liste?) {

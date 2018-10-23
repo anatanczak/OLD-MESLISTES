@@ -15,6 +15,9 @@ import SnapKit
 
 class ListViewController: UIViewController {
     
+    //MARK: - Constants
+    let cellHeight: CGFloat = 70
+    
     //MARK: - Properties
     let backgroundImageView: UIImageView = UIImageView()
     let tableView = UITableView()
@@ -48,7 +51,7 @@ class ListViewController: UIViewController {
         
         let title = "meslistes"
         self.title = title
-        let attributes = [NSAttributedStringKey.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedStringKey.foregroundColor: UIColor.black]
+        let attributes = [NSAttributedString.Key.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedString.Key.foregroundColor: UIColor.black]
         navigationController?.navigationBar.titleTextAttributes = attributes
         var rightImage = UIImage(named: "plus-icon")
         rightImage = rightImage?.withRenderingMode(.alwaysOriginal)
@@ -96,7 +99,12 @@ class ListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ListeTableViewCell.self, forCellReuseIdentifier: "ListeTableViewController")
+        
         tableView.backgroundColor = UIColor.clear
+        
+        
+        //tableView.rowHeight = UITableView.automaticDimension
+        
         tableView.separatorColor = UIColor.init(red: 251/255, green: 251/255, blue: 251/255, alpha: 1)
         tableView.separatorStyle = .singleLine
         tableView.separatorInset = .zero
@@ -104,8 +112,11 @@ class ListViewController: UIViewController {
         tableView.frame = CGRect(x: 0, y: statusBarHeight + navigationBarHeight, width: self.view.bounds.size.width, height: self.view.bounds.size.height - (statusBarHeight + navigationBarHeight))
         view.addSubview(tableView)
     }
-    
 
+//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+//        tableView.reloadData()
+//        print("the font won't change")
+//    }
     private func setupLayout() {
 
         backgroundImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
@@ -149,13 +160,13 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellHeight
+    }
+    
     // data source methhods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return lists?.count ?? 1
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -243,7 +254,7 @@ extension ListViewController: SwipeTableViewCellDelegate {
         let content = UNMutableNotificationContent()
         content.title = "Don't forget!!!"
         content.body = lists![chosenRow].name
-        content.sound = UNNotificationSound.default()
+        content.sound = UNNotificationSound.default
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: "TestIdentifier", content: content, trigger: trigger)
         

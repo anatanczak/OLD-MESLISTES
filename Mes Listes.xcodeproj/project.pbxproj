@@ -202,6 +202,7 @@
 				4C239A8B20D51B36004A0089 /* Frameworks */,
 				4C239A8C20D51B36004A0089 /* Resources */,
 				F3875F05BD83153D4BCD61A1 /* [CP] Embed Pods Frameworks */,
+				F8AB777B144D209652E6347F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -224,6 +225,7 @@
 				TargetAttributes = {
 					4C239A8D20D51B36004A0089 = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -300,6 +302,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F8AB777B144D209652E6347F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Mes Listes/Pods-Mes Listes-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -474,7 +491,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anaviktoriv.Mes-Listes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -494,7 +511,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.anaviktoriv.Mes-Listes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

@@ -1,30 +1,23 @@
 PODS:
-  - Realm (3.3.2):
-    - Realm/Headers (= 3.3.2)
-  - Realm/Headers (3.3.2)
-  - RealmSwift (3.3.2):
-    - Realm (= 3.3.2)
-  - SnapKit (4.0.0)
-  - SwipeCellKit (2.1.0)
+  - Realm (3.11.1):
+    - Realm/Headers (= 3.11.1)
+  - Realm/Headers (3.11.1)
+  - RealmSwift (3.11.1):
+    - Realm (= 3.11.1)
+  - SnapKit (4.2.0)
+  - SwipeCellKit (2.5.0)
 
 DEPENDENCIES:
   - RealmSwift
   - SnapKit (~> 4.0)
   - SwipeCellKit
 
-SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - Realm
-    - RealmSwift
-    - SnapKit
-    - SwipeCellKit
-
 SPEC CHECKSUMS:
-  Realm: d927fbf66df5532cfafc08afb5f7e53ded37b894
-  RealmSwift: 4e903a494e05d866581d69ad6f7e7b879d446baf
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  SwipeCellKit: 80bdb188166484d8a0d813d9fd7748ad33181815
+  Realm: 037c5919b9ceb59d6beed5d3b031096856b119b3
+  RealmSwift: c9580133e73ef40ed340401af2dbc9a5790dfea7
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
+  SwipeCellKit: d8f2617538ce3021cb0a11d1b93856a06a2f2e20
 
 PODFILE CHECKSUM: f80b8e317c07c239c56e7797e91041e9844954fc
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.4.0

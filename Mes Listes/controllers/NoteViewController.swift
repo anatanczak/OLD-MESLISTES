@@ -54,7 +54,7 @@ class NoteViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     private func setupNavigationBar () {
         self.title = currentItem?.title ?? "meslistes"
         
-        let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 19, weight: .light), NSAttributedStringKey.foregroundColor: UIColor.black]
+        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 19, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.black]
         navigationController?.navigationBar.titleTextAttributes = attributes
         
         rightNavigationButton = UIBarButtonItem(title: "OK", style: .plain, target: self, action: #selector(rightBarButtonAction))
