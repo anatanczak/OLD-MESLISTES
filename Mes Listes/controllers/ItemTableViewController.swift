@@ -13,6 +13,12 @@ import EventKit
 import SwipeCellKit
 
 class ItemTableViewController: UIViewController {
+    //MARK: - Constants
+    let textFieldPlaceholderText = "Type your item here..."
+    let textFieldHeight: CGFloat = 40
+    let textFieldAndPlusButtonPadding: CGFloat = 20
+    let distanceBetweenTextfieldAndTableView: CGFloat = 10
+    let borderSubView: CGFloat = 1
     
     //MARK: - Properties
     let realm = try! Realm()
@@ -25,6 +31,9 @@ class ItemTableViewController: UIViewController {
 
     
     let backgroundImageView = UIImageView()
+    let subviewForTextFieldAndPlusButton = UIView()
+    let textFieldItems = UITextField()
+    let plusButton = UIButton()
     let tableView = UITableView()
     
     var selectedListe : Liste? {
@@ -32,7 +41,7 @@ class ItemTableViewController: UIViewController {
             loadItems()
         }
     }
-    
+
     //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +49,14 @@ class ItemTableViewController: UIViewController {
         setupViews()
         setupLayout()
         
+//        tableView.estimatedRowHeight = 100
+//        tableView.rowHeight = UITableView.automaticDimension
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        subviewForTextFieldAndPlusButton.addTopBorderWithColor(color: .white, width: borderSubView)
+        subviewForTextFieldAndPlusButton.addBottomBorderWithColor(color: .white, width: borderSubView)
     }
     private func setupNavigationBar () {
         
@@ -49,12 +66,12 @@ class ItemTableViewController: UIViewController {
       let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 19, weight: .light), NSAttributedString.Key.foregroundColor: UIColor.black]
         navigationController?.navigationBar.titleTextAttributes = attributes
         
-        var rightImage = UIImage(named: "plus-icon")
-        rightImage = rightImage?.withRenderingMode(.alwaysOriginal)
-        let rightNavigationButton = UIBarButtonItem(image: rightImage, style: .plain, target: self, action: #selector (rightBarButtonAction))
-        rightNavigationButton.tintColor = UIColor.white
-  
-        self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
+//        var rightImage = UIImage(named: "plus-icon")
+//        rightImage = rightImage?.withRenderingMode(.alwaysOriginal)
+//        let rightNavigationButton = UIBarButtonItem(image: rightImage, style: .plain, target: self, action: #selector (rightBarButtonAction))
+//        rightNavigationButton.tintColor = UIColor.white
+//
+//        self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
         
         let leftNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "back-button-icon") , style: .plain, target: self, action: #selector(leftBarButtonAction))
         leftNavigationButton.tintColor = .black
@@ -66,13 +83,34 @@ class ItemTableViewController: UIViewController {
     
     private func setupViews () {
         
-        let statusBarHeight: CGFloat = 20.0
-        let navigationBarHeight = (self.navigationController?.navigationBar.frame.height)!
         
         // backgroundImageView
         backgroundImageView.image = backgroundImage
         backgroundImageView.contentMode = .scaleAspectFill
         view.addSubview(backgroundImageView)
+        
+        //subviewForTextField
+        subviewForTextFieldAndPlusButton.backgroundColor = .clear
+
+        view.addSubview(subviewForTextFieldAndPlusButton)
+        
+        //textField
+        textFieldItems.backgroundColor = .clear
+        textFieldItems.placeholder = textFieldPlaceholderText
+        self.textFieldItems.delegate = self
+//        textField.layer.borderColor = UIColor.white.cgColor
+//        textField.layer.borderWidth = borderTextFieldAndPlusBotton
+
+        textFieldItems.becomeFirstResponder()
+        subviewForTextFieldAndPlusButton.addSubview(textFieldItems)
+        
+        //plusButton
+        plusButton.setImage(#imageLiteral(resourceName: "plus-icon"), for: .normal)
+        plusButton.addTarget(self, action: #selector(plusButtonAction), for: .touchUpInside)
+//        plusButton.layer.borderColor = UIColor.white.cgColor
+//        plusButton.layer.borderWidth = borderTextFieldAndPlusBotton
+        
+        subviewForTextFieldAndPlusButton.addSubview(plusButton)
         
         //tableView
         tableView.delegate = self
@@ -82,23 +120,61 @@ class ItemTableViewController: UIViewController {
         tableView.separatorColor = UIColor.white
         tableView.separatorStyle = .singleLine
         tableView.separatorInset = .init(top: 0, left: 0, bottom: 0, right: 0)
-        tableView.frame = CGRect(x: 0, y: statusBarHeight + navigationBarHeight, width: self.view.bounds.size.width, height: self.view.bounds.size.height - (statusBarHeight + navigationBarHeight))
+
         view.addSubview(tableView)
     }
     
     private func setupLayout() {
         
         backgroundImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+        
+        //subViewTextField
+        subviewForTextFieldAndPlusButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            subviewForTextFieldAndPlusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            subviewForTextFieldAndPlusButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            subviewForTextFieldAndPlusButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            subviewForTextFieldAndPlusButton.heightAnchor.constraint(equalToConstant: textFieldHeight + 2 * borderSubView)
+            ])
+        
+        
+        //textField
+        textFieldItems.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            textFieldItems.topAnchor.constraint(equalTo: subviewForTextFieldAndPlusButton.topAnchor, constant: borderSubView),
+            textFieldItems.leadingAnchor.constraint(equalTo: subviewForTextFieldAndPlusButton.leadingAnchor, constant: textFieldAndPlusButtonPadding),
+            textFieldItems.heightAnchor.constraint(equalToConstant: textFieldHeight)
+            ])
+        
+        //plusButton
+        plusButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            plusButton.topAnchor.constraint(equalTo: textFieldItems.topAnchor),
+            plusButton.bottomAnchor.constraint(equalTo: textFieldItems.bottomAnchor),
+            plusButton.leadingAnchor.constraint(equalTo: textFieldItems.trailingAnchor),
+            plusButton.widthAnchor.constraint(equalTo: plusButton.heightAnchor),
+            plusButton.trailingAnchor.constraint(equalTo: subviewForTextFieldAndPlusButton.trailingAnchor, constant: -textFieldAndPlusButtonPadding),
+            ])
+        
+        //tableView
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: subviewForTextFieldAndPlusButton.bottomAnchor, constant: distanceBetweenTextfieldAndTableView),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            ])
+        
     }
     
     //MARK: - ACTIONS
-    @objc func rightBarButtonAction () {
-        //alertAppearForUserInput()
-        let userTextInputVC = TextInputForItemVC()
-       userTextInputVC.createItem = createItem(_:)
-        userTextInputVC.modalPresentationStyle = .overCurrentContext
-               
-        self.present(userTextInputVC, animated: true, completion: nil)
+    @objc func plusButtonAction () {
+print("plusButtonAction")
+        createItem()
     }
     
     @objc func leftBarButtonAction () {
@@ -110,25 +186,35 @@ class ItemTableViewController: UIViewController {
     
     //MARK: - Different Methods REALM
     
-    func createItem (_ item: Item) ->() {
-        userInputHandeled(newItem: item)
+    func createItem (){
+        userInputHandeled()
         tableView.reloadData()
     }
-    func userInputHandeled(newItem: Item){
-        
-        if let currentListe = self.selectedListe {
+    func userInputHandeled(){
+        if textFieldItems.text != "" && textFieldItems.text != nil {
             
-            do {
-                try self.realm.write {
-//                    let newItem = Item()
-//                    newItem.title = text
-                    currentListe.items.append(newItem)
+            if let currentListe = self.selectedListe {
+                
+                do {
+                    try self.realm.write {
+                        let newItem = Item()
+                        newItem.title = textFieldItems.text!
+                        currentListe.items.append(newItem)
+                    }
+                }catch{
+                    print("Error saving item\(error)")
                 }
-            }catch{
-                print("Error saving item\(error)")
             }
+            textFieldItems.text = ""
+            
+        }else if textFieldItems.text == "" && textFieldItems.text != nil{
+            //TODO: - Textfield empty
+            
+        }else{
+            print("text field is nill")
+        }
     }
-    }
+        
     
     //retrieves data from the database
     func loadItems () {
@@ -136,12 +222,14 @@ class ItemTableViewController: UIViewController {
         tableView.reloadData()
     }
     
+
+    
 }
 // MARK: - TABLE VIEW DELEGATE METHODS DATA SOURCE
 extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        //textFieldItems.resignFirstResponder()
         //        let currentItem = items?[indexPath.row]
         //        if currentItem?.hasNote == true {
         //            performSegue(withIdentifier: "goToNote", sender: self)
@@ -157,14 +245,21 @@ extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemTableViewCell", for: indexPath) as! ItemTableViewCell
         cell.delegate = self
-        cell.itemDelegate = self
         cell.fillWith(model: items?[indexPath.row])
+        cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        cell.titleLabel.adjustsFontForContentSizeCategory = true
+        cell.backgroundColor = UIColor.clear
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+
+    return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
     }
 }
 
@@ -358,5 +453,31 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
             performSegue(withIdentifier: "goToNote", sender: self)
         }
         tableView.reloadData()
+    }
+}
+
+//MARK: - TextField Method
+
+extension ItemTableViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == textFieldItems {
+            createItem()
+            return true
+        }
+        return false
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+
+        //or if you have just one textView
+        self.textFieldItems.resignFirstResponder()
+    }
+}
+
+extension ItemTableViewController {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.textFieldItems.resignFirstResponder()
+        self.textFieldItems.text = ""
     }
 }

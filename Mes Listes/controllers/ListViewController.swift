@@ -17,6 +17,7 @@ class ListViewController: UIViewController {
     
     //MARK: - Constants
     let cellHeight: CGFloat = 70
+    let titleFontSize: CGFloat = 28.5
     
     //MARK: - Properties
     let backgroundImageView: UIImageView = UIImageView()
@@ -34,6 +35,10 @@ class ListViewController: UIViewController {
     //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadData(_:)), name: NSNotification.Name("ReloadNotification"), object: nil)
+        
+
        
         setupNavigationBar()
         setupView()
@@ -47,27 +52,23 @@ class ListViewController: UIViewController {
         }
     }
     
+    @objc func reloadData(_ notification: Notification?) {
+        tableView.reloadData()
+        print("the size does change but not shows")
+    }
+    
     private func setupNavigationBar () {
         
         let title = "meslistes"
         self.title = title
-        let attributes = [NSAttributedString.Key.font: UIFont(name: "Zing Sans Rust Regular", size: 28.5)!, NSAttributedString.Key.foregroundColor: UIColor.black]
+        let attributes = [NSAttributedString.Key.font: UIFont(name: "Zing Sans Rust Regular", size: titleFontSize)!, NSAttributedString.Key.foregroundColor: UIColor.black]
         navigationController?.navigationBar.titleTextAttributes = attributes
         var rightImage = UIImage(named: "plus-icon")
         rightImage = rightImage?.withRenderingMode(.alwaysOriginal)
         let rightNavigationButton = UIBarButtonItem(image: rightImage, style: .plain, target: self, action: #selector (rightBarButtonAction))
-//        rightNavigationButton.tintColor = UIColor.black
-        //rightNavigationButton.image?.stretchableImage(withLeftCapWidth: 20, topCapHeight: 20)
-        //moves image in the item
-
        
         self.navigationItem.setRightBarButton(rightNavigationButton, animated: false)
         
-//        let leftNavigationButton = UIBarButtonItem(image: #imageLiteral(resourceName: "menu-icon"), style: .plain, target: self, action: #selector(leftBarButtonAction))
-//        leftNavigationButton.tintColor = UIColor.white
-//        
-//        leftNavigationButton.imageInsets  = .init(top: 0, left: -4, bottom: 0, right: 0)
-//        self.navigationItem.setLeftBarButton(leftNavigationButton, animated: false)
     }
     
     //MARK: - Button ACTIONS
@@ -86,9 +87,6 @@ class ListViewController: UIViewController {
     
     //MARK: - Layout
     private func setupView () {
-
-        let statusBarHeight: CGFloat = 20.0
-        let navigationBarHeight = (self.navigationController?.navigationBar.frame.height)!
         
        // backgroundImageView
         backgroundImageView.image = backgroundImage
@@ -102,15 +100,16 @@ class ListViewController: UIViewController {
         
         tableView.backgroundColor = UIColor.clear
         
-        
-        //tableView.rowHeight = UITableView.automaticDimension
-        
+//        tableView.estimatedRowHeight  = 100
+//        tableView.rowHeight = UITableView.automaticDimension
+
         tableView.separatorColor = UIColor.init(red: 251/255, green: 251/255, blue: 251/255, alpha: 1)
         tableView.separatorStyle = .singleLine
         tableView.separatorInset = .zero
+    
         //tableView - separator height?
-        tableView.frame = CGRect(x: 0, y: statusBarHeight + navigationBarHeight, width: self.view.bounds.size.width, height: self.view.bounds.size.height - (statusBarHeight + navigationBarHeight))
         view.addSubview(tableView)
+        
     }
 
 //    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -120,6 +119,14 @@ class ListViewController: UIViewController {
     private func setupLayout() {
 
         backgroundImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            ])
     }
     
     
@@ -150,6 +157,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     // delegate methods
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+ 
         let itemVC = ItemTableViewController()
         
         if let selectedListWithValue = lists?[indexPath.row] {
@@ -174,7 +182,10 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListeTableViewController", for: indexPath) as! ListeTableViewCell
         cell.delegate = self
         cell.fillWith(model: lists?[indexPath.row])
-
+        cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        cell.titleLabel.adjustsFontForContentSizeCategory = true
+        cell.selectionStyle = .none
+        cell.backgroundColor = UIColor.clear
         return cell
     }
 }

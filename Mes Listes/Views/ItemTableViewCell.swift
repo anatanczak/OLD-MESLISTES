@@ -15,12 +15,18 @@ protocol ItemTableViewCellDelegate: NSObjectProtocol {
 
 class ItemTableViewCell: SwipeTableViewCell {
     
-    weak var itemDelegate: ItemTableViewCellDelegate?
+    //MARK: - Constants
+    private let paddingLeadingTrailing: CGFloat = 24
+    private let distanceBetweenIconViewAndTitlelabel: CGFloat = 30
+    private let paddingTopBottom: CGFloat = 22
+    private let iconViewWidthHeight: CGFloat = 12
+    private let upperTransparentBorder: CGFloat = 1
 
     //MARK: - Views
+    var backgroundCellView = UIView()
     let iconView = UIImageView()
     let titleLabel = UILabel()
-    let noteButton = UIButton()
+
     
     //MARK: - Implementation
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -40,50 +46,63 @@ class ItemTableViewCell: SwipeTableViewCell {
     }
     
     func setupCellView () {
-        contentView.backgroundColor = UIColor.white
+        contentView.isOpaque = false
+        contentView.backgroundColor = UIColor.clear
         
+        backgroundCellView.backgroundColor = .white
+        //contentView.addSubview(backgroundCellView)
+        
+       
+        //titlelabel
         titleLabel.text = ""
         titleLabel.textAlignment = .left
-        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .light)
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.numberOfLines = 0
+        contentView.addSubview(titleLabel)
         
+        //iconview
         iconView.image = #imageLiteral(resourceName: "emty-circle-icon")
         iconView.contentMode = .scaleAspectFit
-        
-        noteButton.setImage(#imageLiteral(resourceName: "note-icon-gray"), for: .normal)
-        noteButton.contentHorizontalAlignment = .fill
-        noteButton.contentVerticalAlignment = .fill
-        noteButton.imageView?.contentMode = .scaleAspectFit
-        
-        noteButton.addTarget(self, action: #selector(noteButtonAction), for: .touchUpInside)
-        [titleLabel, iconView, noteButton].forEach { contentView.addSubview($0) }
+        //backgroundCellView.addSubview(iconView)
         
     }
     
     func setupLayout () {
+        // backgroundCellView
+//        backgroundCellView.translatesAutoresizingMaskIntoConstraints = false
+//
+//        NSLayoutConstraint.activate([
+//            backgroundCellView.topAnchor.constraint(equalTo: topAnchor, constant: upperTransparentBorder),
+//            backgroundCellView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//            backgroundCellView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            backgroundCellView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            backgroundCellView.heightAnchor.constraint(equalToConstant: 50)
+//            ])
         
-        let iconSideOffset: CGFloat = 47.0
-        let iconUpperLowerOffset: CGFloat = 12.5
+        //iconView
+//        iconView.translatesAutoresizingMaskIntoConstraints = false
+//
+//          NSLayoutConstraint.activate([
+//
+//        ])
         
-
-        
-        iconView.anchor(top: contentView.topAnchor, leading: contentView.leadingAnchor, bottom: contentView.bottomAnchor, trailing: titleLabel.leadingAnchor, padding: .init(top: iconUpperLowerOffset, left: iconSideOffset, bottom: iconUpperLowerOffset, right: 30), size: .init(width: 12.0, height: 12.0))
-        
-        
-        
-        titleLabel.anchor(top: contentView.topAnchor, leading: iconView.trailingAnchor, bottom: contentView.bottomAnchor, trailing: noteButton.leadingAnchor, padding: .init(top: iconUpperLowerOffset, left: 27 , bottom: iconUpperLowerOffset, right: 10))
-        
-        noteButton.anchor(top: contentView.topAnchor, leading: titleLabel.trailingAnchor, bottom: contentView.bottomAnchor, trailing: contentView.trailingAnchor, padding: .init(top: 2, left: 5, bottom: 2, right: 2),
-            size: .init(width: 17, height: 25))
-        
+    
+        //titleLabel
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+//        titleLabel.setContentCompressionResistancePriority(.defaultHigh
+//            , for:  .vertical)
+//
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: topAnchor),
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleLabel.widthAnchor.constraint(equalToConstant: 300),
+            titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 20)
+            ])
     }
     
-    //MARK: - ACTIONS
-    @objc func noteButtonAction () {
-        //create an alert which asks if thhe user want to create a note for this item
-        itemDelegate?.cellDidTapOnNoteButton(cell: self)
-    }
-
-    //MARK: - DIFFERENT METHHODS
+    //MARK: - DIFFERENT METHODS
     
     func fillWith(model: Item?) {
                 if let item = model {
@@ -102,12 +121,6 @@ class ItemTableViewCell: SwipeTableViewCell {
                         
                     }
                     
-                    if item.hasNote {
-                        noteButton.setImage(#imageLiteral(resourceName: "note-icon-rose"), for: .normal)
-                    }else{
-                        noteButton.setImage(#imageLiteral(resourceName: "note-icon-gray"), for: .normal)
-                    }
-                    
                 }else{
                     titleLabel.text = "You haven't created an item yet"
                 }
@@ -118,6 +131,5 @@ class ItemTableViewCell: SwipeTableViewCell {
     override func prepareForReuse() {
         titleLabel.text = nil
       
-        noteButton.imageView?.image = nil
     }
 }

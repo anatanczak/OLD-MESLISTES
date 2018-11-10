@@ -10,15 +10,16 @@ import UIKit
 import SwipeCellKit
 
 class ListeTableViewCell: SwipeTableViewCell {
+    
     //MARK: - Constants
-    private let labelFontSize: CGFloat = 14
-    private let iconWidthHeightForAllDevices: CGFloat = 45
-    private let paddingFromLeadingEdge: CGFloat = 30
+    private let paddingLeadingTrailing: CGFloat = 30
     private let distanceBetweenIconViewAndTitlelabel: CGFloat = 30
-    private let paddingToTrailingEdge: CGFloat = 20
-   // private let paddingTopAndBottom: CGFloat = 8
+    private let paddingTopBottom: CGFloat = 20
+    private let iconViewWidthHeight: CGFloat = 40
+    private let upperTransparentBorder: CGFloat = 1
 
     //MARK: - Views
+    var backgroundCellView = UIView()
     var iconView = UIImageView()
     var titleLabel = UILabel()
 
@@ -36,55 +37,66 @@ class ListeTableViewCell: SwipeTableViewCell {
     }
     
     private func setupCellView () {
-        contentView.backgroundColor = UIColor.white
+
+        contentView.isOpaque = false
+        contentView.backgroundColor = UIColor.clear
+        
+        backgroundCellView.backgroundColor = .white
+        contentView.addSubview(backgroundCellView)
         
         //titleLabel
         titleLabel.text = ""
         titleLabel.textAlignment = .left
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        titleLabel.adjustsFontForContentSizeCategory = true
         
-        var myFont = UIFont.systemFont(ofSize: labelFontSize, weight: .light)
-        //var myFont = UIFont.preferredFont(forTextStyle: .body).withSize(labelFontSize)
-        myFont = UIFontMetrics(forTextStyle: .body).scaledFont(for: myFont)
-        titleLabel.font = myFont
-       
-        // titleLabel.font = UIFont.systemFont(ofSize: labelFontSize, weight: .light)
-        contentView.addSubview(titleLabel)
+        backgroundCellView.addSubview(titleLabel)
         
         //iconView
         iconView.image = nil
         iconView.contentMode = .scaleAspectFit
-        contentView.addSubview(iconView)
+        backgroundCellView.addSubview(iconView)
     }
     
-    //TODO: make dynamic type work
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        setNeedsDisplay()
-        setNeedsLayout()
-    }
     
     private func setupLayout() {
+        
+        // backgroundCellView
+        backgroundCellView.translatesAutoresizingMaskIntoConstraints = false
    
+        NSLayoutConstraint.activate([
+            backgroundCellView.topAnchor.constraint(equalTo: topAnchor, constant: upperTransparentBorder),
+            backgroundCellView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            backgroundCellView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            backgroundCellView.trailingAnchor.constraint(equalTo: trailingAnchor)
+            ])
+        
         // iconView Layout
         iconView.translatesAutoresizingMaskIntoConstraints = false
+
         
         NSLayoutConstraint.activate([
-            iconView.widthAnchor.constraint(equalToConstant: iconWidthHeightForAllDevices),
-            iconView.heightAnchor.constraint(equalToConstant: iconWidthHeightForAllDevices),
-            iconView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            { let constraint = iconView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: paddingFromLeadingEdge)
-                return constraint
-            }(),
+
+            iconView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: paddingLeadingTrailing),
+            iconView.heightAnchor.constraint(equalToConstant: iconViewWidthHeight),
+            iconView.widthAnchor.constraint(equalToConstant: iconViewWidthHeight),
+            iconView.centerYAnchor.constraint(equalTo: backgroundCellView.centerYAnchor)
+
             ])
-        
+ 
         //titleLabel Layout
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        //titleLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+       
+        
         NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: distanceBetweenIconViewAndTitlelabel),
-            titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: paddingToTrailingEdge)
+            titleLabel.trailingAnchor.constraint(equalTo: backgroundCellView.trailingAnchor, constant: -paddingLeadingTrailing),
+            titleLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor)
             ])
+        
     }
+
     
     func fillWith(model: Liste?) {
        

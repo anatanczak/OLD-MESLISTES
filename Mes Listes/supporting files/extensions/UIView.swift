@@ -1,10 +1,7 @@
-//
-//  UIView.swift
-//  Mes Listes
-//
-//  Created by Anastasiia Tanczak on 31/08/2018.
-//  Copyright © 2018 Ana Viktoriv. All rights reserved.
-//
+
+
+
+//DO IT IN VIEwsLAYOUTSUBVIEWS!!!!
 
 import Foundation
 import UIKit
