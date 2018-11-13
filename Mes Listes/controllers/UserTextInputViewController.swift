@@ -9,6 +9,7 @@
 import UIKit
 
 class UserTextInputViewController: UIViewController {
+   
     //MARK: - Views
     let backgroundColorView: UIView = UIView()
     
@@ -21,18 +22,18 @@ class UserTextInputViewController: UIViewController {
     
     lazy var buttonStackView: UIStackView  = {
         let stackView = UIStackView(arrangedSubviews: [cancelButton,
-                                                        oKButton])
+                                                        okButton])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 0
         return stackView
     }()
 
-    let textField = UITextField()
+    let textFieldForInput = UITextField()
     let subViewForCollectionView = UIView()
     
     var collectionView: UICollectionView?
-    let oKButton = UIButton()
+    let okButton = UIButton()
     let cancelButton = UIButton()
     
     //MARK: - GLOBAL VARIABLES
@@ -56,7 +57,7 @@ class UserTextInputViewController: UIViewController {
         setupViews()
         setupCollectionView()
         setupLayouts()
-        textField.becomeFirstResponder()
+        textFieldForInput.becomeFirstResponder()
     
     }
 
@@ -94,26 +95,26 @@ class UserTextInputViewController: UIViewController {
         view.addSubview(mainView)
         
         //textField
-        textField.delegate = self
-        textField.attributedPlaceholder = NSAttributedString(string: "name your new list...", attributes: [
+        textFieldForInput.delegate = self
+        textFieldForInput.attributedPlaceholder = NSAttributedString(string: "name your new list...", attributes: [
             .foregroundColor: colorize(hex: 0x8C8C8C),
             .font: UIFont.systemFont(ofSize: 13.0, weight: .light),
             ])
-        textField.setLeftPaddingPoints(10)
-        textField.backgroundColor = .clear
-        textField.layer.borderWidth = 0.5
-        textField.layer.borderColor = colorize(hex: 0xC8C7CC).cgColor
-        textField.font = UIFont.systemFont(ofSize: 13)
+        textFieldForInput.setLeftPaddingPoints(10)
+        textFieldForInput.backgroundColor = .clear
+        textFieldForInput.layer.borderWidth = 0.5
+        textFieldForInput.layer.borderColor = colorize(hex: 0xC8C7CC).cgColor
+        textFieldForInput.font = UIFont.systemFont(ofSize: 13)
         
 
         //subViewForCollectionView
         subViewForCollectionView.backgroundColor = .clear
     
         //save button
-        oKButton.setTitle("OK", for: .normal)
-        oKButton.backgroundColor = UIColor.clear
-        oKButton.setTitleColor(UIColor.black, for: .normal)
-        oKButton.addTarget(self, action: #selector(oKButtonAction), for: .touchUpInside)
+        okButton.setTitle("OK", for: .normal)
+        okButton.backgroundColor = UIColor.clear
+        okButton.setTitleColor(UIColor.black, for: .normal)
+        okButton.addTarget(self, action: #selector(oKButtonAction), for: .touchUpInside)
 
 
         //cancel button
@@ -123,7 +124,7 @@ class UserTextInputViewController: UIViewController {
         cancelButton.addTarget(self, action: #selector(cancelButtonAction), for: .touchUpInside)
 
 
-        [subViewForCollectionView, textField, buttonStackView].forEach { mainView.addSubview($0) }
+        [subViewForCollectionView, textFieldForInput, buttonStackView].forEach { mainView.addSubview($0) }
     }
     
     private func setupCollectionView() {
@@ -156,7 +157,7 @@ class UserTextInputViewController: UIViewController {
             make.centerY.equalToSuperview().offset(-100)
             //make.size.equalTo(CGSize(width: 270, height: 200))
         }
-        textField.snp.makeConstraints { (make) in
+        textFieldForInput.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(16.0)
             make.left.equalToSuperview().offset(16)
@@ -166,7 +167,7 @@ class UserTextInputViewController: UIViewController {
         }
         collectionView?.snp.makeConstraints({ [weak self]  (make) in
             guard let `self` = self else { return }
-            make.top.equalTo(self.textField.snp.bottom).offset(10)
+            make.top.equalTo(self.textFieldForInput.snp.bottom).offset(10)
             make.left.equalToSuperview().offset(10.0)
             make.centerX.equalToSuperview()
             make.height.equalTo(83)
@@ -184,16 +185,31 @@ class UserTextInputViewController: UIViewController {
         super.viewDidLayoutSubviews()
         cancelButton.addBorder(side: .Top, color: alertViewGrayColor, width: 1)
         cancelButton.addBorder(side: .Right, color: alertViewGrayColor, width: 0.5)
-        oKButton.addBorder(side: .Top, color: alertViewGrayColor, width: 1)
-        oKButton.addBorder(side: .Left, color: alertViewGrayColor, width: 0.5)
+        okButton.addBorder(side: .Top, color: alertViewGrayColor, width: 1)
+        okButton.addBorder(side: .Left, color: alertViewGrayColor, width: 0.5)
     }
 
     //MARK: - Button Actions
     @objc func oKButtonAction () {
+saveInput()
+    }
+    
+    @objc func cancelButtonAction () {
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            guard let `self` = self else { return }
+            self.backgroundColorView.alpha = 0.0
+        }) { [weak self]  (isComplete) in
+            guard let `self` = self else { return }
+            self.dismiss(animated: true, completion: nil)
+            self.textFieldForInput.resignFirstResponder()
+        }
+    }
+    
+    func saveInput () {
         
-        if textField.text != "" && textField.text != nil {
+        if textFieldForInput.text != "" && textFieldForInput.text != nil {
             let newListe = Liste()
-            newListe.name = textField.text!
+            newListe.name = textFieldForInput.text!
             if let iconNameLocal = iconName {
                 newListe.iconName = iconNameLocal
             }
@@ -205,18 +221,18 @@ class UserTextInputViewController: UIViewController {
             }) { [weak self]  (isComplete) in
                 guard let `self` = self else { return }
                 self.dismiss(animated: true, completion: nil)
-                self.textField.resignFirstResponder()
+                self.textFieldForInput.resignFirstResponder()
             }
-        }else if textField.text == "" && textField.text != nil{
+        }else if textFieldForInput.text == "" && textFieldForInput.text != nil{
             UIView.animate(withDuration: 2, animations: { [weak self] in
                 guard let `self` = self else { return }
-                self.textField.backgroundColor = UIColor.init(red: 240/255, green: 214/255, blue: 226/255, alpha: 1)
+                self.textFieldForInput.backgroundColor = UIColor.init(red: 240/255, green: 214/255, blue: 226/255, alpha: 1)
                 self.view.layoutIfNeeded()
             })
             
             UIView.animate(withDuration: 2, animations: { [weak self] in
                 guard let `self` = self else { return }
-                self.textField.backgroundColor = .clear
+                self.textFieldForInput.backgroundColor = .clear
                 self.view.layoutIfNeeded()
             })
             
@@ -224,22 +240,21 @@ class UserTextInputViewController: UIViewController {
             print("text field is nill")
         }
     }
-    
-    @objc func cancelButtonAction () {
-        UIView.animate(withDuration: 0.3, animations: { [weak self] in
-            guard let `self` = self else { return }
-            self.backgroundColorView.alpha = 0.0
-        }) { [weak self]  (isComplete) in
-            guard let `self` = self else { return }
-            self.dismiss(animated: true, completion: nil)
-            self.textField.resignFirstResponder()
-        }
-    }
 }
 
 //MARK: - TextFieldDelegate
 extension UserTextInputViewController: UITextFieldDelegate {
 
+   
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            
+            if textField == textFieldForInput {
+                saveInput()
+                return true
+            }
+            return false
+
+    }
 }
 
 //MARK: - UICollectionViewDelegate and DataSource
@@ -274,3 +289,7 @@ extension UserTextInputViewController: UICollectionViewDelegate, UICollectionVie
     }
 
 }
+
+
+
+

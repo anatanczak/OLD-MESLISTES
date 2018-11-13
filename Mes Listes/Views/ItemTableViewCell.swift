@@ -9,18 +9,17 @@
 import UIKit
 import SwipeCellKit
 
-protocol ItemTableViewCellDelegate: NSObjectProtocol {
-    func cellDidTapOnNoteButton(cell: ItemTableViewCell)
-}
-
 class ItemTableViewCell: SwipeTableViewCell {
     
     //MARK: - Constants
-    private let paddingLeadingTrailing: CGFloat = 24
-    private let distanceBetweenIconViewAndTitlelabel: CGFloat = 30
-    private let paddingTopBottom: CGFloat = 22
+    private let paddingLeading: CGFloat = 24
+    private let paddingTrailing: CGFloat = 13
+    private let leadingTrailingPaddingTitlelabel: CGFloat = 13
+    private let paddingTopBottom: CGFloat = 13
     private let iconViewWidthHeight: CGFloat = 12
     private let upperTransparentBorder: CGFloat = 1
+    private let photoButtonHeight: CGFloat = 20
+    private let photoButtonWidth: CGFloat = 25
 
     //MARK: - Views
     var backgroundCellView = UIView()
@@ -46,12 +45,18 @@ class ItemTableViewCell: SwipeTableViewCell {
     }
     
     func setupCellView () {
+        
         contentView.isOpaque = false
         contentView.backgroundColor = UIColor.clear
         
         backgroundCellView.backgroundColor = .white
-        //contentView.addSubview(backgroundCellView)
+        backgroundCellView.alpha = 0.7
+        addSubview(backgroundCellView)
         
+        //iconview
+        
+        iconView.contentMode = .scaleAspectFit
+        backgroundCellView.addSubview(iconView)
        
         //titlelabel
         titleLabel.text = ""
@@ -59,47 +64,41 @@ class ItemTableViewCell: SwipeTableViewCell {
         titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 0
-        contentView.addSubview(titleLabel)
-        
-        //iconview
-        iconView.image = #imageLiteral(resourceName: "emty-circle-icon")
-        iconView.contentMode = .scaleAspectFit
-        //backgroundCellView.addSubview(iconView)
+        backgroundCellView.addSubview(titleLabel)
         
     }
     
     func setupLayout () {
         // backgroundCellView
-//        backgroundCellView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        NSLayoutConstraint.activate([
-//            backgroundCellView.topAnchor.constraint(equalTo: topAnchor, constant: upperTransparentBorder),
-//            backgroundCellView.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            backgroundCellView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            backgroundCellView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            backgroundCellView.heightAnchor.constraint(equalToConstant: 50)
-//            ])
+        backgroundCellView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            backgroundCellView.topAnchor.constraint(equalTo: topAnchor, constant: upperTransparentBorder),
+            backgroundCellView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            backgroundCellView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            backgroundCellView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            ])
         
-        //iconView
-//        iconView.translatesAutoresizingMaskIntoConstraints = false
-//
-//          NSLayoutConstraint.activate([
-//
-//        ])
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+
+          NSLayoutConstraint.activate([
+            iconView.leadingAnchor.constraint(equalTo: backgroundCellView.leadingAnchor, constant: paddingLeading),
+            iconView.heightAnchor.constraint(equalToConstant: iconViewWidthHeight),
+            iconView.widthAnchor.constraint(equalToConstant: iconViewWidthHeight),
+            iconView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor)
+        ])
         
     
         //titleLabel
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-//        titleLabel.setContentCompressionResistancePriority(.defaultHigh
-//            , for:  .vertical)
-//
+
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.widthAnchor.constraint(equalToConstant: 300),
-            titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 20)
+            titleLabel.topAnchor.constraint(equalTo: backgroundCellView.topAnchor, constant: paddingTopBottom),
+            titleLabel.bottomAnchor.constraint(equalTo: backgroundCellView.bottomAnchor, constant: -paddingTopBottom),
+            titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor , constant: leadingTrailingPaddingTitlelabel ),
+            titleLabel.trailingAnchor.constraint(equalTo: backgroundCellView.trailingAnchor, constant: -paddingTrailing)
             ])
+        
     }
     
     //MARK: - DIFFERENT METHODS
@@ -113,12 +112,14 @@ class ItemTableViewCell: SwipeTableViewCell {
                         attributedString.addAttribute(.foregroundColor, value: UIColor.lightGray , range: NSRange.init(location: 0, length: item.title.count))
                         titleLabel.attributedText = attributedString
                         
+                        iconView.image = #imageLiteral(resourceName: "gray-circle-icon")
         
                     }else{
                         let attributedString = NSMutableAttributedString.init(string: item.title)
                         attributedString.addAttribute(.strikethroughStyle, value: 0, range: NSRange.init(location: 0, length: item.title.count))
                         titleLabel.attributedText = attributedString
                         
+                        iconView.image = #imageLiteral(resourceName: "black-emty-circle-icon")
                     }
                     
                 }else{
@@ -130,6 +131,6 @@ class ItemTableViewCell: SwipeTableViewCell {
     
     override func prepareForReuse() {
         titleLabel.text = nil
-      
+        iconView.image = nil
     }
 }

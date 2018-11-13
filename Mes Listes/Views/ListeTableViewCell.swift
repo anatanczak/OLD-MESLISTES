@@ -104,6 +104,9 @@ class ListeTableViewCell: SwipeTableViewCell {
             //set icon
             if let listeIconName = liste.iconName {
                 iconView.image = UIImage(named: listeIconName)
+            }else{
+                iconView.image = #imageLiteral(resourceName: "empty-big-circle")
+                iconView.contentMode = .center
             }
             
             //set title

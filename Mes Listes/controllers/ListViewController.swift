@@ -194,7 +194,6 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
 extension ListViewController: SwipeTableViewCellDelegate {
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        //guard orientation == .right else { return nil }
         
         if orientation == .left {
             guard isSwipeRightEnabled else { return nil }
@@ -209,6 +208,8 @@ extension ListViewController: SwipeTableViewCellDelegate {
             //REMINDER
             let setReminder = SwipeAction(style: .default, title: nil) { action, indexPath in
                 self.updateModelByAddingAReminder(at: indexPath)
+                let cell: SwipeTableViewCell = tableView.cellForRow(at: indexPath) as! SwipeTableViewCell
+                cell.hideSwipe(animated: true)
             }
             setReminder.image = UIImage(named: "reminder-icon")
             setReminder.backgroundColor = self.colorize(hex: 0xF0D6E2)
@@ -216,6 +217,8 @@ extension ListViewController: SwipeTableViewCellDelegate {
             //CALENDAR
             let addEventToCalendar = SwipeAction(style: .default, title: nil) { (action, indexPath) in
                 self.addEventToCalendar(at: indexPath)
+                let cell: SwipeTableViewCell = tableView.cellForRow(at: indexPath) as! SwipeTableViewCell
+                cell.hideSwipe(animated: true)
             }
             addEventToCalendar.image = #imageLiteral(resourceName: "calendar-icon")
             addEventToCalendar.backgroundColor = self.colorize(hex: 0xF0D6E2)
@@ -251,11 +254,10 @@ extension ListViewController: SwipeTableViewCellDelegate {
         
         chosenRow = indexpath.row
         
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
-        
-        popup.setReminder = setReminder
-        self.present(popup, animated: true)
+        let dpVC = DatePickerPopupViewController()
+        dpVC.modalPresentationStyle = .overCurrentContext
+        dpVC.setReminder = setReminder
+        self.present(dpVC, animated: true, completion: nil)
         tableView.reloadData()
     }
     
@@ -294,13 +296,14 @@ extension ListViewController: SwipeTableViewCellDelegate {
         chosenRow = indexpath.row
         chosenNameforCalendar = lists![indexpath.row].name
         
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
+        let dpVC = DatePickerPopupViewController()
+        dpVC.modalPresentationStyle = .overCurrentContext
         
-        popup.dateForCalendar = true
-        popup.saveEventToCalendar = saveEventToCalendar
         
-        self.present(popup, animated: true)
+        dpVC.dateForCalendar = true
+        
+        dpVC.saveEventToCalendar = saveEventToCalendar
+        self.present(dpVC, animated: true, completion: nil)
         tableView.reloadData()
     }
     

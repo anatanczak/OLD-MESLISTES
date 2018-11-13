@@ -16,14 +16,15 @@ class ItemTableViewController: UIViewController {
     //MARK: - Constants
     let textFieldPlaceholderText = "Type your item here..."
     let textFieldHeight: CGFloat = 40
-    let textFieldAndPlusButtonPadding: CGFloat = 20
+    let textFieldAndPlusButtonPadding: CGFloat = 10
+    let subviewTextFiledPaddingRightLeft: CGFloat = 5
     let distanceBetweenTextfieldAndTableView: CGFloat = 10
     let borderSubView: CGFloat = 1
     
     //MARK: - Properties
     let realm = try! Realm()
     var items : Results <Item>?
-    var selectedItem = 0
+    var rowForSelectedItem = 0
     var nameOfTheSelectedListe = ""
     var selectedItemForTheCalendar = ""
     var isSwipeRightEnabled = true
@@ -43,20 +44,24 @@ class ItemTableViewController: UIViewController {
     }
 
     //MARK: - Life Cycle
+    
+    override func viewWillAppear(_ animated: Bool) {
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         setupViews()
         setupLayout()
         
-//        tableView.estimatedRowHeight = 100
-//        tableView.rowHeight = UITableView.automaticDimension
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        subviewForTextFieldAndPlusButton.addTopBorderWithColor(color: .white, width: borderSubView)
-        subviewForTextFieldAndPlusButton.addBottomBorderWithColor(color: .white, width: borderSubView)
+        
+//        subviewForTextFieldAndPlusButton.addTopBorderWithColor(color: .white, width: borderSubView)
+//        subviewForTextFieldAndPlusButton.addBottomBorderWithColor(color: .white, width: borderSubView)
     }
     private func setupNavigationBar () {
         
@@ -91,13 +96,17 @@ class ItemTableViewController: UIViewController {
         
         //subviewForTextField
         subviewForTextFieldAndPlusButton.backgroundColor = .clear
+        subviewForTextFieldAndPlusButton.layer.borderColor = UIColor.white.cgColor
+        subviewForTextFieldAndPlusButton.layer.cornerRadius = 10
+        subviewForTextFieldAndPlusButton.layer.borderWidth = 1
 
         view.addSubview(subviewForTextFieldAndPlusButton)
         
         //textField
         textFieldItems.backgroundColor = .clear
         textFieldItems.placeholder = textFieldPlaceholderText
-        self.textFieldItems.delegate = self
+        textFieldItems.delegate = self
+
 //        textField.layer.borderColor = UIColor.white.cgColor
 //        textField.layer.borderWidth = borderTextFieldAndPlusBotton
 
@@ -105,11 +114,8 @@ class ItemTableViewController: UIViewController {
         subviewForTextFieldAndPlusButton.addSubview(textFieldItems)
         
         //plusButton
-        plusButton.setImage(#imageLiteral(resourceName: "plus-icon"), for: .normal)
+        plusButton.setImage(#imageLiteral(resourceName: "plus-icon-gray"), for: .normal)
         plusButton.addTarget(self, action: #selector(plusButtonAction), for: .touchUpInside)
-//        plusButton.layer.borderColor = UIColor.white.cgColor
-//        plusButton.layer.borderWidth = borderTextFieldAndPlusBotton
-        
         subviewForTextFieldAndPlusButton.addSubview(plusButton)
         
         //tableView
@@ -120,7 +126,8 @@ class ItemTableViewController: UIViewController {
         tableView.separatorColor = UIColor.white
         tableView.separatorStyle = .singleLine
         tableView.separatorInset = .init(top: 0, left: 0, bottom: 0, right: 0)
-
+        tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableView.automaticDimension
         view.addSubview(tableView)
     }
     
@@ -133,8 +140,8 @@ class ItemTableViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             subviewForTextFieldAndPlusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            subviewForTextFieldAndPlusButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            subviewForTextFieldAndPlusButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            subviewForTextFieldAndPlusButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: subviewTextFiledPaddingRightLeft),
+            subviewForTextFieldAndPlusButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -subviewTextFiledPaddingRightLeft),
             subviewForTextFieldAndPlusButton.heightAnchor.constraint(equalToConstant: textFieldHeight + 2 * borderSubView)
             ])
         
@@ -156,7 +163,7 @@ class ItemTableViewController: UIViewController {
             plusButton.bottomAnchor.constraint(equalTo: textFieldItems.bottomAnchor),
             plusButton.leadingAnchor.constraint(equalTo: textFieldItems.trailingAnchor),
             plusButton.widthAnchor.constraint(equalTo: plusButton.heightAnchor),
-            plusButton.trailingAnchor.constraint(equalTo: subviewForTextFieldAndPlusButton.trailingAnchor, constant: -textFieldAndPlusButtonPadding),
+            plusButton.trailingAnchor.constraint(equalTo: subviewForTextFieldAndPlusButton.trailingAnchor),
             ])
         
         //tableView
@@ -173,7 +180,6 @@ class ItemTableViewController: UIViewController {
     
     //MARK: - ACTIONS
     @objc func plusButtonAction () {
-print("plusButtonAction")
         createItem()
     }
     
@@ -249,39 +255,13 @@ extension ItemTableViewController: UITableViewDelegate, UITableViewDataSource {
         cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
         cell.titleLabel.adjustsFontForContentSizeCategory = true
         cell.backgroundColor = UIColor.clear
+        cell.titleLabel.numberOfLines = 0
         
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
-    return UITableView.automaticDimension
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
-    }
 }
 
-//MARK: - Cell Delegate
-extension ItemTableViewController: ItemTableViewCellDelegate {
-    func cellDidTapOnNoteButton(cell: ItemTableViewCell) {
-        //create an alert to ask if user wants to create a note to this item
-        guard let indexPath = self.tableView.indexPath(for: cell) else {
-            // Note, this shouldn't happen - how did the user tap on a button that wasn't on screen?
-            return
-        }
-        
-        let noteVC = NoteViewController()
-        if let selectedCurrentItem = items?[indexPath.row] {
-            noteVC.currentItem = selectedCurrentItem
-        }
-        self.show(noteVC, sender: self)
-        
-        tableView.reloadData()
-    }
-    }
-    
     //MARK: - METHODS FOR SWIPE ACTIONS
 extension ItemTableViewController: SwipeTableViewCellDelegate {
 
@@ -302,6 +282,9 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
                 
                 self.updateModelByAddingAReminder(at: indexPath)
                 
+                let cell: SwipeTableViewCell = tableView.cellForRow(at: indexPath) as! SwipeTableViewCell
+                cell.hideSwipe(animated: true)
+                
             }
             setReminder.image = #imageLiteral(resourceName: "reminder-item-icon")
             setReminder.backgroundColor = self.colorize(hex: 0xF0D6E2)
@@ -309,6 +292,9 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
             let addEventToCalendar = SwipeAction(style: .default, title: nil) { (action, indexPath) in
                 
                 self.addEventToCalendar(at: indexPath)
+                
+                let cell: SwipeTableViewCell = tableView.cellForRow(at: indexPath) as! SwipeTableViewCell
+                cell.hideSwipe(animated: true)
             }
             addEventToCalendar.image = #imageLiteral(resourceName: "calendar-item-icon")
             addEventToCalendar.backgroundColor = self.colorize(hex: 0xF0D6E2)
@@ -326,8 +312,18 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
             deleteAction.image = #imageLiteral(resourceName: "delete-item-icon")
             deleteAction.backgroundColor = self.colorize(hex: 0xF25D61)
             
-            
-            return [deleteAction]
+            let takePhotoAction = SwipeAction(style: .default, title: nil) { (action, indexpath) in
+                
+                //take photo action
+                print("photo has been taken")
+                
+                let cell: SwipeTableViewCell = tableView.cellForRow(at: indexPath) as! SwipeTableViewCell
+                cell.hideSwipe(animated: true)
+                
+            }
+            takePhotoAction.backgroundColor = self.colorize(hex: 0xB9CDD6)
+            takePhotoAction.image = #imageLiteral(resourceName: "camera-icon")
+            return [deleteAction, takePhotoAction]
         }
         
     }
@@ -357,14 +353,14 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
     
     func updateModelByAddingAReminder(at indexpath: IndexPath) {
         
-        selectedItem = indexpath.row
+        rowForSelectedItem = indexpath.row
         
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
+        let dpVC = DatePickerPopupViewController()
+        dpVC.modalPresentationStyle = .overCurrentContext
+        dpVC.setReminder = setReminder
+        self.present(dpVC, animated: true, completion: nil)
+        print("it has finished")
         
-        popup.setReminder = setReminder
-        self.present(popup, animated: true)
-        tableView.reloadData()
     }
     
     // sends the notification to user to remind the list
@@ -372,7 +368,7 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
         
         let content = UNMutableNotificationContent()
         content.title = "Don't forget!!!"
-        content.body = items![selectedItem].title
+        content.body = items![rowForSelectedItem].title
         content.sound = UNNotificationSound.default
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: "TestIdentifier", content: content, trigger: trigger)
@@ -386,17 +382,18 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
     
     func addEventToCalendar(at indexpath: IndexPath) {
         
-        selectedItem = indexpath.row
+        rowForSelectedItem = indexpath.row
         selectedItemForTheCalendar = items![indexpath.row].title
         
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        let popup = sb.instantiateViewController(withIdentifier: "Popup")as! DatePickerPopupViewController
+        let dpVC = DatePickerPopupViewController()
+        dpVC.modalPresentationStyle = .overCurrentContext
         
-        popup.dateForCalendar = true
-        popup.saveEventToCalendar = saveEventToCalendar
         
-        self.present(popup, animated: true)
-        tableView.reloadData()
+        dpVC.dateForCalendar = true
+   
+        dpVC.saveEventToCalendar = saveEventToCalendar
+        self.present(dpVC, animated: true, completion: nil)
+        
     }
     
     func saveEventToCalendar(_ date: Date) ->(){
@@ -436,42 +433,16 @@ extension ItemTableViewController: SwipeTableViewCellDelegate {
             tableView.reloadData()
         }
     }
-    
-    func createNote(at indexPath: IndexPath) {
-        selectedItem = indexPath.row
-        
-        if let currentItem = self.items?[indexPath.row] {
-            if currentItem.hasNote == false {
-                do {
-                    try realm.write {
-                        currentItem.hasNote = true
-                    }
-                }catch{
-                    print("error updating realm\(error)")
-                }
-            }
-            performSegue(withIdentifier: "goToNote", sender: self)
-        }
-        tableView.reloadData()
-    }
 }
-
 //MARK: - TextField Method
 
 extension ItemTableViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == textFieldItems {
-            createItem()
-            return true
+        createItem()
+        return true
         }
         return false
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-
-        //or if you have just one textView
-        self.textFieldItems.resignFirstResponder()
     }
 }
 
@@ -481,3 +452,7 @@ extension ItemTableViewController {
         self.textFieldItems.text = ""
     }
 }
+
+    
+
+
